@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/projectProcessStyle.css}">
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+  <br><br>
+  <section>
+    <aside class="leftsideblank">
+    </aside>
+    <aside class="rightsideblank">
+    </aside>
+    <article>
+      <h1>졸업작품 진행개요</h1>
+
+      <h3>◼ 졸업작품 과목이수(7학기)</h3>
+      <p>졸업프로젝트(미리 이수 가능)</p>
+      <br>
+
+      <h3>◼ 작품발표 및 논문제출(8학기)</h3>
+      <p> 발표 논문집 제작 (CD포함💿)</p>
+      <br>
+
+      <h3>◼ 작품주제</h3>
+      <p> 프로그래밍, 시스템 구축, 컨텐츠 제작(기술적인 구현 포함)</p>
+      <br>
+
+      <h3>◼ 졸업작품 신청서</h3>
+      <a href="/mail" class="downloadBox">IT공학과_졸업작품신청서.hwp</a>
+      <br><br><br><br>
+
+      <h3>◼ 졸업논문 작성절차</h3>
+      <table border="0">
+        <thead>
+          <tr>
+            <th> 순서 </th>
+            <th> 절차 </th>
+            <th colspan="2"> 시기 </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td> 1 </td>
+            <td> 지도교수 배정 </td>
+            <td> 2월 말 ~ 3월 초 </td>
+            <td> 8월 말 ~ 9월 말</td>
+          </tr>
+          <tr>
+            <td> 2 </td>
+            <td> 작품제작 (과목이수) </td>
+            <td> 1학기 (졸업프로젝트) </td>
+            <td> 2학기 (졸업프로젝트) </td>
+          </tr>
+          <tr>
+            <td> 3 </td>
+            <td> 졸업논문 제출 </td>
+            <td> 10월 내 </td>
+            <td> 4월 내 </td>
+          </tr>
+          <tr>
+            <td> 4 </td>
+            <td> 졸업 </td>
+            <td> 2월 혹은 이후 </td>
+            <td> 8월 혹은 이후 </td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+</div>
+</html>
+
