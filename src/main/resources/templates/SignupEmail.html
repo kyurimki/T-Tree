@@ -20,35 +20,43 @@
         </aside>
         <article>
             <h1>✔ 회원가입</h1>
-            <div class="emailAuth">
-                <div class="email">
-                    <p>이메일 인증</p>
-                    <table border="0">
-                        <tr>
-                            <td>이메일:</td>
-                            <td><input type="text" id="email">@sookmyung.ac.kr</td>
-                        </tr>
-                    </table>
-                    <input type="button" name="emailSubmit" value="인증번호 발송">
+
+            <form role="form" action="/signupEmail" id="EmailAuth" method="POST">
+                <div class="emailAuth">
+                    <div class="email">
+                        <p>이메일 인증</p>
+                        <table border="0">
+                            <tr>
+                                <td>이메일:</td>
+                                <td><input type="text" name="email" id="email" required="required">@sookmyung.ac.kr</td>
+                            </tr>
+                        </table>
+                        <input type="submit" name="emailSubmit" value="인증번호 발송">
+                    </div>
                 </div>
-                <br><br><br>
+            </form>
+            <br><br><br>
+
+            <form role="form" action="/signupEmail" name="CodeAuth" id="CodeAuth" method="POST">
                 <div class="verinum">
                     <p>인증번호 입력</p>
                     <table border="0">
                         <tr>
                             <td>인증번호:</td>
-                            <td><input type="text" id="verifCode"></td>
-                            <td><input type="button" name="authSubmit" value="확인"></td>
+                            <td><input name="code" type="text" id="verfiCode"></td>
+                            <td><input type="submit" name="authSubmit" value="확인"></td>
                         </tr>
 
                     </table>
                 </div>
-                <br><br>
-            </div>
+            </form>
+            <p th:text="${status}"></p>
 
             <div class="buttonWrapper">
                 <button type="button" name="authSuccess" onclick="window.location.href='/signup/info';">다음</button>
             </div>
+
+            <br><br><br>
         </article>
     </section>
 </div>

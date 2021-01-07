@@ -40,12 +40,6 @@ public class MainController {
     @RequestMapping(value = "/login/findPW")
     public String findPW(){ return "FindPW";}
 
-    @RequestMapping(value = "/signup/email")
-    public String signupEmail(){ return "SignupEmail";}
-
-    @RequestMapping(value = "/signup/info")
-    public String signup(){ return "SignupInfo"; }
-
 
     @GetMapping("/mail")
     public String dispMail() {return "mail";}
