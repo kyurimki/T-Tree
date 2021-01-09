@@ -1,0 +1,40 @@
+package com.ttree.ttree.service;
+
+import com.ttree.ttree.domain.entity.ProposalFile;
+import com.ttree.ttree.domain.repository.ProposalFileRepository;
+import com.ttree.ttree.dto.ProposalFileDto;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+
+@Service
+public class ProposalFileService {
+    private ProposalFileRepository proposalFileRepository;
+
+    public ProposalFileService(ProposalFileRepository proposalFileRepository){
+        this.proposalFileRepository = proposalFileRepository;
+    }
+
+    @Transactional
+    public void saveProposalFile(ProposalFileDto proposalFileDto){
+        proposalFileRepository.save(proposalFileDto.toEntity());
+    }
+
+    @Transactional
+    public ProposalFileDto getProposalFile(Long id){
+        ProposalFile proposalFile = proposalFileRepository.findById(id).get();
+
+        ProposalFileDto proposalFileDto = ProposalFileDto.builder()
+                .proposal_id(id)
+                .proposal_origFilename(proposalFile.getProposal_origFilename())
+                .proposal_filename(proposalFile.getProposal_filename())
+                .proposal_filePath(proposalFile.getProposal_filePath())
+                .build();
+        return proposalFileDto;
+    }
+
+    @Transactional
+    public void deleteProposalFile(Long id){
+        proposalFileRepository.deleteById(id);
+    }
+}

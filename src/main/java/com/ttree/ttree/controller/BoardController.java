@@ -1,19 +1,14 @@
 package com.ttree.ttree.controller;
 
-import com.ttree.ttree.dto.BoardDto;
-import com.ttree.ttree.dto.LanguageDto;
-import com.ttree.ttree.dto.PaperFileDto;
-import com.ttree.ttree.dto.SourceFileDto;
-import com.ttree.ttree.service.BoardService;
-import com.ttree.ttree.service.LanguageService;
-import com.ttree.ttree.service.PaperFileService;
-import com.ttree.ttree.service.SourceFileService;
+import com.ttree.ttree.dto.*;
+import com.ttree.ttree.service.*;
 import com.ttree.ttree.util.MD5Generator;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +23,27 @@ import java.util.List;
 @Controller
 public class BoardController {
     private BoardService boardService;
+    private LanguageService languageService;
+
     private SourceFileService sourceFileService;
     private PaperFileService paperFileService;
-    private LanguageService languageService;
+    private ProposalFileService proposalFileService;
+    private FinalPTFileService finalPTFileService;
+    private FairFileService fairFileService;
+
+
     private Model model;
     private List<String> yearToSearch;
     private List<String> langToSearch;
 
-    public BoardController(BoardService boardService, SourceFileService sourceFileService, PaperFileService paperFileService, LanguageService languageService) {
+    public BoardController(BoardService boardService, SourceFileService sourceFileService, PaperFileService paperFileService, LanguageService languageService,
+                            ProposalFileService proposalFileService, FinalPTFileService finalPTFileService, FairFileService fairFileService ) {
         this.boardService = boardService;
         this.sourceFileService = sourceFileService;
         this.paperFileService = paperFileService;
+        this.proposalFileService = proposalFileService;
+        this.finalPTFileService = finalPTFileService;
+        this.fairFileService = fairFileService;
         this.languageService = languageService;
     }
 
@@ -76,8 +81,11 @@ public class BoardController {
 
 
     @PostMapping("/projectPost")
-    public String write(@RequestParam("sourceFile") MultipartFile sourceFile, @RequestParam("paperFile") MultipartFile paperFile, BoardDto boardDto, @RequestParam("checkbox") List<String> langList) {
+    public String write(@RequestParam("sourceFile") MultipartFile sourceFile, @RequestParam("paperFile") MultipartFile paperFile,
+                        @RequestParam("proposalFile") MultipartFile proposalFile, @RequestParam("finalPTFile") MultipartFile finalPTFile, @RequestParam("fairFile") MultipartFile fairFile,
+                        BoardDto boardDto, @RequestParam("checkbox") List<String> langList) {
         try {
+            //소스코드
             String origSourceFilename = sourceFile.getOriginalFilename();
             String sourceFilename = new MD5Generator(origSourceFilename).toString();
             /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
@@ -98,9 +106,10 @@ public class BoardController {
             sourceFileDto.setSource_origFilename(origSourceFilename);
             sourceFileDto.setSource_filename(sourceFilename);
             sourceFileDto.setSource_filePath(sourceFilePath);
-
             Long sourceFileId = sourceFileService.saveSourceFile(sourceFileDto);
 
+
+            //논문 자료
             String origPaperFilename = paperFile.getOriginalFilename();
             String paperFilename = new MD5Generator(origPaperFilename).toString();
             /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
@@ -122,8 +131,84 @@ public class BoardController {
             paperFileDto.setPaper_origFilename(origPaperFilename);
             paperFileDto.setPaper_filename(paperFilename);
             paperFileDto.setPaper_filePath(paperFilePath);
-
             paperFileService.savePaperFile(paperFileDto);
+
+
+            //제안서
+            String origProposalFilename = proposalFile.getOriginalFilename();
+            String proposalFilename = new MD5Generator(origProposalFilename).toString();
+            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            String saveProposalPath = System.getProperty("user.dir") + "\\proposalFiles";
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(saveProposalPath).exists()) {
+                try{
+                    new File(saveProposalPath).mkdir();
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }
+            String proposalFilePath = saveProposalPath + "\\" + proposalFilename;
+            proposalFile.transferTo(new File(proposalFilePath));
+
+            ProposalFileDto proposalFileDto = new ProposalFileDto();
+            proposalFileDto.setProposal_id(sourceFileId);
+            proposalFileDto.setProposal_origFilename(origProposalFilename);
+            proposalFileDto.setProposal_filename(proposalFilename);
+            proposalFileDto.setProposal_filePath(proposalFilePath);
+            proposalFileService.saveProposalFile(proposalFileDto);
+
+
+            //전시회자료
+            String origFairFilename = fairFile.getOriginalFilename();
+            String fairFilename = new MD5Generator(origFairFilename).toString();
+            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            String saveFairPath = System.getProperty("user.dir") + "\\fairFiles";
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(saveFairPath).exists()) {
+                try{
+                    new File(saveFairPath).mkdir();
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }
+            String fairFilePath = saveFairPath + "\\" + fairFilename;
+            fairFile.transferTo(new File(fairFilePath));
+            
+            FairFileDto fairFileDto = new FairFileDto();
+            fairFileDto.setFair_id(sourceFileId);
+            fairFileDto.setFair_origFilename(origFairFilename);
+            fairFileDto.setFair_filename(fairFilename);
+            fairFileDto.setFair_filePath(fairFilePath);
+            fairFileService.saveFairFile(fairFileDto);
+
+
+
+            //최종발표
+            String origFinalPTFilename = finalPTFile.getOriginalFilename();
+            String finalPTFilename = new MD5Generator(origFinalPTFilename).toString();
+            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            String saveFinalPTPath = System.getProperty("user.dir") + "\\finalPTFiles";
+            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            if (!new File(saveFinalPTPath).exists()) {
+                try{
+                    new File(saveFinalPTPath).mkdir();
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }
+            String finalPTFilePath = saveFinalPTPath + "\\" + finalPTFilename;
+            finalPTFile.transferTo(new File(finalPTFilePath));
+
+            FinalPTFileDto finalPTFileDto = new FinalPTFileDto();
+            finalPTFileDto.setFinalPT_id(sourceFileId);
+            finalPTFileDto.setFinalPT_origFilename(origFinalPTFilename);
+            finalPTFileDto.setFinalPT_filename(fairFilename);
+            finalPTFileDto.setFinalPT_filePath(finalPTFilePath);
+            finalPTFileService.saveFinalPTFile(finalPTFileDto);
+
 
             LanguageDto languageDto = new LanguageDto();
             for(String lang : langList) {
