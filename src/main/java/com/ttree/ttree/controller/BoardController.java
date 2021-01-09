@@ -89,7 +89,7 @@ public class BoardController {
             String origSourceFilename = sourceFile.getOriginalFilename();
             String sourceFilename = new MD5Generator(origSourceFilename).toString();
             /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-            String saveSourcePath = System.getProperty("user.dir") + "\\sourceFiles";
+            String saveSourcePath = System.getProperty("user.dir") + "/sourceFiles";
             /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
             if (!new File(saveSourcePath).exists()) {
                 try{
@@ -99,7 +99,7 @@ public class BoardController {
                     e.getStackTrace();
                 }
             }
-            String sourceFilePath = saveSourcePath + "\\" + sourceFilename;
+            String sourceFilePath = saveSourcePath + "/" + sourceFilename;
             sourceFile.transferTo(new File(sourceFilePath));
 
             SourceFileDto sourceFileDto = new SourceFileDto();
@@ -113,7 +113,7 @@ public class BoardController {
             String origPaperFilename = paperFile.getOriginalFilename();
             String paperFilename = new MD5Generator(origPaperFilename).toString();
             /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-            String savePaperPath = System.getProperty("user.dir") + "\\paperFiles";
+            String savePaperPath = System.getProperty("user.dir") + "/paperFiles";
             /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
             if (!new File(savePaperPath).exists()) {
                 try{
@@ -123,7 +123,7 @@ public class BoardController {
                     e.getStackTrace();
                 }
             }
-            String paperFilePath = savePaperPath + "\\" + paperFilename;
+            String paperFilePath = savePaperPath + "/" + paperFilename;
             paperFile.transferTo(new File(paperFilePath));
 
             PaperFileDto paperFileDto = new PaperFileDto();
