@@ -38,7 +38,6 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 label {
-  cursor: pointer;
   margin-right:15%;
 }
 
@@ -99,4 +98,8 @@ td.selected {
 
 .button {
   text-align: right;
+}
+
+.langlist{
+  display: inline-block;
 }

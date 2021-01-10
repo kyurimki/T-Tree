@@ -1,6 +1,7 @@
 package com.ttree.ttree.service;
 
 import com.ttree.ttree.domain.entity.Board;
+import com.ttree.ttree.domain.entity.Language;
 import com.ttree.ttree.domain.repository.BoardRepository;
 import com.ttree.ttree.dto.BoardDto;
 import com.ttree.ttree.dto.LanguageDto;
@@ -105,6 +106,7 @@ public class BoardService {
         return boardDtoList;
     }
 
+
     @Transactional
     public BoardDto getPost(Long id) {
         Board board = boardRepository.findById(id).get();
@@ -121,6 +123,7 @@ public class BoardService {
                 .build();
         return boardDto;
     }
+
 
     @Transactional
     public void deletePost(Long id) {

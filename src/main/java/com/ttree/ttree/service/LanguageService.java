@@ -66,6 +66,48 @@ public class LanguageService {
     }
 
     @Transactional
+    public String getLangList(Long id){
+
+        LanguageDto languageDto = getLanguage(id);
+        String langList = "";
+
+        if(languageDto.isLang_android()){
+            langList += "Android ";
+        }
+        if (languageDto.isLang_cpp()){
+            langList += "C/C++ ";
+        }
+        if(languageDto.isLang_django()){
+            langList += "Django ";
+        }
+        if(languageDto.isLang_html()){
+            langList += "HTML/CSS/JS ";
+        }
+        if(languageDto.isLang_java()){
+            langList += "JAVA ";
+        }
+        if(languageDto.isLang_nodejs()){
+            langList += "NodeJS ";
+        }
+        if(languageDto.isLang_python()){
+            langList += "Python ";
+        }
+        if(languageDto.isLang_react()){
+            langList += "React-Native ";
+        }
+        if(languageDto.isLang_spring()){
+            langList += "Spring ";
+        }
+        if(languageDto.isLang_vuejs()){
+            langList += "VueJS ";
+        }
+        if(languageDto.getLang_etc() != null){
+            langList += languageDto.getLang_etc();
+        }
+        return langList;
+    }
+
+    @Transactional
     public void deleteLanguage(Long id) {
         languageRepository.deleteById(id);
     }

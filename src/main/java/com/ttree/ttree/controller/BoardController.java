@@ -262,8 +262,10 @@ public class BoardController {
 
     @GetMapping("/projectPost/{id}")
     public String detail(@PathVariable("id") Long id, Model model) {
+        String langList = languageService.getLangList(id);
         BoardDto boardDto = boardService.getPost(id);
         model.addAttribute("post", boardDto);
+        model.addAttribute("postLang", langList);
         return "projectDetail";
     }
 
