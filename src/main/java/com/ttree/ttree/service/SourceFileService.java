@@ -15,8 +15,8 @@ public class SourceFileService {
     }
 
     @Transactional
-    public Long saveSourceFile(SourceFileDto sourceFileDto) {
-        return sourceFileRepository.save(sourceFileDto.toEntity()).getSource_id();
+    public void saveSourceFile(SourceFileDto sourceFileDto) {
+        sourceFileRepository.save(sourceFileDto.toEntity());
     }
 
     @Transactional

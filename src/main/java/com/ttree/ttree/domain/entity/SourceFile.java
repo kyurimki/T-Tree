@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Getter
@@ -16,7 +15,6 @@ import javax.persistence.Id;
 public class SourceFile {
 
     @Id
-    @GeneratedValue
     private Long source_id;
 
     @Column(nullable = false)
