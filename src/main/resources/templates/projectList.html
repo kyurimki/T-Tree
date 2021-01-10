@@ -137,6 +137,34 @@
                 <a class="btn btn-primary" th:href="@{/projectPost}" role="button">글쓰기</a>
             </div>
             <br><br>
+            <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+            <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+            <script>
+                $('#total_year').click( function () {
+                    if ($(this).is(':checked')) {
+                        $('.year_select').prop('checked', false);
+                    }
+                });
+
+                $('.year_select').change( function () {
+                    if ($(this).is(':checked')) {
+                        $('#total_year').prop('checked', false);
+                    }
+                });
+
+
+                $('#language_total_year').click( function () {
+                    if ($(this).is(':checked')) {
+                        $('.language_select').prop('checked', false);
+                    }
+                });
+
+                $('.language_select').change( function () {
+                    if ($(this).is(':checked')) {
+                        $('#language_total_year').prop('checked', false);
+                    }
+                });
+            </script>
         </article>
     </section>
 </div>
