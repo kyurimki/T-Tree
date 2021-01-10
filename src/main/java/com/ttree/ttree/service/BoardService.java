@@ -47,7 +47,9 @@ public class BoardService {
                     .title(board.getTitle())
                     .year(board.getYear())
                     .semester(board.getSemester())
+                    .purpose(board.getPurpose())
                     .content(board.getContent())
+                    .effect(board.getEffect())
                     .createdDate(board.getCreatedDate())
                     .build();
             boardDtoList.add(boardDto);
@@ -67,7 +69,9 @@ public class BoardService {
                     .title(board.getTitle())
                     .year(board.getYear())
                     .semester(board.getSemester())
+                    .purpose(board.getPurpose())
                     .content(board.getContent())
+                    .effect(board.getEffect())
                     .createdDate(board.getCreatedDate())
                     .build();
             boardDtoList.add(boardDto);
@@ -84,7 +88,9 @@ public class BoardService {
                 .title(board.getTitle())
                 .year(board.getYear())
                 .semester(board.getSemester())
+                .purpose(board.getPurpose())
                 .content(board.getContent())
+                .effect(board.getEffect())
                 .createdDate(board.getCreatedDate())
                 .build();
         return boardDto;

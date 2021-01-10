@@ -27,8 +27,29 @@
                 <small th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></small>
             </p>
             <hr/>
+
+            <!-- 개발환경 가져오기  -->
+
+
+
+            <p class="card-text" th:text="${post.purpose}" style="font-size: 15pt"></p>
             <p class="card-text" th:text="${post.content}" style="font-size: 15pt"></p>
+            <p class="card-text" th:text="${post.effect}" style="font-size: 15pt"></p>
+
+
             <div th:if="${post.id != null}" style="margin-top: 3%; font-size: 12pt">
+                <strong>제안서 파일 : </strong>
+                <a class="card-text" th:href="@{'/download/proposal/' +${post.id}}" th:text="다운로드"></a>
+            </div>
+            <div th:if="${post.id != null}" style="margin-top: 1%; font-size: 12pt">
+                <strong>최종발표 파일 : </strong>
+                <a class="card-text" th:href="@{'/download/finalPT/' +${post.id}}" th:text="다운로드"></a>
+            </div>
+            <div th:if="${post.id != null}" style="margin-top: 1%; font-size: 12pt">
+                <strong>전시회 파일 : </strong>
+                <a class="card-text" th:href="@{'/download/fair/' +${post.id}}" th:text="다운로드"></a>
+            </div>
+            <div th:if="${post.id != null}" style="margin-top: 1%; font-size: 12pt">
                 <strong>소스코드 파일 : </strong>
                 <a class="card-text" th:href="@{'/download/source/' +${post.id}}" th:text="다운로드"></a>
             </div>
@@ -36,6 +57,7 @@
                 <strong>논문 파일 : </strong>
                 <a class="card-text" th:href="@{'/download/paper/' +${post.id}}" th:text="다운로드"></a>
             </div>
+
         </div>
     </div>
         <hr/>

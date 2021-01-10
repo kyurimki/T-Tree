@@ -19,7 +19,7 @@ public class LanguageDto {
     private boolean lang_react;
     private boolean lang_spring;
     private boolean lang_vuejs;
-    private boolean lang_etc;
+    private String lang_etc;
     private Long board_id;
 
     public Language toEntity() {
@@ -42,7 +42,7 @@ public class LanguageDto {
 
     @Builder
     public LanguageDto(Long board_id, boolean lang_android, boolean lang_cpp, boolean lang_django, boolean lang_html, boolean lang_java,
-                       boolean lang_nodejs, boolean lang_python, boolean lang_react, boolean lang_spring, boolean lang_vuejs, boolean lang_etc) {
+                       boolean lang_nodejs, boolean lang_python, boolean lang_react, boolean lang_spring, boolean lang_vuejs, String lang_etc) {
         this.lang_android = lang_android;
         this.lang_cpp = lang_cpp;
         this.lang_django = lang_django;
@@ -56,4 +56,5 @@ public class LanguageDto {
         this.lang_etc = lang_etc;
         this.board_id = board_id;
     }
+
 }

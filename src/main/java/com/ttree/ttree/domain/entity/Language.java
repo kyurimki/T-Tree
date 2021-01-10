@@ -44,8 +44,8 @@ public class Language {
     @Column(columnDefinition = "boolean default false")
     private boolean lang_vuejs;
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean lang_etc;
+    @Column(columnDefinition = "TEXT")
+    private String lang_etc;
 
     @Id
     private Long board_id;
@@ -53,7 +53,7 @@ public class Language {
 
     @Builder
     public Language(Long board_id, boolean lang_android, boolean lang_cpp, boolean lang_django, boolean lang_html, boolean lang_java,
-                    boolean lang_nodejs, boolean lang_python, boolean lang_react, boolean lang_spring, boolean lang_vuejs, boolean lang_etc) {
+                    boolean lang_nodejs, boolean lang_python, boolean lang_react, boolean lang_spring, boolean lang_vuejs, String lang_etc) {
         this.lang_android = lang_android;
         this.lang_cpp = lang_cpp;
         this.lang_django = lang_django;

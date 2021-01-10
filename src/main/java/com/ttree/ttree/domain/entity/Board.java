@@ -26,9 +26,15 @@ public class Board {
 
     @Column (nullable = false)
     private String semester;
+    
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String purpose; //개발목적
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
+    private String content; //프로그램 설명
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String effect; // 기대효과
 
     @CreatedDate
     @Column(updatable = false)
@@ -38,12 +44,14 @@ public class Board {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public Board(Long id, String title, String year, String semester, String content) {
+    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect) {
         this.id = id;
         this.title = title;
         this.year = year;
         this.semester = semester;
+        this.purpose = purpose;
         this.content = content;
+        this.effect = effect;
     }
 
     public String getYear() {

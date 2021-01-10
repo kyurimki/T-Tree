@@ -1,11 +1,13 @@
 package com.ttree.ttree.controller;
 
+import com.ttree.ttree.domain.entity.Language;
 import com.ttree.ttree.dto.*;
 import com.ttree.ttree.service.*;
 import com.ttree.ttree.util.MD5Generator;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -82,8 +86,9 @@ public class BoardController {
 
     @PostMapping("/projectPost")
     public String write(@RequestParam("sourceFile") MultipartFile sourceFile, @RequestParam("paperFile") MultipartFile paperFile,
-                        @RequestParam("proposalFile") MultipartFile proposalFile, @RequestParam("finalPTFile") MultipartFile finalPTFile, @RequestParam("fairFile") MultipartFile fairFile,
-                        BoardDto boardDto, @RequestParam("checkbox") List<String> langList) {
+                        @RequestParam("proposalFile") MultipartFile proposalFile, @RequestParam("finalPTFile") MultipartFile finalPTFile,
+                        @RequestParam("fairFile") MultipartFile fairFile,
+                        BoardDto boardDto, @RequestParam("checkbox") List<String> langList, HttpServletRequest request) {
         try {
             //소스코드
             String origSourceFilename = sourceFile.getOriginalFilename();
@@ -211,6 +216,10 @@ public class BoardController {
 
 
             LanguageDto languageDto = new LanguageDto();
+
+            //String etcDetail = "sad";
+
+            String etcDetail = request.getParameter("etcText");
             for(String lang : langList) {
                 if(lang.equals("android")) {
                     languageDto.setLang_android(true);
@@ -233,7 +242,7 @@ public class BoardController {
                 } else if(lang.equals("vuejs")) {
                     languageDto.setLang_vuejs(true);
                 } else if(lang.equals("etc")) {
-                    languageDto.setLang_etc(true);
+                    languageDto.setLang_etc(etcDetail);
                 }
                 languageDto.setBoard_id(sourceFileId);
                 languageService.saveLanguage(languageDto);
@@ -298,4 +307,39 @@ public class BoardController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + paperFileDto.getPaper_origFilename() + "\"")
                 .body(resource);
     }
+
+    @GetMapping("/download/proposal/{id}")
+    public ResponseEntity<Resource> proposalFileDownload(@PathVariable("id") Long fileId) throws IOException {
+        ProposalFileDto proposalFileDto = proposalFileService.getProposalFile(fileId);
+        Path proposalPath = Paths.get(proposalFileDto.getProposal_filePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(proposalPath));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + proposalFileDto.getProposal_origFilename() + "\"")
+                .body(resource);
+    }
+
+
+    @GetMapping("/download/finalPT/{id}")
+    public ResponseEntity<Resource> finalPTFileDownload(@PathVariable("id") Long fileId) throws IOException {
+        FinalPTFileDto finalPTFileDto = finalPTFileService.getFinalPTFile(fileId);
+        Path finalPTPath = Paths.get(finalPTFileDto.getFinalPT_filePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(finalPTPath));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + finalPTFileDto.getFinalPT_origFilename() + "\"")
+                .body(resource);
+    }
+
+    @GetMapping("/download/fair/{id}")
+    public ResponseEntity<Resource> fairFileDownload(@PathVariable("id") Long fileId) throws IOException {
+        FairFileDto fairFileDto = fairFileService.getFairFile(fileId);
+        Path fairPath = Paths.get(fairFileDto.getFair_filePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(fairPath));
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fairFileDto.getFair_origFilename() + "\"")
+                .body(resource);
+    }
+
 }

@@ -37,7 +37,7 @@ public class LanguageService {
                     .lang_react(language.isLang_react())
                     .lang_spring(language.isLang_spring())
                     .lang_vuejs(language.isLang_vuejs())
-                    .lang_etc(language.isLang_etc())
+                    .lang_etc(language.getLang_etc())
                     .board_id(language.getBoard_id())
                     .build();
             languageDtoList.add(languageDto);
@@ -59,7 +59,7 @@ public class LanguageService {
                 .lang_react(language.isLang_react())
                 .lang_spring(language.isLang_spring())
                 .lang_vuejs(language.isLang_vuejs())
-                .lang_etc(language.isLang_etc())
+                .lang_etc(language.getLang_etc())
                 .board_id(language.getBoard_id())
                 .build();
         return languageDto;
