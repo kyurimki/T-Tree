@@ -28,7 +28,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private String identity;
+    private String role;
 
     @Column(nullable = false)
     private String major1;
@@ -46,12 +46,12 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String name, String studentIdNum, String password, String identity, String major1, String major2){
+    public User(Long id, String name, String studentIdNum, String password, String role, String major1, String major2){
         this.id = id;
         this.name = name;
         this.studentIdNum = studentIdNum;
         this.password = password;
-        this.identity = identity;
+        this.role = role;
         this.major1 = major1;
         this.major2 = major2;
     }

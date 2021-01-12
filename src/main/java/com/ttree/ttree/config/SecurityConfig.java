@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 
 @Configuration
@@ -36,6 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return authProvider;
     }
 
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
+    }
+
     @Override
     public void configure(WebSecurity webSecurity) throws Exception { //권한 인증 필요없는 애들은 통과
         webSecurity.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
@@ -52,14 +58,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/*").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/projectPost").hasRole("STAFF")
                 .and()
                 .formLogin().loginPage("/user/login")
                 .defaultSuccessUrl("/")
-                .permitAll();
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/").permitAll();
     }
 
-    /*
+    /*사용자 임의로 넣기
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()

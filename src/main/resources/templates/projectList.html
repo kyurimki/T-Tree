@@ -134,7 +134,8 @@
             </table>
 
             <div class="button">
-                <a class="btn btn-primary" th:href="@{/projectPost}" role="button">글쓰기</a>
+                <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
+                        class="btn btn-primary" th:href="@{/projectPost}" role="button">글쓰기</a>
             </div>
             <br><br>
             <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
