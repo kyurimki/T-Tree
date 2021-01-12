@@ -5,6 +5,7 @@ import com.ttree.ttree.domain.repository.FairFileRepository;
 import com.ttree.ttree.dto.FairFileDto;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 
 @Service
 public class FairFileService {
@@ -21,15 +22,20 @@ public class FairFileService {
 
     @Transactional
     public FairFileDto getFairFile(Long id){
-        FairFile fairFile = fairFileRepository.findById(id).get();
+        try {
+            FairFile fairFile = fairFileRepository.findById(id).get();
 
-        FairFileDto fairFileDto = FairFileDto.builder()
-                .fair_id(id)
-                .fair_origFilename(fairFile.getFair_origFilename())
-                .fair_filename(fairFile.getFair_filename())
-                .fair_filePath(fairFile.getFair_filePath())
-                .build();
-        return fairFileDto;
+            FairFileDto fairFileDto = FairFileDto.builder()
+                    .fair_id(id)
+                    .fair_origFilename(fairFile.getFair_origFilename())
+                    .fair_filename(fairFile.getFair_filename())
+                    .fair_filePath(fairFile.getFair_filePath())
+                    .build();
+            return fairFileDto;
+        } catch(NoSuchElementException e) {
+            return null;
+        }
+
     }
 
     @Transactional

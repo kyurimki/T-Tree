@@ -5,6 +5,7 @@ import com.ttree.ttree.domain.repository.PaperFileRepository;
 import com.ttree.ttree.dto.PaperFileDto;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 
 @Service
 public class PaperFileService {
@@ -21,15 +22,19 @@ public class PaperFileService {
 
     @Transactional
     public PaperFileDto getPaperFile(Long id) {
-        PaperFile paperFile = paperFileRepository.findById(id).get();
+        try {
+            PaperFile paperFile = paperFileRepository.findById(id).get();
 
-        PaperFileDto paperFileDto = PaperFileDto.builder()
-                .paper_id(id)
-                .paper_origFilename(paperFile.getPaper_origFilename())
-                .paper_filename(paperFile.getPaper_filename())
-                .paper_filePath(paperFile.getPaper_filePath())
-                .build();
-        return paperFileDto;
+            PaperFileDto paperFileDto = PaperFileDto.builder()
+                    .paper_id(id)
+                    .paper_origFilename(paperFile.getPaper_origFilename())
+                    .paper_filename(paperFile.getPaper_filename())
+                    .paper_filePath(paperFile.getPaper_filePath())
+                    .build();
+            return paperFileDto;
+        } catch(NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Transactional

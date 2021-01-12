@@ -6,6 +6,7 @@ import com.ttree.ttree.dto.ProposalFileDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProposalFileService {
@@ -22,15 +23,19 @@ public class ProposalFileService {
 
     @Transactional
     public ProposalFileDto getProposalFile(Long id){
-        ProposalFile proposalFile = proposalFileRepository.findById(id).get();
+        try {
+            ProposalFile proposalFile = proposalFileRepository.findById(id).get();
 
-        ProposalFileDto proposalFileDto = ProposalFileDto.builder()
-                .proposal_id(id)
-                .proposal_origFilename(proposalFile.getProposal_origFilename())
-                .proposal_filename(proposalFile.getProposal_filename())
-                .proposal_filePath(proposalFile.getProposal_filePath())
-                .build();
-        return proposalFileDto;
+            ProposalFileDto proposalFileDto = ProposalFileDto.builder()
+                    .proposal_id(id)
+                    .proposal_origFilename(proposalFile.getProposal_origFilename())
+                    .proposal_filename(proposalFile.getProposal_filename())
+                    .proposal_filePath(proposalFile.getProposal_filePath())
+                    .build();
+            return proposalFileDto;
+        } catch(NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Transactional

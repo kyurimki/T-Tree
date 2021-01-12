@@ -5,6 +5,7 @@ import com.ttree.ttree.domain.repository.SourceFileRepository;
 import com.ttree.ttree.dto.SourceFileDto;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 
 @Service
 public class SourceFileService {
@@ -21,15 +22,19 @@ public class SourceFileService {
 
     @Transactional
     public SourceFileDto getSourceFile(Long id) {
-        SourceFile sourceFile = sourceFileRepository.findById(id).get();
+        try {
+            SourceFile sourceFile = sourceFileRepository.findById(id).get();
 
-        SourceFileDto fileDto = SourceFileDto.builder()
-                .source_id(id)
-                .source_origFilename(sourceFile.getSource_origFilename())
-                .source_filename(sourceFile.getSource_filename())
-                .source_filePath(sourceFile.getSource_filePath())
-                .build();
-        return fileDto;
+            SourceFileDto fileDto = SourceFileDto.builder()
+                    .source_id(id)
+                    .source_origFilename(sourceFile.getSource_origFilename())
+                    .source_filename(sourceFile.getSource_filename())
+                    .source_filePath(sourceFile.getSource_filePath())
+                    .build();
+            return fileDto;
+        } catch(NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Transactional

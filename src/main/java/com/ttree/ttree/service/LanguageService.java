@@ -84,7 +84,7 @@ public class LanguageService {
             langList += "HTML/CSS/JS ";
         }
         if(languageDto.isLang_java()){
-            langList += "JAVA ";
+            langList += "Java ";
         }
         if(languageDto.isLang_nodejs()){
             langList += "NodeJS ";
