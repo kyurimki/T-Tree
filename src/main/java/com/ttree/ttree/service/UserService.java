@@ -6,6 +6,7 @@ import com.ttree.ttree.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -27,11 +28,25 @@ public class UserService {
                 .name(user.getName())
                 .studentIdNum(user.getStudentIdNum())
                 .email(user.getEmail())
+                .role(user.getRole())
                 .major1(user.getMajor1())
                 .major2(user.getMajor2())
                 .build();
         return userDto;
 
+    }
+
+    @Transactional
+    public UserDto getUserByStudentId(String studentId) {
+        List<User> userList = userRepository.findAll();
+        for(User user : userList) {
+            if(studentId.equals(user.getStudentIdNum())) {
+                Long id = user.getId();
+                UserDto userDto = getUser(id);
+                return userDto;
+            }
+        }
+        return null;
     }
 
 }

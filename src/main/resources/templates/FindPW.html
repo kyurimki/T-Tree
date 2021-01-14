@@ -31,11 +31,20 @@
             </div>
 
             <div class="buttonWrapper">
-                <button type="submit" name="findpw" onclick="window.location.href='/user/login'; alert('저장된 이메일로 임시 비밀번호가 발송되었습니다');">
+                <button type="submit" id="findPWButton" name="findpw">
                     비밀번호 찾기
                 </button>
             </div>
             </form>
+            <script>
+                if([[${exist}]]) {
+                    alert('저장된 이메일로 임시 비밀번호가 발송되었습니다');
+                    window.location.href='/user/login';
+                } else {
+                    alert('등록되지 않은 회원입니다. 회원가입을 진행하세요.');
+                    window.location.href='/signup/email';
+                }
+            </script>
         </article>
     </section>
 </div>

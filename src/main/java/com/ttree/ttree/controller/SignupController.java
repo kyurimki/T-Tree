@@ -73,7 +73,7 @@ public class SignupController {
             status = tokenService.checkToken(code);
             model.addAttribute("status", status);
         }
-        return "redirect:/signup/email";
+        return "SignupEmail";
     }
 
     @GetMapping("/signup/email")
@@ -108,7 +108,7 @@ public class SignupController {
                     e.getStackTrace();
                 }
             }
-            String filePath = savePath + "\\" + filename;
+            String filePath = savePath + "/" + filename;
             files.transferTo(new File(filePath));
 
             AuthImageDto authImageDto = new AuthImageDto();
@@ -153,4 +153,36 @@ public class SignupController {
         return "studentPage";
     }
 
+    @GetMapping(value = "/login/findPW")
+    public String findPW() {
+        return "FindPW";
+    }
+
+    @PostMapping(value = "/login/findPW")
+    public String findPW(@RequestParam("id") String studentId, Model model){
+        UserDto userDto = userService.getUserByStudentId(studentId);
+        boolean infoExist = false;
+        if(userDto != null) {
+            String password = randomPWGenerator();
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(password);
+
+            userDto.setPassword(encodedPassword);
+            userService.saveUser(userDto);
+
+            String email = userDto.getEmail();
+
+            mailService.mailPasswordSend(email, password);
+            infoExist = true;
+        }
+        model.addAttribute("exist", infoExist);
+        return "FindPW";
+    }
+
+    public String randomPWGenerator() {
+        String generatedPW = UUID.randomUUID().toString();
+        generatedPW = generatedPW.replaceAll("-", "");
+        generatedPW = generatedPW.substring(0, 16);
+        return generatedPW;
+    }
 }

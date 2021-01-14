@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.UUID;
+
 @Controller
 public class MainController {
 
@@ -40,9 +42,6 @@ public class MainController {
     public String staffPage(){ return "staffPage"; }
 
 
-    @PostMapping(value = "/login/findPW")
-    public String findPW(@RequestParam("id") String id){ return "FindPW";}
-
     @GetMapping("/mail")
     public String dispMail() {return "mail";}
 
@@ -50,4 +49,5 @@ public class MainController {
     public void execMail(MailDto mailDto) {
         mailService.mailSend(mailDto);
     }
+
 }
