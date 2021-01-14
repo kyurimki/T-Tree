@@ -18,7 +18,7 @@ public class SignupEmailController {
     public TokenService tokenService;
     private MailService mailService;
     public String token;
-    public String email = "";
+    public String emailStore = "";
     public boolean status = false;
 
     public SignupEmailController(TokenService tokenService, MailService mailService) {
@@ -26,16 +26,18 @@ public class SignupEmailController {
         this.mailService = mailService;
     }
 
-    @RequestMapping(value = "/signupEmail")
+    @RequestMapping(value = "/signup/email")
     public String signupEmail(){ return "SignupEmail";}
 
-    @PostMapping(value="/signupEmail")
-    public void signupEmail(HttpServletRequest request) {
-        email = request.getParameter("email");
+    @PostMapping(value="/signup/email")
+    public void signupEmail(HttpServletRequest request, Model model) {
+        String email = request.getParameter("email");
         String code = request.getParameter("code");
         if(code == null) {
             try {
+                model.addAttribute("inputEmailID", email);
                 email = email + "@sookmyung.ac.kr";
+                setEmail(email);
 
                 TokenDto tokenDto = new TokenDto();
                 tokenDto.setEmail(email);
@@ -45,19 +47,23 @@ public class SignupEmailController {
                 tokenService.saveToken(tokenDto);
 
                 mailService.mailTokenSend(email, token);
+                model.addAttribute("status", status);
             } catch(Exception e) {
                 e.printStackTrace();
             }
-        } else if(email == null) {
+        } else {
             status = tokenService.checkToken(code);
+            model.addAttribute("status", status);
         }
-
     }
 
-    @GetMapping("/signupEmail")
+    @GetMapping("/signup/email")
     public String signupEmail(Model model) {
         model.addAttribute("status", status);
-        model.addAttribute("email", email);
         return "SignupEmail";
+    }
+
+    public void setEmail(String email) {
+        this.emailStore = email;
     }
 }

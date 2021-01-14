@@ -20,7 +20,6 @@
         </aside>
         <article>
             <h1>✔ 회원가입</h1>
-
             <form role="form" action="/signupEmail" id="EmailAuth" method="POST">
                 <div class="emailAuth">
                     <div class="email">
@@ -28,10 +27,10 @@
                         <table border="0">
                             <tr>
                                 <td>이메일:</td>
-                                <td><input type="text" name="email" id="email" required="required">@sookmyung.ac.kr</td>
+                                <td><input type="text" name="email" id="email" required="required" th:value="${inputEmailID}">@sookmyung.ac.kr</td>
                             </tr>
                         </table>
-                        <input type="submit" name="emailSubmit" value="인증번호 발송">
+                        <input type="submit" name="emailSubmit" value="인증번호 발송" onclick="alert('입력된 이메일로 인증번호가 발송되었습니다');">
                     </div>
                 </div>
             </form>
@@ -46,16 +45,25 @@
                             <td><input name="code" type="text" id="verfiCode"></td>
                             <td><input type="submit" name="authSubmit" value="확인"></td>
                         </tr>
-
+                        <tr>
+                            <td colspan="3" style="text-align:right" id="status">이메일 인증 상태: [[${status}]]</td>
+                        </tr>
                     </table>
                 </div>
             </form>
-            <p th:text="${status}"></p>
 
             <div class="buttonWrapper">
+                <input type="hidden" name="emailInput" th:value="${inputEmailID}">
                 <button type="button" name="authSuccess" onclick="window.location.href='/signup/info';">다음</button>
             </div>
-
+            <script>
+                if([[${status}]]) {
+                    document.getElementById("status").style.color= 'blue';
+                    window.alert("인증 완료! 다음을 눌러 회원가입을 완료하세요.");
+                } else {
+                    document.getElementById("status").style.color= 'red';
+                }
+            </script>
             <br><br><br>
         </article>
     </section>

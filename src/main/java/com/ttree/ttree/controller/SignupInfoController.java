@@ -23,7 +23,6 @@ import java.io.File;
 
 @Controller
 public class SignupInfoController {
-
     private CustomUserDetailsService customUserDetailsService;
     private AuthImageService authImageService;
     private UserService userService;

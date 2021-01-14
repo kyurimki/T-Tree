@@ -10,6 +10,12 @@
 <!-- 해당페이지 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
   <script>
+    // function getQueryStringValue (key) {
+    //   return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    // }
+    // var email = getQueryStringValue("emailInput");
+    // window.alert(email);
+
     function check_pw() { //???? ???? ??
       var pw = document.getElementById('pw').value;
       var SC = ["!", "@", "$", "&", "*"];
