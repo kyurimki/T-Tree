@@ -35,11 +35,12 @@ public class MainController {
     @RequestMapping(value = "/projectProcess")
     public String projectProcess(){ return "projectProcess";}
 
+    @RequestMapping(value = "/staff/staffPage")
+    public String staffPage(){ return "staffPage"; }
 
 
     @RequestMapping(value = "/login/findPW")
     public String findPW(){ return "FindPW";}
-
 
     @GetMapping("/mail")
     public String dispMail() {return "mail";}

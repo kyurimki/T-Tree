@@ -1,19 +1,24 @@
 package com.ttree.ttree.controller;
 
+import com.ttree.ttree.domain.entity.CustomUserDetails;
+import com.ttree.ttree.domain.entity.User;
 import com.ttree.ttree.dto.AuthImageDto;
 import com.ttree.ttree.dto.UserDto;
 import com.ttree.ttree.service.AuthImageService;
 import com.ttree.ttree.service.CustomUserDetailsService;
 import com.ttree.ttree.service.UserService;
 import com.ttree.ttree.util.MD5Generator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.WebParam;
 import java.io.File;
 
 @Controller
@@ -73,4 +78,43 @@ public class SignupInfoController {
 
         return "login";
     }
+
+    @RequestMapping(value ="/user/studentPage")
+    public String studentPage(){ return "studentPage"; }
+
+    @GetMapping(value = "/user/studentPage")
+    public String currentUserDetail(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
+        String UserInfo= "";
+        String username = customUserDetails.getUsername();
+        String usermajor1 = customUserDetails.getMajorOne();
+        String usermajor2 = customUserDetails.getMajorTwo();
+        String studentIdNum = customUserDetails.getStudentIdNum();
+
+        UserInfo = username + usermajor1 + usermajor2 + studentIdNum;
+        System.out.println(UserInfo);
+        model.addAttribute("userDetails", UserInfo);
+
+        return "studentPage";
+    }
+
+    /*
+    @GetMapping("/user/studentPage")
+    public String getUserDetail(Model model){
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Object userDetail = loggedInUser.getPrincipal();
+
+        model.addAttribute("userDetails", userDetail);
+
+        return "studentPage";
+    }
+
+    @GetMapping("/user/studentPage")
+    public String userDetail(@PathVariable("id") Long id, Model model){
+        UserDto userDto = userService.getUser(id);
+        System.out.println(userDto);
+        model.addAttribute("userDetails", userDto);
+
+        return "studentPage";
+    }
+     */
 }

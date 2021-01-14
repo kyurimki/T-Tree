@@ -17,6 +17,7 @@ public class UserDto {
     private String role;
     private String major1;
     private String major2;
+    private boolean status;
 
     private Long fileId;
     private String filename;
@@ -32,12 +33,13 @@ public class UserDto {
                 .role(role)
                 .major1(major1)
                 .major2(major2)
+                .status(status)
                 .build();
         return build;
     }
 
     @Builder
-    public UserDto(Long id, String name, String studentIdNum, String password, String role, String major1, String major2, Long fileId){
+    public UserDto(Long id, String name, String studentIdNum, String password, String role, String major1, String major2, Long fileId, boolean status){
         this.id = id;
         this.name = name;
         this.studentIdNum = studentIdNum;
@@ -46,5 +48,6 @@ public class UserDto {
         this.major1 = major1;
         this.major2 = major2;
         this.fileId = fileId;
+        this.status = status;
     }
 }

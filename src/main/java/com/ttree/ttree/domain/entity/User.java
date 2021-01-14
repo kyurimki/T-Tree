@@ -36,7 +36,8 @@ public class User {
     @Column
     private String major2;
 
-    //인증사진 추가
+    @Column(columnDefinition = "boolean default false")
+    private boolean status;
 
     public String getPassword(){
         return password;
@@ -46,7 +47,7 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String name, String studentIdNum, String password, String role, String major1, String major2){
+    public User(Long id, String name, String studentIdNum, String password, String role, String major1, String major2, boolean status){
         this.id = id;
         this.name = name;
         this.studentIdNum = studentIdNum;
@@ -54,5 +55,6 @@ public class User {
         this.role = role;
         this.major1 = major1;
         this.major2 = major2;
+        this.status = status;
     }
 }

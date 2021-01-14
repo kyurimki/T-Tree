@@ -1,6 +1,7 @@
 package com.ttree.ttree.domain.entity;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,7 +23,6 @@ public class CustomUserDetails implements UserDetails {
         System.out.println("!");
         System.out.println(user.getRole());
         System.out.println(authList);
-        System.out.println("!");
         return authList;
     }
 
@@ -56,8 +56,12 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    public String getFullName() {
-        return user.getName() + " ";
-    }
+    public String getStudentIdNum(){ return user.getStudentIdNum(); }
+
+    public String getMajorOne(){ return user.getMajor1(); }
+
+    public String getMajorTwo(){ return user.getMajor2(); }
+
+
 
 }

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
@@ -16,6 +17,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableWebSecurity
+
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Bean
