@@ -25,6 +25,9 @@ public class User {
     private String studentIdNum; //학번
 
     @Column(nullable = false, length = 100)
+    private String email;
+
+    @Column(nullable = false, length = 100)
     private String password;
 
     @Column(nullable = false)
@@ -47,10 +50,11 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String name, String studentIdNum, String password, String role, String major1, String major2, boolean status){
+    public User(Long id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, boolean status){
         this.id = id;
         this.name = name;
         this.studentIdNum = studentIdNum;
+        this.email = email;
         this.password = password;
         this.role = role;
         this.major1 = major1;

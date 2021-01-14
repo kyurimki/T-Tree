@@ -54,14 +54,17 @@
 
             <div class="buttonWrapper">
                 <input type="hidden" name="emailInput" th:value="${inputEmailID}">
-                <button type="button" name="authSuccess" onclick="window.location.href='/signup/info';">다음</button>
+                <button type="button" id="buttonToNext" name="authSuccess" onclick="window.location.href='/signup/info';">다음</button>
             </div>
             <script>
+                var nextButton = document.getElementById("buttonToNext");
                 if([[${status}]]) {
                     document.getElementById("status").style.color= 'blue';
                     window.alert("인증 완료! 다음을 눌러 회원가입을 완료하세요.");
+                    nextButton.style.visibility = "visible";
                 } else {
                     document.getElementById("status").style.color= 'red';
+                    nextButton.style.visibility = "hidden";
                 }
             </script>
             <br><br><br>

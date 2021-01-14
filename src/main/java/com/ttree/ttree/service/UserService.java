@@ -26,6 +26,7 @@ public class UserService {
                 .id(id)
                 .name(user.getName())
                 .studentIdNum(user.getStudentIdNum())
+                .email(user.getEmail())
                 .major1(user.getMajor1())
                 .major2(user.getMajor2())
                 .build();
