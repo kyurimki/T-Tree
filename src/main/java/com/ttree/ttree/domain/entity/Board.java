@@ -1,6 +1,7 @@
 package com.ttree.ttree.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -44,8 +45,11 @@ public class Board {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    @Column
+    private int hit;
+
     @Builder
-    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect) {
+    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -53,6 +57,7 @@ public class Board {
         this.purpose = purpose;
         this.content = content;
         this.effect = effect;
+        this.hit = hit;
     }
 
     public String getYear() {

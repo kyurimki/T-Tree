@@ -262,6 +262,12 @@ public class BoardController {
     public String detail(@PathVariable("id") Long id, Model model) {
         String langList = languageService.getLangList(id);
         BoardDto boardDto = boardService.getPost(id);
+
+        int hit = boardDto.getHit();
+        hit++;
+        boardDto.setHit(hit);
+        boardService.savePost(boardDto);
+
         String proposalFileName = "";
         String finalPTFileName = "";
         String fairFileName = "";
@@ -282,6 +288,7 @@ public class BoardController {
         if(paperFileService.getPaperFile(id) != null) {
             paperFileName = paperFileService.getPaperFile(id).getPaper_origFilename();
         }
+
         model.addAttribute("post", boardDto);
         model.addAttribute("postLang", langList);
         model.addAttribute("proposalFileName", proposalFileName);

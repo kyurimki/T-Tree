@@ -18,6 +18,7 @@ public class BoardDto {
     private String purpose;
     private String content;
     private String effect;
+    private int hit;
 
     private Long fileId;
     private String filename;
@@ -33,12 +34,13 @@ public class BoardDto {
                 .purpose(purpose)
                 .content(content)
                 .effect(effect)
+                .hit(hit)
                 .build();
         return build;
     }
 
     @Builder
-    public BoardDto(Long id, String title, String year, String semester, String purpose, String content, String effect, Long fileId, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public BoardDto(Long id, String title, String year, String semester, String purpose, String content, String effect, Long fileId, LocalDateTime createdDate, LocalDateTime modifiedDate, int hit) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -49,5 +51,6 @@ public class BoardDto {
         this.fileId = fileId;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.hit = hit;
     }
 }

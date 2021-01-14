@@ -38,6 +38,7 @@ public class BoardService {
                         .semester(board.getSemester())
                         .content(board.getContent())
                         .createdDate(board.getCreatedDate())
+                        .hit(board.getHit())
                         .build();
                 boardDtoList.add(boardDto);
             }
@@ -52,6 +53,7 @@ public class BoardService {
                             .semester(board.getSemester())
                             .content(board.getContent())
                             .createdDate(board.getCreatedDate())
+                            .hit(board.getHit())
                             .build();
                     boardDtoList.add(boardDto);
                 }
@@ -120,10 +122,10 @@ public class BoardService {
                 .content(board.getContent())
                 .effect(board.getEffect())
                 .createdDate(board.getCreatedDate())
+                .hit(board.getHit())
                 .build();
         return boardDto;
     }
-
 
     @Transactional
     public void deletePost(Long id) {
