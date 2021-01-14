@@ -47,7 +47,7 @@ public class SignupController {
         this.userService = userService;
     }
 
-    @PostMapping(value="/signupEmail")
+    @PostMapping(value="/signup/email")
     public void signupEmail(HttpServletRequest request, Model model) {
         String email = request.getParameter("email");
         String code = request.getParameter("code");
@@ -75,8 +75,8 @@ public class SignupController {
         }
     }
 
-    @GetMapping("/signupEmail")
-    public String signupEmail(Model model) {
+    @GetMapping("/signup/email")
+    public String signupEmailStatus(Model model) {
         model.addAttribute("status", status);
         return "SignupEmail";
     }
@@ -130,7 +130,7 @@ public class SignupController {
             e.printStackTrace();
         }
 
-        return "redirect:/login";
+        return "login";
     }
 
     @RequestMapping(value ="/user/studentPage")
@@ -138,37 +138,18 @@ public class SignupController {
 
     @GetMapping(value = "/user/studentPage")
     public String currentUserDetail(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
-        String UserInfo= "";
         String username = customUserDetails.getUsername();
         String usermajor1 = customUserDetails.getMajorOne();
         String usermajor2 = customUserDetails.getMajorTwo();
         String studentIdNum = customUserDetails.getStudentIdNum();
+        //System.out.println(username + usermajor1 + usermajor2 + studentIdNum);
 
-        UserInfo = username + usermajor1 + usermajor2 + studentIdNum;
-        System.out.println(UserInfo);
-        model.addAttribute("userDetails", UserInfo);
-
-        return "studentPage";
-    }
-
-    /*
-    @GetMapping("/user/studentPage")
-    public String getUserDetail(Model model){
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        Object userDetail = loggedInUser.getPrincipal();
-
-        model.addAttribute("userDetails", userDetail);
+        model.addAttribute("username", username);
+        model.addAttribute("usermajor1", usermajor1);
+        model.addAttribute("usermajor2", usermajor2);
+        model.addAttribute("studentIdNum", studentIdNum);
 
         return "studentPage";
     }
 
-    @GetMapping("/user/studentPage")
-    public String userDetail(@PathVariable("id") Long id, Model model){
-        UserDto userDto = userService.getUser(id);
-        System.out.println(userDto);
-        model.addAttribute("userDetails", userDto);
-
-        return "studentPage";
-    }
-     */
 }
