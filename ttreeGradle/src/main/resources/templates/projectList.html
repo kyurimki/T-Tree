@@ -1,0 +1,176 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectListStyle.css}">
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <section>
+        <aside class="leftsideblank">
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>졸업작품 소개</h1>
+            <form action="/projectList" method="post">
+            <table class="year">
+                <tr>
+                    <td><label><input id="total_year" name="year_select" type="radio" value="all_year"> 전체 </label></td>
+                    <td><label><input class="year_select" name="year_select" type="checkbox" value="2016"> 2016 </label></td>
+                    <td><label><input class="year_select" name="year_select" type="checkbox" value="2017"> 2017 </label></td>
+                    <td><label><input class="year_select" name="year_select" type="checkbox" value="2018"> 2018 </label></td>
+                    <td><label><input class="year_select" name="year_select" type="checkbox" value="2019"> 2019 </label></td>
+                    <td><label><input class="year_select" name="year_select" type="checkbox" value="2020"> 2020 </label></td>
+                </tr>
+            </table>
+            <br/>
+
+            <table class="language">
+                <tr>
+                    <td><label><input id="language_total_year" name="language_select" type="radio" value="all_language">전체</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="android">Android</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="cpp">C/C++</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="django">Django</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="html">HTML5</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="java">Java</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="nodejs">NodeJS</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="python">Python</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="rn">React Native</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="spring">Spring</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="vuejs">VueJS</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="etc">기타</label></td>
+                </tr>
+            </table>
+
+            <input id="searchButton" class="btn btn-primary" type="submit" role="button" value="검색" onclick="pressed()">
+            </form>
+            <script type="text/javascript">
+                var $table = document.querySelector('.year');
+                $table.addEventListener("click", function (e) {
+                    if (e.target.tagName == "INPUT" && e.target.type == "checkbox") {
+                        if (e.target.checked) {
+                            e.target.parentNode.parentNode.classList.add("selected");
+                            var t_elems = document.getElementById("total_year");
+                            t_elems.parentNode.parentNode.classList.remove("selected");
+                        } else {
+                            e.target.parentNode.parentNode.classList.remove("selected");
+                        }
+                    }
+
+                    if (e.target.tagName == "INPUT" && e.target.type == "radio") {
+                        if (e.target.checked) {
+                            e.target.parentNode.parentNode.classList.add("selected");
+                            for (var i = 0; i < 5; i++) {
+                                var elems = document.getElementsByClassName("year_select")[i];
+                                elems.parentNode.parentNode.classList.remove("selected");
+                            }
+                        } else {
+                            e.target.parentNode.parentNode.classList.remove("selected");
+                        }
+                    }
+                });
+
+                var $table = document.querySelector('.language');
+                $table.addEventListener("click", function (e) {
+                    if (e.target.tagName == "INPUT" && e.target.type == "checkbox") {
+                        if (e.target.checked) {
+                            e.target.parentNode.parentNode.classList.add("selected");
+                            var t_elems = document.getElementById("language_total_year");
+                            t_elems.parentNode.parentNode.classList.remove("selected");
+                        } else {
+                            e.target.parentNode.parentNode.classList.remove("selected");
+                        }
+                    }
+
+                    if (e.target.tagName == "INPUT" && e.target.type == "radio") {
+                        if (e.target.checked) {
+                            e.target.parentNode.parentNode.classList.add("selected");
+                            for (var i = 0; i < 11; i++) {
+                                var elems = document.getElementsByClassName("language_select")[i];
+                                elems.parentNode.parentNode.classList.remove("selected");
+                            }
+                        } else {
+                            e.target.parentNode.parentNode.classList.remove("selected");
+                        }
+                    }
+                });
+            </script>
+
+            <br><br><br>
+            <table id="table_list">
+                <tr>
+                    <th scope="col" style="text-align: center">#</th>
+                    <th scope="col" style="text-align: center">제목</th>
+                    <th scope="col" style="text-align: center">연도</th>
+                    <th scope="col" style="text-align: center">학기</th>
+                    <th scope="col" style="text-align: center">작성일</th>
+                    <th scope="col" style="text-align: center">조회수</th>
+                </tr>
+                <tr class="text-center" th:each="post : ${postList}">
+                    <td>
+                        <p th:text="${post.id}"></p>
+                    </td>
+                    <td>
+                        <a th:href="@{'/projectPost/' + ${post.id}}">
+                            <p th:text="${post.title}"></p>
+                        </a>
+                    </td>
+                    <td>
+                        <p th:text="${post.year}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${post.semester}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${post.hit}"></p>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="button">
+                <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
+                        class="btn btn-primary" th:href="@{/projectPost}" role="button">글쓰기</a>
+            </div>
+            <br><br>
+            <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+            <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+            <script>
+                $('#total_year').click( function () {
+                    if ($(this).is(':checked')) {
+                        $('.year_select').prop('checked', false);
+                    }
+                });
+
+                $('.year_select').change( function () {
+                    if ($(this).is(':checked')) {
+                        $('#total_year').prop('checked', false);
+                    }
+                });
+
+
+                $('#language_total_year').click( function () {
+                    if ($(this).is(':checked')) {
+                        $('.language_select').prop('checked', false);
+                    }
+                });
+
+                $('.language_select').change( function () {
+                    if ($(this).is(':checked')) {
+                        $('#language_total_year').prop('checked', false);
+                    }
+                });
+            </script>
+        </article>
+    </section>
+</div>
+</html>

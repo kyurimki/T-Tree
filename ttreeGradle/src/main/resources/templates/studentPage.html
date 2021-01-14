@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorator="layout/default">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <section>
+        <aside class="leftsideblank">
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>✔ 마이페이지</h1>
+            <h3><span id="user_name" sec:authentication="name" style="color: #003087"></span>님의 회원정보</h3>
+            \
+            <p>학번: <span th:text="${studentIdNum}" style="color: black;"></span></p>
+            <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span> </p>
+            <p>제 2 전공: <span th:text="${usermajor2}" style="color: black;"></span></p>
+
+            <br>
+            <h3>회원정보 수정</h3>
+
+            <br><br>
+
+        </article>
+    </section>
+
+</div>
+</html>
+
+
+

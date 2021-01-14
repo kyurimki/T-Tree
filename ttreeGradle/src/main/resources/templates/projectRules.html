@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectRulesStyle.css}">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <br><br><br>
+    <section>
+        <aside class="leftsideblank">
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>졸업작품 시행규칙</h1>
+            <h3 class="miniTitle">ICT융합공학부 IT공학전공 졸업논문 시행규칙(2018년도 기준)</h3>
+            <br>
+
+            <h3>◼ 목적</h3>
+            <ul class="ruleslistStyle">
+                <li> 본 시행규칙은 숙명여자대학교 IT공학과(혹은 IT공학전공, 이하 IT공학과)에서 졸업을 위하여 필요한 졸업논문을 작성・제출하는데 관련되는 사항을 규정한다.</li>
+            </ul>
+            <br>
+
+            <h3>◼ 시행방법</h3>
+            <ul class="ruleslistStyle">
+                <li><span class="textColor">필수과목 이수 :</span> 졸업논문에 포함될 졸업작품을 제작하는 과목을 필수로 이수하여야 한다. 지정 과목은 IT공학과에서 별도로
+                    정한다.
+                </li>
+                <li><span class="textColor">지도교수 결정 :</span> 졸업논문 지도교수는 7학기 시작시 졸업작품 이수과목에서결정한다. 또한 복수전공 학생의 경우 7학기(혹은 그
+                    이후)에 IT공학 전공과목을 24 학점 이상 이수하였을 경우 졸업작품 지도과목을 수강할 수 있다.
+                </li>
+                <li><span class="textColor">작품발표 :</span> 졸업작품과 관련된 지정과목을 이수한 자는 최종학기에 졸업논문에 포함되는 작품을 완성하여 IT공학과에서 주최하는
+                    출품심사와 전시회에서 통과하여야 한다.
+                </li>
+                <li><span class="textColor">사정 :</span> 졸업 예정학기에 졸업작품 및 졸업논문을 제출하여 IT공학과 교수 전원으로 구성된 사정위원회의 심사를 통과하여야
+                    한다.
+                </li>
+                <li><span class="textColor">재심 :</span> 심사에 탈락한 졸업논문은 논문 및 관련작품을 수정 보완한 후 다음 학기에 재심을 신청할 수 있다.</li>
+            </ul>
+
+            <br>
+
+            <h3>◼ 시행일시</h3>
+            <ul class="ruleslistStyle">
+                <li> 위의 졸업논문 시행규칙은 2019년 3월 1일 이후 졸업예정자부터 시행한다.</li>
+            </ul>
+            <br>
+
+            <h3>◼ 준용</h3>
+            <ul class="ruleslistStyle">
+                <li> 졸업논문과 관련하여 위의 시행규칙에서 규정하지 아니한 사항은 IT공학과 교수 전원으로 구성된 사정위원회의 결정에 따른다.</li>
+            </ul>
+            <br>
+            <div class="revisionBox">
+                <p> 2007년 9월 5일 제정 </p>
+                <p> 2014년 3월 5일 개정 </p>
+                <p> 2017년 6월 15일 개정 </p>
+                <p> 2018년 3월 15일 개정 </p>
+                <p class="prof"> 숙명여자대학교 IT공학과 교수 일동 </p>
+            </div>
+
+        </article>
+    </section>
+</div>
+</html>
+
+
