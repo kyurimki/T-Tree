@@ -48,7 +48,7 @@ public class SignupController {
     }
 
     @PostMapping(value="/signup/email")
-    public void signupEmail(HttpServletRequest request, Model model) {
+    public String signupEmail(HttpServletRequest request, Model model) {
         String email = request.getParameter("email");
         String code = request.getParameter("code");
         if(code == null) {
@@ -73,6 +73,7 @@ public class SignupController {
             status = tokenService.checkToken(code);
             model.addAttribute("status", status);
         }
+        return "redirect:/signup/email";
     }
 
     @GetMapping("/signup/email")
