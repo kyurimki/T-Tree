@@ -1,5 +1,6 @@
 package com.ttree.ttree.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.ttree.ttree.domain.entity.CustomUserDetails;
 import com.ttree.ttree.dto.AuthImageDto;
 import com.ttree.ttree.dto.UserDto;
@@ -32,6 +33,7 @@ public class SignupController {
     public String token;
     public String emailStore = "";
     public boolean status = false;
+    public boolean id_status = false;
 
     private CustomUserDetailsService customUserDetailsService;
     private AuthImageService authImageService;
@@ -86,19 +88,34 @@ public class SignupController {
         this.emailStore = email;
     }
 
-
     @RequestMapping(value = "/signup/info")
-    public String signup(Model model){
+    public String signup(Model model) {
+
         model.addAttribute("user", new UserDto());
         return "SignupInfo";
     }
 
-    @PostMapping("/process_register")
-    public String processRegister(UserDto userDto, @RequestParam("authImg") MultipartFile files) {
-        try {
-            String origFilename = files.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
-            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+    /*
+   @PostMapping(value = "/signup/info")
+   public String checkId(HttpServletRequest request, Model model){
+     String studentIdNum = request.getParameter("studentIdNum");
+       id_status = userService.idCheck(studentIdNum);
+       System.out.println("~~~~");
+       System.out.println(studentIdNum);
+       model.addAttribute("idAvail", id_status);
+
+       return "SignupInfo";
+   }
+
+     */
+
+   @PostMapping("/process_register")
+   public String processRegister(UserDto userDto, @RequestParam("authImg") MultipartFile files, HttpServletRequest request, Model model) {
+
+       try {
+           String origFilename = files.getOriginalFilename();
+           String filename = new MD5Generator(origFilename).toString();
+           /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
             String savePath = System.getProperty("user.dir") + "/files";
             /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
             if (!new File(savePath).exists()) {
@@ -130,9 +147,10 @@ public class SignupController {
         }catch(Exception e) {
             e.printStackTrace();
         }
-
         return "login";
     }
+
+
 
     @RequestMapping(value ="/user/studentPage")
     public String studentPage(){ return "studentPage"; }
@@ -151,6 +169,37 @@ public class SignupController {
         model.addAttribute("studentIdNum", studentIdNum);
 
         return "studentPage";
+    }
+
+    @PostMapping(value = "/user/studentPage")
+    public String changePW(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("oldpw") String oldPassword, @RequestParam("pass") String password, Model model){
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        boolean isChanged = true;
+
+        String dbPassword = customUserDetails.getPassword();
+        String studentIdNum = customUserDetails.getStudentIdNum();
+        System.out.println(studentIdNum);
+
+        UserDto userDto = userService.getUserByStudentId(studentIdNum);
+
+        System.out.println("!" + dbPassword);
+        System.out.println("oldpassword: " + oldPassword);
+        System.out.println("password: " + password);
+
+
+        if(passwordEncoder.matches(oldPassword, dbPassword)){
+            model.addAttribute("isChanged", isChanged);
+            String newPassword = passwordEncoder.encode(password);
+            userDto.setPassword(newPassword);
+            userService.saveUser(userDto);
+
+        }else{
+            isChanged = false;
+            model.addAttribute("isChanged", isChanged);
+        }
+
+       return "studentPage";
     }
 
     @GetMapping(value = "/login/findPW")

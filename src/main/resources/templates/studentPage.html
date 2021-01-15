@@ -23,14 +23,35 @@
             <h3><span id="user_name" sec:authentication="name" style="color: #003087"></span>님의 회원정보</h3>
             \
             <p>학번: <span th:text="${studentIdNum}" style="color: black;"></span></p>
-            <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span> </p>
+            <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span></p>
             <p>제 2 전공: <span th:text="${usermajor2}" style="color: black;"></span></p>
 
             <br>
-            <h3>회원정보 수정</h3>
+            <form role="form" action="/user/studentPage" id="findPW" method="POST">
+                <h3>비밀번호 수정</h3>
+                <p>현재 비밀번호 입력</p>
+                <input type="password" id="oldpw" value="" name="oldpw"
+                       required minlength="6" maxlength="10">
 
-            <br><br>
+                <p>새로운 비밀번호 입력</p>
+                <input type="password" id="" value="" name="pass"
+                       required minlength="6" maxlength="10">
 
+                <div class="buttonWrapper">
+                    <button type="submit" id="changePWButton" name="changePW">
+                        비밀번호 변경하기
+                    </button>
+                </div>
+            </form>
+
+            <script>
+                if([[${isChanged}]]) {
+                    alert('비밀번호가 변경되었습니다. 새롭게 로그인해주세요!');
+                    window.location.href = '/user/login';
+                }else{
+                    alert('현재 비밀번호가 일치하지 않습니다.')
+                }
+            </script>
         </article>
     </section>
 

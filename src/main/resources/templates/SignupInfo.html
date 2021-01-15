@@ -63,8 +63,9 @@
             </tr>
             <tr>
               <td>학번(ID)</td>
-              <td><input type="text" th:field="*{studentIdNum}" id="ID" required></td>
-              <td><input type="button" name="IDcheck" value="중복확인"></td>
+              <td><input type="text" th:field="*{studentIdNum}" id="studentIdNum" name="studentIdNum" required></td>
+              <td><input type="button" name="IDcheck" value="중복확인" onclick="showStatus()"></td>
+              <td id="check_id">사용여부: [[${idAvail}]]</td>
             </tr>
             <tr>
               <td>비밀번호</td>
@@ -99,6 +100,19 @@
         </div>
         <br><br><br>
       </form>
+      <script>
+        function showStatus(){
+          if ([[${idAvail}]]) {
+            document.getElementById('check_id').innerHTML = '사용할 수 있는 ID입니다.'
+            document.getElementById('check_id').style.color = 'blue'
+          }
+          else{
+              document.getElementById('check_id').innerHTML = '입력하신 비밀번호가 일치하지 않습니다.'
+              document.getElementById('check_id').style.color = 'red';
+              document.getElementById('check_id').value = ''
+            }
+        }
+      </script>
     </article>
   </section>
 </div>

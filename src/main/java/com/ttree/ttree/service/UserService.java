@@ -48,5 +48,14 @@ public class UserService {
         }
         return null;
     }
+    
+    @Transactional
+    public boolean idCheck(String id){
+        boolean id_status = false;
+        if(userRepository.findBystudentIdNum(id) == null){
+            id_status = true;
+        }
+        return id_status;
+    }
 
 }
