@@ -517,7 +517,7 @@ public class BoardController {
         Resource resource = new InputStreamResource(Files.newInputStream(sourcePath));
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=/" + sourceFileDto.getSource_origFilename() + "/")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + sourceFileDto.getSource_origFilename() + "\"")
                 .body(resource);
     }
 
@@ -528,7 +528,7 @@ public class BoardController {
         Resource resource = new InputStreamResource(Files.newInputStream(paperPath));
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=/" + paperFileDto.getPaper_origFilename() + "/")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + paperFileDto.getPaper_origFilename() + "\"")
                 .body(resource);
     }
 
@@ -539,7 +539,7 @@ public class BoardController {
         Resource resource = new InputStreamResource(Files.newInputStream(proposalPath));
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=/" + proposalFileDto.getProposal_origFilename() + "/")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + proposalFileDto.getProposal_origFilename() + "\"")
                 .body(resource);
     }
 
@@ -551,7 +551,7 @@ public class BoardController {
         Resource resource = new InputStreamResource(Files.newInputStream(finalPTPath));
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=/" + finalPTFileDto.getFinalPT_origFilename() + "/")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + finalPTFileDto.getFinalPT_origFilename() + "\"")
                 .body(resource);
     }
 
@@ -562,7 +562,7 @@ public class BoardController {
         Resource resource = new InputStreamResource(Files.newInputStream(fairPath));
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=/" + fairFileDto.getFair_origFilename() + "/")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fairFileDto.getFair_origFilename() + "\"")
                 .body(resource);
     }
 
