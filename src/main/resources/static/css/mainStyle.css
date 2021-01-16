@@ -60,6 +60,7 @@ span {
   text-align: right;
   height: 50px;
   line-height: 50px;
+  position:relative;
 }
 
 .menu ul {
@@ -108,7 +109,12 @@ span {
   }
 
   .menu ul{
-    background-color: rgba(0, 48, 135, 0.65);
+    background-color: rgb(0, 48, 135);
+    z-index: 999;
+  }
+
+  .menubar{
+    z-index: 999;
   }
 
   .menu ul li{
