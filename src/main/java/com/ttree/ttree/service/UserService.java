@@ -17,7 +17,10 @@ public class UserService {
     }
 
     @Transactional
-    public Long saveUser(UserDto userDto){ return userRepository.save(userDto.toEntity()).getId(); }
+    public Long saveUser(UserDto userDto){
+        idCheck(userDto.getStudentIdNum());
+        return userRepository.save(userDto.toEntity()).getId();
+    }
 
     @Transactional
     public UserDto getUser(Long id){
@@ -48,14 +51,11 @@ public class UserService {
         }
         return null;
     }
-    
-    @Transactional
-    public boolean idCheck(String id){
-        boolean id_status = false;
-        if(userRepository.findBystudentIdNum(id) == null){
-            id_status = true;
+
+    public void idCheck(String id){
+        if(userRepository.findBystudentIdNum(id) != null){
+            throw new IllegalStateException("이미 존재하는 회원입니다");
         }
-        return id_status;
     }
 
 }

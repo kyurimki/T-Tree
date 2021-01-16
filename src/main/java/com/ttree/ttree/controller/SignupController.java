@@ -33,7 +33,8 @@ public class SignupController {
     public String token;
     public String emailStore = "";
     public boolean status = false;
-    public boolean id_status = false;
+    public boolean id_status = true;
+
 
     private CustomUserDetailsService customUserDetailsService;
     private AuthImageService authImageService;
@@ -90,29 +91,14 @@ public class SignupController {
 
     @RequestMapping(value = "/signup/info")
     public String signup(Model model) {
-
         model.addAttribute("user", new UserDto());
+        //model.addAttribute("id_status", id_status);
         return "SignupInfo";
     }
 
-    /*
-   @PostMapping(value = "/signup/info")
-   public String checkId(HttpServletRequest request, Model model){
-     String studentIdNum = request.getParameter("studentIdNum");
-       id_status = userService.idCheck(studentIdNum);
-       System.out.println("~~~~");
-       System.out.println(studentIdNum);
-       model.addAttribute("idAvail", id_status);
-
-       return "SignupInfo";
-   }
-
-     */
-
    @PostMapping("/process_register")
-   public String processRegister(UserDto userDto, @RequestParam("authImg") MultipartFile files, HttpServletRequest request, Model model) {
-
-       try {
+   public String processRegister(UserDto userDto, @RequestParam("authImg") MultipartFile files, Model model) {
+        try {
            String origFilename = files.getOriginalFilename();
            String filename = new MD5Generator(origFilename).toString();
            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
@@ -142,14 +128,23 @@ public class SignupController {
             String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 
             userDto.setPassword(encodedPassword);
-            userService.saveUser(userDto);
+
+          try {
+              userService.saveUser(userDto);
+              id_status = true;
+              model.addAttribute("id_status", id_status);
+
+          }catch (IllegalStateException e){
+              id_status = false;
+              System.out.println("아이디 중복 오류");
+              model.addAttribute("id_status", id_status);
+          }
 
         }catch(Exception e) {
             e.printStackTrace();
         }
         return "login";
     }
-
 
 
     @RequestMapping(value ="/user/studentPage")
