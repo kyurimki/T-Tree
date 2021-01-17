@@ -5,6 +5,9 @@ import com.ttree.ttree.domain.entity.Language;
 import com.ttree.ttree.domain.repository.BoardRepository;
 import com.ttree.ttree.dto.BoardDto;
 import com.ttree.ttree.dto.LanguageDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -61,6 +64,16 @@ public class BoardService {
         }
         return boardDtoList;
     }
+
+
+    public Page<Board> getBoardPage(Pageable pageable){
+        int page = (pageable.getPageNumber() == 0 ) ? 0 : (pageable.getPageNumber() - 1); //index 0부터 시작
+        pageable = PageRequest.of(page, 10);
+
+        return boardRepository.findAll(pageable);
+    }
+
+
 
     @Transactional
     public List<BoardDto> getBoardListFromLang(String[] languageSet, List<BoardDto> boardDtoList, LanguageService languageService) {

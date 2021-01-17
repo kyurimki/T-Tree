@@ -1,10 +1,14 @@
 package com.ttree.ttree.controller;
 
+import com.ttree.ttree.domain.entity.Board;
 import com.ttree.ttree.dto.*;
 import com.ttree.ttree.service.*;
 import com.ttree.ttree.util.MD5Generator;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,9 +51,19 @@ public class BoardController {
     }
 
     @GetMapping("/projectList")
-    public String list(Model model) {
+    public String list(@PageableDefault Pageable pageable, Model model) {
         List<BoardDto> boardDtoList = boardService.getBoardList(null, null);
+        Page<Board> pageList = boardService.getBoardPage(pageable);
+
         model.addAttribute("postList", boardDtoList);
+        model.addAttribute("listPage", pageList);
+
+        System.out.println("총 element 수: " + pageList.getTotalElements());
+        System.out.println("전체 page 수: " + pageList.getTotalPages());
+        System.out.println("페이지에 표시할 element 수: " + pageList.getSize());
+        System.out.println("현재 페이지 index: " + pageList.getNumber());
+        System.out.println("현재 페이지의 element 수: " + pageList.getNumberOfElements());
+
         return "projectList";
     }
 
@@ -296,6 +311,7 @@ public class BoardController {
         model.addAttribute("fairFileName", fairFileName);
         model.addAttribute("sourceFileName", sourceFileName);
         model.addAttribute("paperFileName", paperFileName);
+
         return "projectDetail";
     }
 
@@ -515,9 +531,11 @@ public class BoardController {
         SourceFileDto sourceFileDto = sourceFileService.getSourceFile(fileId);
         Path sourcePath = Paths.get(sourceFileDto.getSource_filePath());
         Resource resource = new InputStreamResource(Files.newInputStream(sourcePath));
+        String sourceFilename = sourceFileDto.getSource_origFilename();
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + sourceFileDto.getSource_origFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(sourceFilename, "utf-8") + "\"")
                 .body(resource);
     }
 
@@ -526,9 +544,11 @@ public class BoardController {
         PaperFileDto paperFileDto = paperFileService.getPaperFile(fileId);
         Path paperPath = Paths.get(paperFileDto.getPaper_filePath());
         Resource resource = new InputStreamResource(Files.newInputStream(paperPath));
+        String paperFilename = paperFileDto.getPaper_origFilename();
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + paperFileDto.getPaper_origFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(paperFilename, "utf-8") + "\"")
                 .body(resource);
     }
 
@@ -537,9 +557,11 @@ public class BoardController {
         ProposalFileDto proposalFileDto = proposalFileService.getProposalFile(fileId);
         Path proposalPath = Paths.get(proposalFileDto.getProposal_filePath());
         Resource resource = new InputStreamResource(Files.newInputStream(proposalPath));
+        String proposalFilename = proposalFileDto.getProposal_origFilename();
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + proposalFileDto.getProposal_origFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(proposalFilename, "utf-8") + "\"")
                 .body(resource);
     }
 
@@ -549,9 +571,11 @@ public class BoardController {
         FinalPTFileDto finalPTFileDto = finalPTFileService.getFinalPTFile(fileId);
         Path finalPTPath = Paths.get(finalPTFileDto.getFinalPT_filePath());
         Resource resource = new InputStreamResource(Files.newInputStream(finalPTPath));
+        String finalPTFilename = finalPTFileDto.getFinalPT_origFilename();
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + finalPTFileDto.getFinalPT_origFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(finalPTFilename, "utf-8") + "\"")
                 .body(resource);
     }
 
@@ -560,9 +584,11 @@ public class BoardController {
         FairFileDto fairFileDto = fairFileService.getFairFile(fileId);
         Path fairPath = Paths.get(fairFileDto.getFair_filePath());
         Resource resource = new InputStreamResource(Files.newInputStream(fairPath));
+        String fairFilename = fairFileDto.getFair_origFilename();
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fairFileDto.getFair_origFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(fairFilename, "utf-8") + "\"")
                 .body(resource);
     }
 
