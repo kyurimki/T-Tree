@@ -79,6 +79,7 @@ public class SignupController {
         String code = request.getParameter("code");
         status = tokenService.checkToken(emailStore, code);
         model.addAttribute("status", status);
+        status = false;
         return "SignupEmail";
     }
 
@@ -163,9 +164,6 @@ public class SignupController {
     }
 
 
-    @RequestMapping(value ="/user/studentPage")
-    public String studentPage(){ return "studentPage"; }
-
     @GetMapping(value = "/user/studentPage")
     public String currentUserDetail(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
         String username = customUserDetails.getUsername();
@@ -182,7 +180,10 @@ public class SignupController {
         return "studentPage";
     }
 
-    @PostMapping(value = "/user/studentPage")
+    @RequestMapping(value="/changePW")
+    public String changePW() { return "changePW";}
+
+    @PostMapping(value = "/changePW")
     public String changePW(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("oldpw") String oldPassword, @RequestParam("pass") String password, Model model){
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -209,9 +210,10 @@ public class SignupController {
             isChanged = false;
             model.addAttribute("isChanged", isChanged);
         }
-
-       return "studentPage";
+       return "changePW";
     }
+
+
 
     @GetMapping(value = "/login/findPW")
     public String findPW() {
