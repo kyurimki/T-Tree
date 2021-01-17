@@ -52,10 +52,11 @@ public class UserService {
         return null;
     }
 
-    public void idCheck(String id){
-        if(userRepository.findBystudentIdNum(id) != null){
-            throw new IllegalStateException("이미 존재하는 회원입니다");
+    public boolean idCheck(String id){
+        if(userRepository.findBystudentIdNum(id) != null){ // DB에 존재함
+            return true;
         }
+        return false;
     }
 
 }

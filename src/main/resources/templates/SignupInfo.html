@@ -10,12 +10,6 @@
 <!-- 해당페이지 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script>
-        // function getQueryStringValue (key) {
-        //   return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
-        // }
-        // var email = getQueryStringValue("emailInput");
-        // window.alert(email);
-
         function check_pw() {
             var pw = document.getElementById('pw').value;
             var SC = ["!", "@", "$", "&", "*"];
@@ -53,24 +47,25 @@
         </aside>
         <article>
             <h1>✔ 회원가입</h1>
-            <form th:action="@{/process_register}" th:object="${user}"
-                  enctype="multipart/form-data" method="post">
+
                 <div class="registerForm">
                     <table border="0">
                         <tr>
-                            <td>이름</td>
-                            <td><input type="text" th:field="*{name}" id="name" required></td>
-                        </tr>
-                        <tr>
+                            <form action="/signup/info/idCheck" method="post">
                             <td>학번(ID)</td>
-                            <td><input type="text" th:field="*{studentIdNum}" id="studentIdNum" name="studentIdNum"
-                                       required></td>
-                            <td><p th:text="${id_status}"></p><p>why</p></td>
-                            <!--<td><input type="button" name="IDcheck" value="중복확인" onclick="showStatus()"></td> -->
+                            <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${id}" required></td>
+                            <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
+                            <td><input type="submit" name="IDcheck" value="중복확인"></td>
+                            </form>
+                        </tr>
+                        <form action="/signup/info" enctype="multipart/form-data" method="post">
+                        <tr>
+                            <td>이름</td>
+                            <td><input type="text" name="name" id="name" required></td>
                         </tr>
                         <tr>
                             <td>비밀번호</td>
-                            <td><input type="password" th:field="*{password}" id="pw" value=""
+                            <td><input type="password" name="password" id="pw" value=""
                                        required minlength="6" maxlength="10" onchange="check_pw()"></td>
                         </tr>
                         <tr>
@@ -81,31 +76,36 @@
                         </tr>
                         <tr>
                             <td>신분</td>
-                            <td><input type="radio" name="identity" value="ROLE_STUDENT" th:field="*{role}">학생</td>
-                            <td><input type="radio" name="identity" value="ROLE_STAFF" th:field="*{role}">교수자/조교</td>
+                            <td><input type="radio" name="identity" value="ROLE_STUDENT">학생</td>
+                            <td><input type="radio" name="identity" value="ROLE_STAFF">교수자/조교</td>
                         </tr>
                         <tr>
                             <td>제1전공</td>
-                            <td><input type="text" th:field="*{major1}" required/></td>
+                            <td><input type="text" name="major1" required/></td>
                         </tr>
                         <tr>
                             <td>제2전공</td>
-                            <td><input type="text" th:field="*{major2}"></td>
+                            <td><input type="text" name="major2"></td>
                         </tr>
                         <tr>
-                            <td rowspan="2">숙명포털 인증</td>
+                            <td>숙명포털 인증</td>
                             <td><input type="file" name="authImg" value="authImg"></td>
                         </tr>
+                            <tr><td></td><td><button type="submit" name="SignupEnd" onclick="window.alert('회원가입이 완료되었습니다!')">작성 완료</button></td></tr>
+
+                        </form>
                     </table>
-                    <button type="submit" name="SignupEnd">작성 완료</button>
+
                 </div>
                 <br><br><br>
-            </form>
+
             <script>
-                if ([[${id_status}]]) {
-                    alert("회원가입이 완료되었습니다!");
-                } else {
-                    alert("해당 학번으로 이미 가입되었습니다!");
+                if ("[[${id_status}]]" === "NULL_ID") {
+                    window.alert("학번을 입력하세요.");
+                } else if("[[${id_status}]]" === "SAME_ID") {
+                    window.alert("가입 이력이 있는 회원입니다.");
+                } else if("[[${id_status}]]" === "INVALID_ID") {
+                    window.alert("학번이 유효하지 않습니다.");
                 }
             </script>
         </article>

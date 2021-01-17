@@ -29,7 +29,7 @@ th, td {
     padding: 10px;
 }
 
-input[type=button]{
+input[type=button], input[type=submit]{
   background-color: #003087;
   color: white;
   padding: 10px;
