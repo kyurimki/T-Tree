@@ -72,6 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/projectPost").hasRole("STAFF")
+                .antMatchers("/admin/**").hasRole("STAFF")
                 .and()
                 .formLogin().loginPage("/user/login")
                 .defaultSuccessUrl("/")
