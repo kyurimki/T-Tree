@@ -126,6 +126,21 @@ public class SignupController {
             model.addAttribute("id_status", "INVALID_ID");
         } else {
             try {
+
+
+                userDto.setStudentIdNum(student_id);
+                userDto.setRole(identity);
+                userDto.setEmail(emailStore);
+
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+                userDto.setPassword(encodedPassword);
+
+                //userService.saveUser(userDto);
+                Long userId = userService.saveUser(userDto);
+                boolIdStatus = false;
+
+
                 String origFilename = files.getOriginalFilename();
                 String filename = new MD5Generator(origFilename).toString();
                 String savePath = System.getProperty("user.dir") + "/files";
@@ -140,22 +155,13 @@ public class SignupController {
                 files.transferTo(new File(filePath));
 
                 AuthImageDto authImageDto = new AuthImageDto();
+                authImageDto.setImage_id(userId);
                 authImageDto.setOrigFilename(origFilename);
                 authImageDto.setFilename(filename);
                 authImageDto.setFilePath(filePath);
 
-                Long fileId = authImageService.saveAuthImage(authImageDto);
-                userDto.setId(fileId);
-                userDto.setStudentIdNum(student_id);
-                userDto.setRole(identity);
-                userDto.setEmail(emailStore);
+                authImageService.saveAuthImage(authImageDto);
 
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String encodedPassword = passwordEncoder.encode(userDto.getPassword());
-                userDto.setPassword(encodedPassword);
-
-                userService.saveUser(userDto);
-                boolIdStatus = false;
             }catch(Exception e) {
                 e.printStackTrace();
             }

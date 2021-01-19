@@ -8,15 +8,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 public class User {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long user_id;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -50,8 +51,8 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, boolean status){
-        this.id = id;
+    public User(Long user_id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, boolean status){
+        this.user_id = user_id;
         this.name = name;
         this.studentIdNum = studentIdNum;
         this.email = email;

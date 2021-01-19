@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 public class UserDto {
-    private Long id;
+    private Long user_id;
     private String name;
     private String studentIdNum;
     private String email;
@@ -21,13 +21,10 @@ public class UserDto {
     private boolean status;
 
     private Long fileId;
-    private String filename;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
     public User toEntity(){
         User build = User.builder()
-                .id(id)
+                .user_id(user_id)
                 .name(name)
                 .studentIdNum(studentIdNum)
                 .email(email)
@@ -41,8 +38,8 @@ public class UserDto {
     }
 
     @Builder
-    public UserDto(Long id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, Long fileId, boolean status){
-        this.id = id;
+    public UserDto(Long user_id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, Long fileId, boolean status){
+        this.user_id = user_id;
         this.name = name;
         this.studentIdNum = studentIdNum;
         this.email = email;

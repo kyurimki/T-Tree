@@ -21,7 +21,7 @@ public class UserService {
     @Transactional
     public Long saveUser(UserDto userDto){
         idCheck(userDto.getStudentIdNum());
-        return userRepository.save(userDto.toEntity()).getId();
+        return userRepository.save(userDto.toEntity()).getUser_id();
     }
 
     @Transactional
@@ -29,7 +29,7 @@ public class UserService {
         User user = userRepository.findById(id).get();
 
         UserDto userDto = UserDto.builder()
-                .id(id)
+                .user_id(user.getUser_id())
                 .name(user.getName())
                 .studentIdNum(user.getStudentIdNum())
                 .password(user.getPassword())
@@ -48,7 +48,7 @@ public class UserService {
         List<User> userList = userRepository.findAll();
         for(User user : userList) {
             if(studentId.equals(user.getStudentIdNum())) {
-                Long id = user.getId();
+                Long id = user.getUser_id();
                 UserDto userDto = getUser(id);
                 return userDto;
             }
@@ -70,7 +70,7 @@ public class UserService {
         int size = userList.size();
         List<UserDto> userNotApprovedList = new ArrayList<>(size);
         for(int i = 0; i < size; i++) {
-            Long id = userList.get(i).getId();
+            Long id = userList.get(i).getUser_id();
             UserDto userDto = getUser(id);
             userNotApprovedList.add(userDto);
         }

@@ -15,14 +15,14 @@ public class AuthImageService {
     public AuthImageService(AuthImageRepository authImageRepository) {this.authImageRepository = authImageRepository;}
 
     @Transactional
-    public Long saveAuthImage(AuthImageDto authImageDto) { return authImageRepository.save(authImageDto.toEntity()).getId();}
+    public Long saveAuthImage(AuthImageDto authImageDto) { return authImageRepository.save(authImageDto.toEntity()).getImage_id();}
 
     @Transactional
     public AuthImageDto getAuthImage(Long id) {
         AuthImage authImage = authImageRepository.findById(id).get();
 
         AuthImageDto authImageDto = AuthImageDto.builder()
-                .id(id)
+                .image_id(id)
                 .origFilename(authImage.getOrigFilename())
                 .filename(authImage.getFilename())
                 .filePath(authImage.getFilePath())

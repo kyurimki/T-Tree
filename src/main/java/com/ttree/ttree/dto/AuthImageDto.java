@@ -8,14 +8,14 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class AuthImageDto {
-    private Long id;
+    private Long image_id;
     private String origFilename;
     private String filename;
     private String filePath;
 
     public AuthImage toEntity(){
         AuthImage build = AuthImage.builder()
-                .id(id)
+                .image_id(image_id)
                 .origFilename(origFilename)
                 .filename(filename)
                 .filePath(filePath)
@@ -24,8 +24,8 @@ public class AuthImageDto {
     }
 
     @Builder
-    public AuthImageDto(Long id, String origFilename, String filename, String filePath){
-        this.id = id;
+    public AuthImageDto(Long image_id, String origFilename, String filename, String filePath){
+        this.image_id = image_id;
         this.origFilename = origFilename;
         this.filename = filename;
         this.filePath = filePath;

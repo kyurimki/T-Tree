@@ -13,8 +13,7 @@ import javax.persistence.*;
 public class AuthImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long image_id;
 
     @Column(nullable = false)
     private String origFilename;
@@ -26,8 +25,8 @@ public class AuthImage {
     private String filePath;
 
     @Builder
-    public AuthImage (Long id, String origFilename, String filename, String filePath){
-        this.id = id;
+    public AuthImage (Long image_id, String origFilename, String filename, String filePath){
+        this.image_id = image_id;
         this.origFilename = origFilename;
         this.filename = filename;
         this.filePath = filePath;
