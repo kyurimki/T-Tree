@@ -66,4 +66,17 @@ public class AdminController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(authImgFilename, "utf-8") + "\"")
                 .body(resource);
     }
+
+    @GetMapping("/admin/createUser")
+    public String createUserPage() {
+        return "adminCreateUser";
+    }
+
+    @PostMapping("/admin/createUser")
+    public String createUser(HttpServletRequest request) {
+        String studentId = request.getParameter("studentIdNum");
+        String name = request.getParameter("studentNum");
+
+        return "StaffPage";
+    }
 }
