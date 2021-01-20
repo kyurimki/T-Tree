@@ -51,31 +51,36 @@ public class BoardController {
     }
 
     @GetMapping("/projectList")
-    public String list(@PageableDefault Pageable pageable, Model model) {
-        List<BoardDto> boardDtoList = boardService.getBoardList(null, null);
-        Page<Board> pageList = boardService.getBoardPage(pageable);
+    public String list(@RequestParam(value = "page", defaultValue = "1") Integer pageNum, Model model) {
+        List<BoardDto> boardDtoList = boardService.getBoardList(null, null, pageNum);
+        Integer[] pageList = boardService.getPageList(pageNum);
+        //Page<Board> pageList = boardService.getBoardPage(pageable);
 
-        model.addAttribute("postList", boardDtoList);
-        model.addAttribute("listPage", pageList);
+        //model.addAttribute("postList", boardDtoList);
+        model.addAttribute("listPage", boardDtoList);
+        model.addAttribute("pageList", pageList);
 
-        System.out.println("총 element 수: " + pageList.getTotalElements());
-        System.out.println("전체 page 수: " + pageList.getTotalPages());
-        System.out.println("페이지에 표시할 element 수: " + pageList.getSize());
-        System.out.println("현재 페이지 index: " + pageList.getNumber());
-        System.out.println("현재 페이지의 element 수: " + pageList.getNumberOfElements());
+        //System.out.println("총 element 수: " + pageList.getTotalElements());
+        //System.out.println("전체 page 수: " + pageList.getTotalPages());
+        //System.out.println("페이지에 표시할 element 수: " + pageList.getSize());
+        //System.out.println("현재 페이지 index: " + pageList.getNumber());
+        //System.out.println("현재 페이지의 element 수: " + pageList.getNumberOfElements());
 
         return "projectList";
     }
 
     @PostMapping("/projectList")
-    public String search(HttpServletRequest request, Model model) {
+    public String search(HttpServletRequest request, Model model,
+                         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
         String[] yearToSearch = request.getParameterValues("year_select");
         String[] langToSearch = request.getParameterValues("language_select");
         List<BoardDto> boardDtoList = null;
+        Integer[] pageList = boardService.getPageList(pageNum);
 
         if((!yearToSearch[0].equals("all_year")) && (yearToSearch != null)) {
             for(int i = 0; i < yearToSearch.length; i++) {
-                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
+                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i], pageNum);
+                System.out.println("boardDtoSearchList pageNum:" + pageNum);
                 if(boardDtoSearchList != null) {
                     for(int j = 0; j < boardDtoSearchList.size(); j++) {
                         if (boardDtoList == null) {
@@ -88,14 +93,16 @@ public class BoardController {
                 }
             }
         } else {
-            boardDtoList = boardService.getBoardList(null, null);
+            boardDtoList = boardService.getBoardList(null, null, pageNum);
         }
 
         if((!langToSearch[0].equals("all_language")) && (langToSearch != null)) {
-            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService);
+            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService, pageNum);
+            System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
         }
 
-        model.addAttribute("postList", boardDtoList);
+        model.addAttribute("listPage", boardDtoList);
+        model.addAttribute("pageList", pageList);
         return "projectList";
     }
 
