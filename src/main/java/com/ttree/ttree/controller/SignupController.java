@@ -1,6 +1,5 @@
 package com.ttree.ttree.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.ttree.ttree.domain.entity.CustomUserDetails;
 import com.ttree.ttree.dto.AuthImageDto;
 import com.ttree.ttree.dto.UserDto;
@@ -218,6 +217,38 @@ public class SignupController {
         }
        return "changePW";
     }
+
+    @RequestMapping(value="/changeEmail")
+    public String changeEmail(){ return "changeEmail"; }
+
+    @PostMapping(value = "/changeEmail")
+    public String changeEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                              @RequestParam("oldEmail") String oldEmail, @RequestParam("email") String email, Model model){
+        boolean isEmailChanged = true;
+
+        String dbEmail = customUserDetails.getUserEmail();
+        String studentIdNum = customUserDetails.getStudentIdNum();
+
+        oldEmail = oldEmail + "@sookmyung.ac.kr";
+        email = email + "@sookmyung.ac.kr";
+
+        UserDto userDto = userService.getUserByStudentId(studentIdNum);
+
+        System.out.println("dbEmail: " + dbEmail);
+        System.out.println("oldEmail: " + oldEmail);
+        System.out.println("email: " + email);
+
+        if (dbEmail.equals(oldEmail)){
+            model.addAttribute("isEmailChanged", isEmailChanged);
+            userDto.setEmail(email);
+            userService.saveUser(userDto);
+        } else{
+            isEmailChanged = false;
+            model.addAttribute("isEmailChanged", isEmailChanged);
+        }
+        return "changeEmail";
+    }
+
 
 
 

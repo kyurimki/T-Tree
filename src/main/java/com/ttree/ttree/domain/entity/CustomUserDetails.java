@@ -62,6 +62,8 @@ public class CustomUserDetails implements UserDetails {
 
     public String getMajorTwo(){ return user.getMajor2(); }
 
+    public String getUserEmail(){ return user.getEmail(); }
+
 
 
 }
