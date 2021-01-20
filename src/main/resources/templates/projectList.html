@@ -137,13 +137,11 @@
                 </tr>
             </table>
 
-            <!--
             <div>
                 <span th:each="pageNum : ${pageList}" th:inline="text">
-                    <a th:href="@{'/projectList/page=' + ${pageNum}}">[[${pageNum}]]</a>
+                    <a th:href="@{'/projectList?page=' + ${pageNum}}">[[${pageNum}]]</a>
                 </span>
             </div>
-            -->
 
 
 

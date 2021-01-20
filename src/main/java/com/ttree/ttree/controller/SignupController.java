@@ -96,7 +96,6 @@ public class SignupController {
     public String signup(Model model) {
         model.addAttribute("user", new UserDto());
         model.addAttribute("boolStatus", boolIdStatus);
-        model.addAttribute("id_status", "!");
         return "SignupInfo";
     }
 
@@ -125,8 +124,6 @@ public class SignupController {
             model.addAttribute("id_status", "INVALID_ID");
         } else {
             try {
-
-
                 userDto.setStudentIdNum(student_id);
                 userDto.setRole(identity);
                 userDto.setEmail(emailStore);

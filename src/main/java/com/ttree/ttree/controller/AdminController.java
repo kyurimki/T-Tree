@@ -1,23 +1,21 @@
 package com.ttree.ttree.controller;
 
-import com.ttree.ttree.domain.entity.CustomUserDetails;
 import com.ttree.ttree.dto.AuthImageDto;
-import com.ttree.ttree.dto.FairFileDto;
 import com.ttree.ttree.dto.UserDto;
 import com.ttree.ttree.service.AuthImageService;
-import com.ttree.ttree.service.CustomUserDetailsService;
 import com.ttree.ttree.service.UserService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -31,13 +29,15 @@ import java.util.List;
 public class AdminController {
     private UserService userService;
     private AuthImageService authImageService;
+    public boolean boolIdStatus = false;
+    public String student_id = "";
 
     public AdminController(UserService userService, AuthImageService authImageService) {
         this.userService = userService;
         this.authImageService = authImageService;
     }
 
-    @GetMapping(value="/admin/userApproval")
+    @GetMapping(value = "/admin/userApproval")
     public String userList(Model model) {
         List<UserDto> notApprovedUserList = userService.getNotApprovedUser();
         model.addAttribute("studentList", notApprovedUserList);
@@ -45,7 +45,7 @@ public class AdminController {
         return "adminUserApproval";
     }
 
-    @PostMapping(value="/admin/userApproval")
+    @PostMapping(value = "/admin/userApproval")
     public String userApproval(HttpServletRequest request) {
         String id = request.getParameter("id");
         UserDto userDto = userService.getUser(Long.valueOf(id));
@@ -68,15 +68,58 @@ public class AdminController {
     }
 
     @GetMapping("/admin/createUser")
-    public String createUserPage() {
+    public String createUserPage(Model model) {
+        model.addAttribute("boolStatus", boolIdStatus);
+        return "adminCreateUser";
+    }
+
+    @PostMapping("/admin/createUser/checkId")
+    public String idCheck(@RequestParam("studentIdNum") String id, Model model) {
+        if (id == null) {
+            model.addAttribute("id_status", "NULL_ID");
+            model.addAttribute("boolStatus", boolIdStatus);
+        } else {
+            if (userService.idCheck(id)) {
+                model.addAttribute("id_status", "SAME_ID");
+                model.addAttribute("boolStatus", boolIdStatus);
+            } else {
+                boolIdStatus = true;
+                model.addAttribute("boolStatus", boolIdStatus);
+                student_id = id;
+                model.addAttribute("id", student_id);
+            }
+        }
         return "adminCreateUser";
     }
 
     @PostMapping("/admin/createUser")
-    public String createUser(HttpServletRequest request) {
-        String studentId = request.getParameter("studentIdNum");
-        String name = request.getParameter("studentNum");
+    public String createUser(HttpServletRequest request, Model model) {
+        if (student_id.equals("")) {
+            model.addAttribute("id_status", "INVALID_ID");
+        } else {
+            try {
+                UserDto userDto = new UserDto();
+                String studentId = request.getParameter("studentIdNum");
+                String name = request.getParameter("studentNum");
 
-        return "StaffPage";
+                userDto.setStudentIdNum(studentId);
+                userDto.setName(name);
+                userDto.setRole("ROLE_STUDENT");
+                userDto.setEmail("test@sookmyung.ac.kr");
+                userDto.setStatus(true);
+                userDto.setMajor1("IT공학전공");
+
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = passwordEncoder.encode("p" + studentId + "!");
+                userDto.setPassword(encodedPassword);
+
+                userService.saveUser(userDto);
+                model.addAttribute("id_status", "OK");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "adminCreateUser";
     }
 }
+
