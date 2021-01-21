@@ -62,11 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf().disable()
-                /*.sessionManagement()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)
-                .expiredUrl("/user/login")
-                .sessionRegistry()*/
                 .httpBasic()
                 .and()
                 .authorizeRequests()
@@ -80,7 +75,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/").permitAll();
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true) //로그아웃시 세션제거
+                .deleteCookies("JSESSIONID") // 쿠키제거
+                .clearAuthentication(true)
+                .permitAll()
+                .and()
+                .sessionManagement()
+                .maximumSessions(1)//같은 id로 한명만 로그인 가능
+                .expiredUrl("/user/login")
+                .maxSessionsPreventsLogin(true);
     }
 
     /*
