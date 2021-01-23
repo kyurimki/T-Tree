@@ -110,4 +110,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
      */
+
+    @Bean //invalidateHttpSession(true)가 작동하지 않을 때 사용
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
+    }
 }

@@ -48,17 +48,17 @@
         <article>
             <h1>✔ 회원가입</h1>
 
-                <div class="registerForm">
-                    <table border="0">
-                        <tr>
-                            <form action="/signup/info/idCheck" method="post">
+            <div class="registerForm">
+                <table border="0">
+                    <tr>
+                        <form action="/signup/info/idCheck" method="post">
                             <td>학번(ID)</td>
                             <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${id}" required></td>
                             <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
                             <td><input type="submit" name="IDcheck" value="중복확인"></td>
-                            </form>
-                        </tr>
-                        <form action="/signup/info" enctype="multipart/form-data" method="post">
+                        </form>
+                    </tr>
+                    <form action="/signup/info" enctype="multipart/form-data" method="post">
                         <tr>
                             <td>이름</td>
                             <td><input type="text" name="name" id="name" required></td>
@@ -91,22 +91,43 @@
                             <td>숙명포털 인증</td>
                             <td><input type="file" name="authImg" value="authImg" required></td>
                         </tr>
-                            <tr><td></td><td><button type="submit" name="SignupEnd" onclick="window.alert('회원가입이 완료되었습니다!')">작성 완료</button></td></tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="submit" name="SignupEnd" onclick="alertMessage()">작성 완료</button>
+                            </td>
+                        </tr>
 
-                        </form>
-                    </table>
+                    </form>
+                </table>
 
-                </div>
-                <br><br><br>
+            </div>
+            <br><br><br>
 
             <script>
                 if ("[[${id_status}]]" === "NULL_ID") {
                     window.alert("학번을 입력하세요.");
-                } else if("[[${id_status}]]" === "SAME_ID") {
+                } else if ("[[${id_status}]]" === "SAME_ID") {
                     window.alert("가입 이력이 있는 회원입니다.");
-                } else if("[[${id_status}]]" === "INVALID_ID") {
+                } else if ("[[${id_status}]]" === "INVALID_ID") {
                     window.alert("학번이 유효하지 않습니다.");
                 }
+
+                function alertMessage(isFilled) {
+                    $('input').filter('[required]').each(function () {
+                        if ($(this).val() == "") {
+                            isFilled = false;
+                        } else {
+                            isFilled = true;
+                        }
+                    })
+                    if (isFilled) {
+                        window.alert("회원가입이 완료되었습니다")
+                    } else {
+                        window.alert("필수 창을 모두 입력하여주세요.")
+                    }
+                }
+
             </script>
         </article>
     </section>
