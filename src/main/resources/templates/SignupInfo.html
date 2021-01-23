@@ -113,6 +113,11 @@
                     window.alert("학번이 유효하지 않습니다.");
                 }
 
+                if([[${boolStatus}]]){
+                    $("#studentIdNum").attr("disabled", true);
+                }
+
+
                 function alertMessage(isFilled) {
                     $('input').filter('[required]').each(function () {
                         if ($(this).val() == "") {
