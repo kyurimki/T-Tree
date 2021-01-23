@@ -1,8 +1,10 @@
 package com.ttree.ttree.controller;
 
 import com.ttree.ttree.dto.AuthImageDto;
+import com.ttree.ttree.dto.TeamDto;
 import com.ttree.ttree.dto.UserDto;
 import com.ttree.ttree.service.AuthImageService;
+import com.ttree.ttree.service.TeamService;
 import com.ttree.ttree.service.UserService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -29,12 +31,15 @@ import java.util.List;
 public class AdminController {
     private UserService userService;
     private AuthImageService authImageService;
-    public boolean boolIdStatus = false;
+    private TeamService teamService;
     public String student_id = "";
+    public UserDto userDto;
+    boolean signupRecord = false;
 
-    public AdminController(UserService userService, AuthImageService authImageService) {
+    public AdminController(UserService userService, AuthImageService authImageService, TeamService teamService) {
         this.userService = userService;
         this.authImageService = authImageService;
+        this.teamService = teamService;
     }
 
     @GetMapping(value = "/admin/userApproval")
@@ -68,8 +73,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/createUser")
-    public String createUserPage(Model model) {
-        model.addAttribute("boolStatus", boolIdStatus);
+    public String createUserPage() {
         return "adminCreateUser";
     }
 
@@ -77,16 +81,18 @@ public class AdminController {
     public String idCheck(@RequestParam("studentIdNum") String id, Model model) {
         if (id == null) {
             model.addAttribute("id_status", "NULL_ID");
-            model.addAttribute("boolStatus", boolIdStatus);
         } else {
-            if (userService.idCheck(id)) {
-                model.addAttribute("id_status", "SAME_ID");
-                model.addAttribute("boolStatus", boolIdStatus);
-            } else {
-                boolIdStatus = true;
-                model.addAttribute("boolStatus", boolIdStatus);
-                student_id = id;
-                model.addAttribute("id", student_id);
+            student_id = id;
+            model.addAttribute("studentId", student_id);
+            if(userService.getUserByStudentId(id) != null) {
+                signupRecord = true;
+                userDto = userService.getUserByStudentId(id);
+                model.addAttribute("userInfo", userDto);
+                if(userDto.getTeamIdNum() != null) {
+                    Long teamId = userDto.getTeamIdNum();
+                    TeamDto teamDto = teamService.getTeam(teamId);
+                    model.addAttribute("teamInfo", teamDto);
+                }
             }
         }
         return "adminCreateUser";
@@ -94,24 +100,31 @@ public class AdminController {
 
     @PostMapping("/admin/createUser")
     public String createUser(HttpServletRequest request, Model model) {
-        if (student_id.equals("")) {
+        String name = request.getParameter("studentName");
+        if (name == null) {
             model.addAttribute("id_status", "INVALID_ID");
         } else {
+            String email = request.getParameter("studentEmail");
+            String phoneNum = request.getParameter("studentPhoneNum");
             try {
-                UserDto userDto = new UserDto();
-                String studentId = request.getParameter("studentIdNum");
-                String name = request.getParameter("studentNum");
+                if(!signupRecord) {
+                    userDto = new UserDto();
 
-                userDto.setStudentIdNum(studentId);
+                    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                    String encodedPassword = passwordEncoder.encode("p" + student_id + "!");
+                    userDto.setPassword(encodedPassword);
+                    userDto.setMajor1("IT공학전공");
+                } else {
+                    userDto.setPassword(userDto.getPassword());
+                    userDto.setMajor1(userDto.getMajor1());
+                    userDto.setMajor2(userDto.getMajor2());
+                }
+                userDto.setStudentIdNum(student_id);
                 userDto.setName(name);
                 userDto.setRole("ROLE_STUDENT");
-                userDto.setEmail("test@sookmyung.ac.kr");
+                userDto.setEmail(email);
+                userDto.setPhoneNum(phoneNum);
                 userDto.setStatus(true);
-                userDto.setMajor1("IT공학전공");
-
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String encodedPassword = passwordEncoder.encode("p" + studentId + "!");
-                userDto.setPassword(encodedPassword);
 
                 userService.saveUser(userDto);
                 model.addAttribute("id_status", "OK");

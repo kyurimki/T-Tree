@@ -43,6 +43,12 @@ public class User {
     @Column(columnDefinition = "boolean default false")
     private boolean status;
 
+    @Column
+    private String phoneNum;
+
+    @Column
+    private Long teamIdNum;
+
     public String getPassword(){
         return password;
     }
@@ -51,7 +57,7 @@ public class User {
     }
 
     @Builder
-    public User(Long user_id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, boolean status){
+    public User(Long user_id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, boolean status, String phoneNum, Long teamIdNum){
         this.user_id = user_id;
         this.name = name;
         this.studentIdNum = studentIdNum;
@@ -61,5 +67,7 @@ public class User {
         this.major1 = major1;
         this.major2 = major2;
         this.status = status;
+        this.phoneNum = phoneNum;
+        this.teamIdNum = teamIdNum;
     }
 }

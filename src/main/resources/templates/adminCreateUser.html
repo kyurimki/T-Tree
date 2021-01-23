@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,33 +10,68 @@
             <tr>
                 <form role="form" action="/admin/createUser/checkId" name="createUserCheckId" id="checkId" method="POST">
                     <td>학번</td>
-                    <td><input type="text" id="studentIdNum" name="studentIdNum" required></td>
-                    <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
-                    <td><button type="submit" name="checkStudentId">학번 중복 체크</button></td>
+                    <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${studentId}" required></td>
+                    <td><button type="submit" name="checkStudentId">검색</button></td>
                 </form>
             </tr>
             <form role="form" action="/admin/createUser" name="createUser" id="createUser" method="POST">
-            <tr>
-                <td>이름</td>
-                <td><input type="text" id="studentNum" name="studentNum" required></td>
-            </tr>
-            <tr>
-                <td colspan="2"><button type="submit" name="createUserEnd">회원 등록</button></td>
-            </tr>
+                <tr>
+                    <td>이름</td>
+                    <td><input type="text" id="studentName" name="studentName" th:value="${userInfo?.name}"required></td>
+                </tr>
+                <tr>
+                    <td>휴대폰 번호</td>
+                    <td><input type="text" id="studentPhoneNum" name="studentPhoneNum" th:value="${userInfo?.phoneNum}"></td>
+                </tr>
+                <tr>
+                    <td>메일 주소</td>
+                    <td><input type="text" id="studentEmail" name="studentEmail" th:value="${userInfo?.email}"></td>
+                </tr>
+                <tr>
+                    <td>팀 이름</td>
+                    <td><input type="text" id="teamName" name="studentEmail" th:value="${teamInfo?.teamName}"></td>
+                </tr>
+                <tr>
+                    <td> 연도/학기 </td>
+                    <td>
+                        <select name="teamYear" id="teamYear">
+                            <option value="">연도</option>
+                            <option value="2021">2021년</option>
+                            <option value="2022">2022년</option>
+                            <option value="2023">2023년</option>
+                            <option value="2024">2024년</option>
+                            <option value="2025">2025년</option>
+                        </select>
+
+                        <select name="teamSemester" id="teamSemester">
+                            <option value="">학기</option>
+                            <option value="1">1학기</option>
+                            <option value="2">2학기</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button type="submit" name="createUserEnd">회원 등록</button></td>
+                </tr>
             </form>
         </table>
     <script>
         if ("[[${id_status}]]" === "NULL_ID") {
             window.alert("학번을 입력하세요.");
-        } else if("[[${id_status}]]" === "SAME_ID") {
-            window.alert("가입 이력이 있는 회원입니다.");
-            window.close();
         } else if("[[${id_status}]]" === "INVALID_ID") {
             window.alert("학번이 유효하지 않습니다.");
         } else if("[[${id_status}]]" === "OK") {
             window.alert("회원 생성 완료");
             window.close();
         }
+
+        $(function() {
+            $("#teamYear").val([[${teamInfo?.teamYear}]]).attr("selected");
+        });
+
+        $(function() {
+            $('#teamSemester').val([[${teamInfo?.teamSemester}]]).attr("selected");
+        });
     </script>
 </body>
 </html>

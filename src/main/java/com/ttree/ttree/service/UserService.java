@@ -38,6 +38,8 @@ public class UserService {
                 .major1(user.getMajor1())
                 .major2(user.getMajor2())
                 .status(user.isStatus())
+                .phoneNum(user.getPhoneNum())
+                .teamIdNum(user.getTeamIdNum())
                 .build();
         return userDto;
 

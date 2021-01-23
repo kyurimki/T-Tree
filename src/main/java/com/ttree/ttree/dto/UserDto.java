@@ -19,6 +19,8 @@ public class UserDto {
     private String major1;
     private String major2;
     private boolean status;
+    private String phoneNum;
+    private Long teamIdNum;
 
     private Long fileId;
 
@@ -33,12 +35,14 @@ public class UserDto {
                 .major1(major1)
                 .major2(major2)
                 .status(status)
+                .phoneNum(phoneNum)
+                .teamIdNum(teamIdNum)
                 .build();
         return build;
     }
 
     @Builder
-    public UserDto(Long user_id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, Long fileId, boolean status){
+    public UserDto(Long user_id, String name, String studentIdNum, String email, String password, String role, String major1, String major2, Long fileId, boolean status, String phoneNum, Long teamIdNum){
         this.user_id = user_id;
         this.name = name;
         this.studentIdNum = studentIdNum;
@@ -49,5 +53,7 @@ public class UserDto {
         this.major2 = major2;
         this.fileId = fileId;
         this.status = status;
+        this.phoneNum = phoneNum;
+        this.teamIdNum = teamIdNum;
     }
 }
