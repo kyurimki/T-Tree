@@ -126,7 +126,32 @@ public class AdminController {
                 userDto.setPhoneNum(phoneNum);
                 userDto.setStatus(true);
 
+                String teamName = request.getParameter("teamName");
+                String teamYear = request.getParameter("teamYear");
+                String teamSemester = request.getParameter("teamSemester");
+
+                List<TeamDto> teamDtoList = teamService.getTeamListByName(teamName);
+                System.out.println("!");
+                TeamDto teamDto;
+                boolean flag = false;
+                if(teamDtoList != null) {
+                    for(TeamDto team : teamDtoList) {
+                        if(team.getTeamYear().equals(teamYear) && team.getTeamSemester().equals(teamSemester)) {
+                            userDto.setTeamIdNum(team.getTeamId());
+                            flag = true;
+                        }
+                    }
+                } else if(teamDtoList == null || !flag) {
+                    System.out.println("@");
+                    teamDto = new TeamDto();
+                    teamDto.setTeamName(teamName);
+                    teamDto.setTeamYear(teamYear);
+                    teamDto.setTeamSemester(teamSemester);
+                    Long teamId = teamService.saveTeam(teamDto);
+                    userDto.setTeamIdNum(teamId);
+                }
                 userService.saveUser(userDto);
+                signupRecord = false;
                 model.addAttribute("id_status", "OK");
             } catch (Exception e) {
                 e.printStackTrace();
