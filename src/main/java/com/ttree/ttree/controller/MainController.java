@@ -27,17 +27,6 @@ public class MainController {
     @RequestMapping(value = "/user/login")
     public String login(){ return "login"; }
 
-    @RequestMapping(value = "/projectNotes")
-    public String projectNotes(){
-        return "projectNotes";
-    }
-
-    @RequestMapping(value = "/projectRules")
-    public String projectRules(){ return "projectRules";}
-
-    @RequestMapping(value = "/projectProcess")
-    public String projectProcess(){ return "projectProcess";}
-
     @RequestMapping(value = "/staff/staffPage")
     public String staffPage(){ return "staffPage"; }
 

@@ -39,7 +39,10 @@
                     <a href="/projectRules"> 졸업작품 시행 규칙 </a>
                 </li>
                 <li>
-                    <a href="/projectNotes"> 졸업작품 유의사항 </a>
+                    <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
+                       href="/projectNotes"> 졸업작품 유의사항 </a>
+                    <a th:if="${#authorization.expression('!hasRole(''STAFF'')')}"
+                       href="/projectNotesSaved"> 졸업작품 유의사항 </a>
                 </li>
                 <li>
                     <a href="/projectList"> 졸업작품 소개 </a>
