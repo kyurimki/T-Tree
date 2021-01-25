@@ -35,8 +35,10 @@
                 <li>
                     <a href="/projectProcess"> 졸업작품 진행 개요 </a>
                 </li>
-                <li>
-                    <a href="/projectRules"> 졸업작품 시행 규칙 </a>
+                <li><a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
+                       href="/projectRules"> 졸업작품 시행 규칙 </a>
+                    <a th:if="${#authorization.expression('!hasRole(''STAFF'')')}"
+                       href="/projectRulesSaved"> 졸업작품 시행 규칙 </a>
                 </li>
                 <li>
                     <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
