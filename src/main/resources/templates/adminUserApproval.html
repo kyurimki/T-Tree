@@ -29,10 +29,10 @@
                     <th scope="col" style="text-align: center">학적정보</th>
                     <th scope="col" style="text-align: center">승인</th>
                 </tr>
-                <tr class="text-center" th:each="student, index : ${studentList}">
+                <tr class="text-center" th:each="student : ${studentList}">
                     <form role="form" action="/admin/userApproval" name="userApproval" id="userApproval" method="POST">
                         <td>
-                            <p th:text="${student.id}"></p>
+                            <p th:text="${student.user_id}"></p>
                         </td>
                         <td>
                             <p th:text="${student.studentIdNum}"></p>
@@ -47,10 +47,10 @@
                             <p th:text="${student.major2}"></p>
                         </td>
                         <td>
-                            <a th:href="@{'/admin/userApproval/' +${student.id}}" th:text="다운로드"></a>
+                            <a th:href="@{'/admin/userApproval/' +${student.user_id}}" th:text="다운로드"></a>
                         </td>
                         <td>
-                            <input type="hidden" name="id" th:value="${student.id}">
+                            <input type="hidden" name="id" th:value="${student.user_id}">
                             <button type="submit" id="userApprovalButton" name="userApproval">
                                 가입 승인
                             </button>

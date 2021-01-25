@@ -1,12 +1,8 @@
 package com.ttree.ttree.service;
 
-import com.ttree.ttree.domain.entity.Board;
 import com.ttree.ttree.domain.entity.Team;
-import com.ttree.ttree.domain.entity.User;
 import com.ttree.ttree.domain.repository.TeamRepository;
-import com.ttree.ttree.dto.BoardDto;
 import com.ttree.ttree.dto.TeamDto;
-import com.ttree.ttree.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -49,6 +45,32 @@ public class TeamService {
         List<TeamDto> teamDtoList = new ArrayList<>();
         for(Team team : teamList) {
             if(teamName.equals(team.getTeamName())) {
+                Long id = team.getTeamId();
+                TeamDto teamDto = getTeam(id);
+                teamDtoList.add(teamDto);
+            }
+        }
+        return teamDtoList;
+    }
+
+    @Transactional
+    public List<TeamDto> getTeamList() {
+        List<Team> teamList = teamRepository.findAll();
+        List<TeamDto> teamDtoList = new ArrayList<>();
+        for(Team team : teamList) {
+            Long id = team.getTeamId();
+            TeamDto teamDto = getTeam(id);
+            teamDtoList.add(teamDto);
+        }
+        return teamDtoList;
+    }
+
+    @Transactional
+    public List<TeamDto> searchTeamByTime(String yearToSearch, String semesterToSearch) {
+        List<Team> teamList = teamRepository.findAll();
+        List<TeamDto> teamDtoList = new ArrayList<>();
+        for(Team team : teamList) {
+            if(yearToSearch.equals(team.getTeamYear()) && semesterToSearch.equals(team.getTeamSemester())) {
                 Long id = team.getTeamId();
                 TeamDto teamDto = getTeam(id);
                 teamDtoList.add(teamDto);

@@ -158,5 +158,31 @@ public class AdminController {
         }
         return "adminCreateUser";
     }
+
+    @GetMapping(value = "/admin/updateStatus")
+    public String getTeamList(Model model) {
+        List<TeamDto> teamList = teamService.getTeamList();
+        model.addAttribute("teamList", teamList);
+
+        return "adminUpdateStatus";
+    }
+
+    @GetMapping("/admin/updateStatus/search")
+    public String redirectToUpdateStatus() {
+        return "redirect:/admin/updateStatus";
+    }
+
+    @PostMapping("/admin/updateStatus/search")
+    public String searchTeam(HttpServletRequest request, Model model) {
+        String yearToSearch = request.getParameter("teamYear");
+        String semesterToSearch = request.getParameter("teamSemester");
+        if(yearToSearch.equals("") || semesterToSearch.equals("")) {
+            model.addAttribute("ERROR", "연도와 학기가 올바르게 선택되지 않았습니다.");
+        } else {
+            List<TeamDto> teamList = teamService.searchTeamByTime(yearToSearch, semesterToSearch);
+            model.addAttribute("teamList", teamList);
+        }
+        return "adminUpdateStatus";
+    }
 }
 

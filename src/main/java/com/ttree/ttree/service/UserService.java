@@ -78,5 +78,4 @@ public class UserService {
         }
         return userNotApprovedList;
     }
-
 }
