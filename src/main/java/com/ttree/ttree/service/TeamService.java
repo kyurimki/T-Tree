@@ -54,6 +54,6 @@ public class TeamService {
                 teamDtoList.add(teamDto);
             }
         }
-        return null;
+        return teamDtoList;
     }
 }

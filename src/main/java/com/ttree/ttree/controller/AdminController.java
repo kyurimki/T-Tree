@@ -118,6 +118,7 @@ public class AdminController {
                     userDto.setPassword(userDto.getPassword());
                     userDto.setMajor1(userDto.getMajor1());
                     userDto.setMajor2(userDto.getMajor2());
+                    userDto.setTeamIdNum(userDto.getTeamIdNum());
                 }
                 userDto.setStudentIdNum(student_id);
                 userDto.setName(name);
@@ -131,18 +132,16 @@ public class AdminController {
                 String teamSemester = request.getParameter("teamSemester");
 
                 List<TeamDto> teamDtoList = teamService.getTeamListByName(teamName);
-                System.out.println("!");
                 TeamDto teamDto;
                 boolean flag = false;
-                if(teamDtoList != null) {
+                if(!teamDtoList.isEmpty()) {
                     for(TeamDto team : teamDtoList) {
                         if(team.getTeamYear().equals(teamYear) && team.getTeamSemester().equals(teamSemester)) {
                             userDto.setTeamIdNum(team.getTeamId());
                             flag = true;
                         }
                     }
-                } else if(teamDtoList == null || !flag) {
-                    System.out.println("@");
+                } else {
                     teamDto = new TeamDto();
                     teamDto.setTeamName(teamName);
                     teamDto.setTeamYear(teamYear);
