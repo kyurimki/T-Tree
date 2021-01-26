@@ -10,9 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -66,8 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/projectPost").hasRole("STAFF")
-                //.antMatchers("/admin/**").hasRole("STAFF")
+                .antMatchers("/projectPost", "/projectRules", "/projectNotes", "/staff/staffPage", "/changePW", "/changeEmail").hasRole("STAFF")
+                .antMatchers("/user/studentPage", "/changePW", "/changeEmail").hasRole("STUDENT")
                 .and()
                 .formLogin().loginPage("/user/login")
                 .defaultSuccessUrl("/")
