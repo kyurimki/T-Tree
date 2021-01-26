@@ -93,10 +93,14 @@ public class SignupController {
     }
 
     @GetMapping(value = "/signup/info")
-    public String signup(Model model) {
-        model.addAttribute("user", new UserDto());
-        model.addAttribute("boolStatus", boolIdStatus);
-        return "SignupInfo";
+    public String signup(Model model, HttpServletRequest request) {
+        if(request.getHeader("REFERER") == null){
+            return "SignupEmail";
+        } else {
+            model.addAttribute("user", new UserDto());
+            model.addAttribute("boolStatus", boolIdStatus);
+            return "SignupInfo";
+        }
     }
 
     @PostMapping(value="/signup/info/idCheck")
