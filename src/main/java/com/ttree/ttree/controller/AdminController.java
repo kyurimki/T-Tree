@@ -6,6 +6,7 @@ import com.ttree.ttree.dto.UserDto;
 import com.ttree.ttree.service.AuthImageService;
 import com.ttree.ttree.service.TeamService;
 import com.ttree.ttree.service.UserService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -183,6 +185,36 @@ public class AdminController {
             model.addAttribute("teamList", teamList);
         }
         return "adminUpdateStatus";
+    }
+
+    @GetMapping("/admin/updateStatus/status1/{id}")
+    public String updateStatus1(@PathVariable("id") Long id, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        model.addAttribute("teamId", id.toString());
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "1");
+        return "adminUpdateStatusWindow";
+    }
+
+    @PostMapping("/admin/updateStatus/status1/{id}")
+    public String storeStatus1(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        String status = request.getParameter("status");
+        String reason = "";
+        LocalDate today = LocalDate.now();
+
+        if(status.equals("탈락")) {
+            reason = request.getParameter("reason");
+            teamDto.setTeamStatus1("["+today+"] "+status+": " +reason);
+        } else {
+            teamDto.setTeamStatus1("["+today+"] "+status);
+        }
+        teamDto.setTeamName(teamDto.getTeamName());
+        teamDto.setTeamYear(teamDto.getTeamYear());
+        teamDto.setTeamSemester(teamDto.getTeamSemester());
+        teamService.saveTeam(teamDto);
+
+        return "redirect:/admin/updateStatus/status1/"+id;
     }
 }
 
