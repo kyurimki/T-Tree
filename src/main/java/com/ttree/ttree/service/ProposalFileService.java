@@ -3,6 +3,7 @@ package com.ttree.ttree.service;
 import com.ttree.ttree.domain.entity.ProposalFile;
 import com.ttree.ttree.domain.repository.ProposalFileRepository;
 import com.ttree.ttree.dto.ProposalFileDto;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,7 +40,11 @@ public class ProposalFileService {
     }
 
     @Transactional
-    public void deleteProposalFile(Long id){
-        proposalFileRepository.deleteById(id);
+    public void deleteProposalFile(Long id) {
+        if (proposalFileRepository.findById(id).isPresent()) {
+            proposalFileRepository.deleteById(id);
+        } else{
+            System.out.println("file is already empty");
+        }
     }
 }

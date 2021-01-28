@@ -40,7 +40,11 @@ public class FinalPTFileService {
 
     @Transactional
     public void deleteFinalPTFile(Long id){
-        finalPTFileRepository.deleteById(id);
+        if(finalPTFileRepository.findById(id).isPresent()) {
+            finalPTFileRepository.deleteById(id);
+        }else{
+            System.out.println("file is already empty");
+        }
     }
 
 }
