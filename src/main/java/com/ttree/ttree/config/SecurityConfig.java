@@ -61,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         httpSecurity.csrf().disable()
                 .httpBasic()
                 .and()
+                .headers(headers -> headers //게시글 뒤로가기 시 발생하는 오류 없애기 위해
+                .cacheControl(cache -> cache.disable()))
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/projectPost", "/projectRules", "/projectNotes", "/staff/staffPage", "/changePW", "/changeEmail").hasRole("STAFF")
