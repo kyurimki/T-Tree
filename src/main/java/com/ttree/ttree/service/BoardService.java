@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class BoardService {
     private static final int PAGE_POST_COUNT = 4;
 
     List<Board> boardList = null;
+    List<Board> boardListByYear = null;
+
     List<BoardDto> boardDtoList = new ArrayList<>();
 
     public BoardService(BoardRepository boardRepository) {
@@ -34,16 +37,19 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardDto> getBoardList(String index, String toSearch, Integer pageNum) {
-
+    public List<BoardDto> getBoardList(String index, String toSearch) {
+        /*
         Page<Board> page = boardRepository.findAll(PageRequest.of(pageNum-1, PAGE_POST_COUNT,
                 Sort.by(Sort.Direction.ASC, "createdDate")));
         List<Board> boardList = page.getContent();
 
-        //boardList = boardRepository.findAll();
+         */
+        boardList = boardRepository.findAll();
+        boardListByYear = boardRepository.findByYear(toSearch);
+
         List<BoardDto> boardDtoList = new ArrayList<>();
-        if(index == null) {
-            for(Board board : boardList) {
+        if (index == null) {
+            for (Board board : boardList) {
                 BoardDto boardDto = BoardDto.builder()
                         .id(board.getId())
                         .title(board.getTitle())
@@ -55,79 +61,71 @@ public class BoardService {
                         .build();
                 boardDtoList.add(boardDto);
             }
-        }
-        else if (index.equals("year")) {
-            for(Board board : boardList) {
-                if(toSearch.equals(board.getYear())) {
-                    BoardDto boardDto = BoardDto.builder()
-                            .id(board.getId())
-                            .title(board.getTitle())
-                            .year(board.getYear())
-                            .semester(board.getSemester())
-                            .content(board.getContent())
-                            .createdDate(board.getCreatedDate())
-                            .hit(board.getHit())
-                            .build();
-                    boardDtoList.add(boardDto);
-                }
+        } else if (index.equals("year")) {
+            for (Board board : boardListByYear) {
+                BoardDto boardDto = BoardDto.builder()
+                        .id(board.getId())
+                        .title(board.getTitle())
+                        .year(board.getYear())
+                        .semester(board.getSemester())
+                        .content(board.getContent())
+                        .createdDate(board.getCreatedDate())
+                        .hit(board.getHit())
+                        .build();
+                boardDtoList.add(boardDto);
+
             }
         }
         return boardDtoList;
     }
 
-    /*
-    public Page<Board> getBoardPage(Pageable pageable){
-        int page = (pageable.getPageNumber() == 0 ) ? 0 : (pageable.getPageNumber() - 1); //index 0부터 시작
-        pageable = PageRequest.of(page, 10);
-
-        return boardRepository.findAll(pageable);
-    }
-
-     */
     @Transactional
-    public List<BoardDto> getBoardListFromLang(String[] languageSet, List<BoardDto> boardDtoList, LanguageService languageService, Integer pageNum) {
+    public List<BoardDto> getBoardListFromLang(String[] languageSet, List<BoardDto> boardDtoList, LanguageService languageService) {
 
+       /*
         Page<Board> page = boardRepository.findAll(PageRequest.of(pageNum-1, PAGE_POST_COUNT,
                 Sort.by(Sort.Direction.ASC, "createdDate")));
         List<Board> boardList = page.getContent();
 
-        //boardList = boardRepository.findAll();
-        if(boardDtoList != null) {
-            for(int i = 0; i < boardDtoList.size(); i++) {
+        */
+
+        boardList = boardRepository.findAll();
+        if (boardDtoList != null) {
+            for (int i = 0; i < boardDtoList.size(); i++) {
                 Long id = boardDtoList.get(i).getId();
                 LanguageDto languageDto = languageService.getLanguage(id);
                 boolean status = true;
-                for(String lang : languageSet) {
-                    if(lang.equals("android")) {
+                for (String lang : languageSet) {
+                    if (lang.equals("android")) {
                         status = languageDto.isLang_android();
-                    } else if(lang.equals("cpp")) {
+                    } else if (lang.equals("cpp")) {
                         status = languageDto.isLang_cpp();
-                    } else if(lang.equals("django")) {
+                    } else if (lang.equals("django")) {
                         status = languageDto.isLang_django();
-                    } else if(lang.equals("html")) {
+                    } else if (lang.equals("html")) {
                         status = languageDto.isLang_html();
-                    } else if(lang.equals("java")) {
+                    } else if (lang.equals("java")) {
                         status = languageDto.isLang_java();
-                    } else if(lang.equals("nodejs")) {
+                    } else if (lang.equals("nodejs")) {
                         status = languageDto.isLang_nodejs();
-                    } else if(lang.equals("python")) {
+                    } else if (lang.equals("python")) {
                         status = languageDto.isLang_python();
-                    } else if(lang.equals("rn")) {
+                    } else if (lang.equals("rn")) {
                         status = languageDto.isLang_react();
-                    } else if(lang.equals("spring")) {
+                    } else if (lang.equals("spring")) {
                         status = languageDto.isLang_spring();
-                    } else if(lang.equals("vuejs")) {
+                    } else if (lang.equals("vuejs")) {
                         status = languageDto.isLang_vuejs();
-                    } else if(lang.equals("etc")) {
+                    } else if (lang.equals("etc")) {
                         String etcStatus = languageDto.getLang_etc();
-                        if(etcStatus == null) {
+                        if (etcStatus == null) {
                             status = false;
                         } else {
                             status = true;
                         }
                     }
                 }
-                if(!status) {
+                if (!status) {
                     boardDtoList.remove(i);
                     i--;
                 }
@@ -135,6 +133,8 @@ public class BoardService {
         }
         return boardDtoList;
     }
+
+    /*
 
     public Integer[] getPageList(Integer curPageNum){
         Integer[] pageList = new Integer[BLOCK_PAGE_NUM_COUNT];
@@ -165,6 +165,8 @@ public class BoardService {
     public Long getBoardCount(){
         return boardRepository.count();
     }
+
+     */
 
 
     @Transactional

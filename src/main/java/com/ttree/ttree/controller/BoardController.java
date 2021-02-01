@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,8 +38,10 @@ public class BoardController {
     private FinalPTFileService finalPTFileService;
     private FairFileService fairFileService;
 
+    private List<BoardDto> boardSearchList;
+
     public BoardController(BoardService boardService, SourceFileService sourceFileService, PaperFileService paperFileService, LanguageService languageService,
-                            ProposalFileService proposalFileService, FinalPTFileService finalPTFileService, FairFileService fairFileService ) {
+                           ProposalFileService proposalFileService, FinalPTFileService finalPTFileService, FairFileService fairFileService ) {
         this.boardService = boardService;
         this.sourceFileService = sourceFileService;
         this.paperFileService = paperFileService;
@@ -50,15 +51,15 @@ public class BoardController {
         this.languageService = languageService;
     }
 
-    @GetMapping("/projectList")
-    public String list(@RequestParam(value = "page", defaultValue = "1") Integer pageNum, Model model) {
-        List<BoardDto> boardDtoList = boardService.getBoardList(null, null, pageNum);
-        Integer[] pageList = boardService.getPageList(pageNum);
+    @GetMapping("/projectList") //검색하지 않은 상태에서의 게시판
+    public String list(Model model) {
+        List<BoardDto> boardDtoList = boardService.getBoardList(null, null);
+        //Integer[] pageList = boardService.getPageList(pageNum);
         //Page<Board> pageList = boardService.getBoardPage(pageable);
 
         //model.addAttribute("postList", boardDtoList);
         model.addAttribute("listPage", boardDtoList);
-        model.addAttribute("pageList", pageList);
+        //model.addAttribute("pageList", pageList);
 
         //System.out.println("총 element 수: " + pageList.getTotalElements());
         //System.out.println("전체 page 수: " + pageList.getTotalPages());
@@ -70,21 +71,21 @@ public class BoardController {
     }
 
     @PostMapping("/projectList")
-    public String search(HttpServletRequest request, Model model,
-                         @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+    public String search(HttpServletRequest request, Model model) {
         String[] yearToSearch = request.getParameterValues("year_select");
         String[] langToSearch = request.getParameterValues("language_select");
         List<BoardDto> boardDtoList = null;
-        Integer[] pageList = boardService.getPageList(pageNum);
+        //Integer[] pageList = boardService.getPageList(pageNum);
+        //List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
 
         if((!yearToSearch[0].equals("all_year")) && (yearToSearch != null)) {
             for(int i = 0; i < yearToSearch.length; i++) {
-                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i], pageNum);
-                System.out.println("boardDtoSearchList pageNum:" + pageNum);
+                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
                 if(boardDtoSearchList != null) {
                     for(int j = 0; j < boardDtoSearchList.size(); j++) {
                         if (boardDtoList == null) {
                             boardDtoList = boardDtoSearchList;
+                            boardSearchList = boardDtoList;
                             break;
                         } else {
                             boardDtoList.add(boardDtoList.size(), boardDtoSearchList.get(j));
@@ -93,18 +94,24 @@ public class BoardController {
                 }
             }
         } else {
-            boardDtoList = boardService.getBoardList(null, null, pageNum);
+            boardDtoList = boardService.getBoardList(null, null);
+            boardSearchList = boardDtoList;
         }
 
         if((!langToSearch[0].equals("all_language")) && (langToSearch != null)) {
-            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService, pageNum);
-            System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
+            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService);
+            boardSearchList = boardDtoList;
+            //System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
         }
 
         model.addAttribute("listPage", boardDtoList);
-        model.addAttribute("pageList", pageList);
+        //model.addAttribute("pageList", pageList);
         return "projectList";
     }
+
+
+
+
 
     @GetMapping("/projectPost")
     public String post() {
@@ -295,19 +302,19 @@ public class BoardController {
         String fairFileName = "";
         String sourceFileName = "";
         String paperFileName = "";
-        if(proposalFileService.getProposalFile(id) != null) {
+        if (proposalFileService.getProposalFile(id) != null) {
             proposalFileName = proposalFileService.getProposalFile(id).getProposal_origFilename();
         }
-        if(finalPTFileService.getFinalPTFile(id) != null) {
+        if (finalPTFileService.getFinalPTFile(id) != null) {
             finalPTFileName = finalPTFileService.getFinalPTFile(id).getFinalPT_origFilename();
         }
-        if(fairFileService.getFairFile(id) != null) {
+        if (fairFileService.getFairFile(id) != null) {
             fairFileName = fairFileService.getFairFile(id).getFair_origFilename();
         }
-        if(sourceFileService.getSourceFile(id) != null) {
+        if (sourceFileService.getSourceFile(id) != null) {
             sourceFileName = sourceFileService.getSourceFile(id).getSource_origFilename();
         }
-        if(paperFileService.getPaperFile(id) != null) {
+        if (paperFileService.getPaperFile(id) != null) {
             paperFileName = paperFileService.getPaperFile(id).getPaper_origFilename();
         }
 
@@ -525,11 +532,13 @@ public class BoardController {
     @DeleteMapping("/projectPost/{id}")
     public String delete(@PathVariable("id") Long id) {
         boardService.deletePost(id);
+        languageService.deleteLanguage(id);
         proposalFileService.deleteProposalFile(id);
         finalPTFileService.deleteFinalPTFile(id);
         fairFileService.deleteFairFile(id);
         sourceFileService.deleteSourceFile(id);
         paperFileService.deletePaperFile(id);
+
         return "redirect:/projectList";
     }
 
