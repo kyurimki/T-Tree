@@ -125,6 +125,12 @@ public class BoardController {
                         @RequestParam("fairFile") MultipartFile fairFile,
                         BoardDto boardDto, @RequestParam("checkbox") List<String> langList, HttpServletRequest request) {
         try {
+            String etcText = request.getParameter("etcText");
+            if (etcText != null){
+                System.out.println(langList.size());
+                langList.set(langList.size()-1, etcText);
+                boardDto.setLanguages(langList);
+            }
             boardDto.setLanguages(langList);
             Long id = boardService.savePost(boardDto);
 

@@ -61,8 +61,13 @@
                                         <td><label><input name="checkbox" class="language_select" type="checkbox" value="spring">Spring</label></td>
                                         <td><label><input name="checkbox" class="language_select" type="checkbox" value="vuejs">VueJS</label></td>
                                         <td>
-                                            <label><input name="checkbox" class="language_select" type="checkbox" value="etc"
-                                                          onclick="if (this.checked){ document.getElementById('changeMode').removeAttribute('disabled');}">기타</label>
+                                            <label><input name="checkbox" id="etc" class="language_select" type="checkbox" value="changePlease"
+                                                          onclick="if (this.checked){
+                                                              document.getElementById('changeMode').removeAttribute('disabled');
+                                                              document.getElementById('etc').value = document.getElementById('changeMode').value;
+                                                          }else {
+                                                              document.getElementById('changeMode').disabled = true;
+                                                          }">기타</label>
                                             <input name="etcText" id="changeMode" class="language_select" type="text" value="etc" disabled placeholder="기타 개발환경" />
                                         </td>
                                     </tr></table>
@@ -159,6 +164,13 @@
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+
+    /*
+    if($("#changeMode").prop("checked")){
+        $("#etc").val("this");
+    }
+
+     */
 </script>
 </body>
 </html>
