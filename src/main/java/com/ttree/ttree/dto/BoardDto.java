@@ -4,6 +4,7 @@ import com.ttree.ttree.domain.entity.Board;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,6 +21,8 @@ public class BoardDto {
     private String effect;
     private int hit;
 
+    private List<String> languages;
+
     private Long fileId;
     private String filename;
     private LocalDateTime createdDate;
@@ -35,12 +38,13 @@ public class BoardDto {
                 .content(content)
                 .effect(effect)
                 .hit(hit)
+                .languages(languages)
                 .build();
         return build;
     }
 
     @Builder
-    public BoardDto(Long id, String title, String year, String semester, String purpose, String content, String effect, Long fileId, LocalDateTime createdDate, LocalDateTime modifiedDate, int hit) {
+    public BoardDto(Long id, String title, String year, String semester, String purpose, String content, String effect, Long fileId, LocalDateTime createdDate, LocalDateTime modifiedDate, int hit, List<String> languages) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -52,5 +56,6 @@ public class BoardDto {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.hit = hit;
+        this.languages = languages;
     }
 }

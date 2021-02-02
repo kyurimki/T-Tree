@@ -58,6 +58,7 @@ public class BoardService {
                         .content(board.getContent())
                         .createdDate(board.getCreatedDate())
                         .hit(board.getHit())
+                        .languages(board.getLanguages())
                         .build();
                 boardDtoList.add(boardDto);
             }
@@ -71,6 +72,7 @@ public class BoardService {
                         .content(board.getContent())
                         .createdDate(board.getCreatedDate())
                         .hit(board.getHit())
+                        .languages(board.getLanguages())
                         .build();
                 boardDtoList.add(boardDto);
 
@@ -183,6 +185,7 @@ public class BoardService {
                 .effect(board.getEffect())
                 .createdDate(board.getCreatedDate())
                 .hit(board.getHit())
+                .languages(board.getLanguages())
                 .build();
         return boardDto;
     }

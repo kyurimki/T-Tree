@@ -1,5 +1,6 @@
 package com.ttree.ttree.domain.entity;
 
+import com.ttree.ttree.util.StringToListConverter;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -46,8 +48,12 @@ public class Board {
     @Column
     private int hit;
 
+    @Column
+    @Convert(converter = StringToListConverter.class)
+    private List<String> languages;
+
     @Builder
-    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit) {
+    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit, List<String> languages) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -56,6 +62,7 @@ public class Board {
         this.content = content;
         this.effect = effect;
         this.hit = hit;
+        this.languages = languages;
     }
 
     public String getYear() {
