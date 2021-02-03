@@ -51,21 +51,25 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="android" id="android">Android</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="cpp" id="cpp">C/C++</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="django" id="django">Django</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="html" id="html">HTML5</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="java" id="java">Java</label></td></tr>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Android" id="android">Android</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="C/C++" id="cpp">C/C++</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Django" id="django">Django</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="HTML5" id="html">HTML5</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Java" id="java">Java</label></td></tr>
                                 <tr>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="nodejs" id="nodejs">NodeJS</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="python" id="python">Python</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="rn" id="rn">React Native</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="spring" id="spring">Spring</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="vuejs" id="vuejs">VueJS</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="NodeJS" id="nodejs">NodeJS</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Python" id="python">Python</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="React-Native" id="rn">React-Native</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Spring" id="spring">Spring</label></td>
+                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="VueJS" id="vuejs">VueJS</label></td>
                                     <td>
-                                        <label><input name="checkbox" class="language_select" type="checkbox" value="etc" id="etc"
-                                                      onclick="if (this.checked){ document.getElementById('changeMode').removeAttribute('disabled');}">기타</label>
-                                        <input name="etcText" id="changeMode" class="language_select" type="text" placeholder="기타 개발환경" disabled />
+                                        <label><input name="checkbox" id="etc" class="language_select" type="checkbox" value="etc"
+                                                      onclick="if (this.checked){
+                                                              document.getElementById('changeMode').removeAttribute('disabled');
+                                                          }else {
+                                                              document.getElementById('changeMode').disabled = true;
+                                                          }">기타</label>
+                                        <input name="etcText" id="changeMode" class="language_select" type="text" disabled placeholder="기타 개발환경" />
                                     </td>
                                 </tr></table>
                         </td>
@@ -73,6 +77,7 @@
                     <tr>
                         <td> 개발 목적 </td>
                         <td>
+                            <p class="form-control"  th:text="${post.languages}"> </p>
                             <textarea type="text" name="purpose" class="form-control" id="inputPurpose" cols="40" rows="10" th:text="${post.purpose}"> </textarea>
                         </td>
                     </tr>
@@ -159,7 +164,9 @@
                 });
 
                 $(function() {
+
                     var langListArray = "[[${postLang}]]".split(' ');
+                    window.alert(langListArray);
                     var count = 0;
                     for(var i=0; i <langListArray.length; i++) {
                         if(langListArray[i] == "Android") {
@@ -171,7 +178,7 @@
                         } else if(langListArray[i] == "Django") {
                             $("input:checkbox[id='django']").prop("checked", true);
                             count++;
-                        } else if(langListArray[i] == "HTML/CSS/JS") {
+                        } else if(langListArray[i] == "HTML5") {
                             $("input:checkbox[id='html']").prop("checked", true);
                             count++;
                         } else if(langListArray[i] == "Java") {
@@ -194,9 +201,9 @@
                             count++;
                         }
                     }
-                    if(count == langListArray.length-1) {
+                    if(count == langListArray.length-2) {
                         $("input:checkbox[id='etc']").prop("checked", true);
-                        document.getElementById('changeMode').value = langListArray[langListArray.length-1];
+                        document.getElementById('changeMode').value = langListArray[langListArray.length-2];
                     }
                 });
 

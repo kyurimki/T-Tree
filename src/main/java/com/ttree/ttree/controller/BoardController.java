@@ -118,7 +118,6 @@ public class BoardController {
         return "projectPost";
     }
 
-
     @PostMapping("/projectPost")
     public String write(@RequestParam("sourceFile") MultipartFile sourceFile, @RequestParam("paperFile") MultipartFile paperFile,
                         @RequestParam("proposalFile") MultipartFile proposalFile, @RequestParam("finalPTFile") MultipartFile finalPTFile,
@@ -127,7 +126,6 @@ public class BoardController {
         try {
             String etcText = request.getParameter("etcText");
             if (etcText != null){
-                System.out.println(langList.size());
                 langList.set(langList.size()-1, etcText);
                 boardDto.setLanguages(langList);
             }
@@ -259,35 +257,6 @@ public class BoardController {
                 finalPTFileService.saveFinalPTFile(finalPTFileDto);
             }
 
-            LanguageDto languageDto = new LanguageDto();
-            String etcDetail = request.getParameter("etcText");
-            for(String lang : langList) {
-                if(lang.equals("android")) {
-                    languageDto.setLang_android(true);
-                } else if(lang.equals("cpp")) {
-                    languageDto.setLang_cpp(true);
-                } else if(lang.equals("django")) {
-                    languageDto.setLang_django(true);
-                } else if(lang.equals("html")) {
-                    languageDto.setLang_html(true);
-                } else if(lang.equals("java")) {
-                    languageDto.setLang_java(true);
-                } else if(lang.equals("nodejs")) {
-                    languageDto.setLang_nodejs(true);
-                } else if(lang.equals("python")) {
-                    languageDto.setLang_python(true);
-                } else if(lang.equals("rn")) {
-                    languageDto.setLang_react(true);
-                } else if(lang.equals("spring")) {
-                    languageDto.setLang_spring(true);
-                } else if(lang.equals("vuejs")) {
-                    languageDto.setLang_vuejs(true);
-                } else if(lang.equals("etc")) {
-                    languageDto.setLang_etc(etcDetail);
-                }
-                languageDto.setBoard_id(id);
-                languageService.saveLanguage(languageDto);
-            }
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -296,7 +265,6 @@ public class BoardController {
 
     @GetMapping("/projectPost/{id}")
     public String detail(@PathVariable("id") Long id, Model model) {
-        String langList = languageService.getLangList(id);
         BoardDto boardDto = boardService.getPost(id);
 
         int hit = boardDto.getHit();
@@ -326,7 +294,6 @@ public class BoardController {
         }
 
         model.addAttribute("post", boardDto);
-        model.addAttribute("postLang", langList);
         model.addAttribute("proposalFileName", proposalFileName);
         model.addAttribute("finalPTFileName", finalPTFileName);
         model.addAttribute("fairFileName", fairFileName);
@@ -339,7 +306,15 @@ public class BoardController {
     @GetMapping("/projectPost/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model) {
         BoardDto boardDto = boardService.getPost(id);
-        String langList = languageService.getLangList(id);
+
+        List<String> langList = boardDto.getLanguages();
+        //System.out.println(langList);
+        String langListString = "";
+        for (String s : langList){
+            langListString += s + " ";
+        }
+        //System.out.println(langListString);
+
         String proposalFileName = "";
         String finalPTFileName = "";
         String fairFileName = "";
@@ -361,7 +336,7 @@ public class BoardController {
             paperFileName = paperFileService.getPaperFile(id).getPaper_origFilename();
         }
         model.addAttribute("post", boardDto);
-        model.addAttribute("postLang", langList);
+        model.addAttribute("postLang", langListString);
         model.addAttribute("proposalFileName", proposalFileName);
         model.addAttribute("finalPTFileName", finalPTFileName);
         model.addAttribute("fairFileName", fairFileName);
@@ -375,7 +350,17 @@ public class BoardController {
                          @RequestParam("paperFile") MultipartFile paperFile, @RequestParam("proposalFile") MultipartFile proposalFile,
                          @RequestParam("finalPTFile") MultipartFile finalPTFile, @RequestParam("fairFile") MultipartFile fairFile,
                          BoardDto boardDto, @RequestParam("checkbox") List<String> langList, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
+
         boardDto.setId(id);
+        String etcText = request.getParameter("etcText");
+
+        if (etcText != null){
+            System.out.println(langList.size());
+            langList.set(langList.size()-1, etcText);
+            boardDto.setLanguages(langList);
+        }
+
+        boardDto.setLanguages(langList);
         boardService.savePost(boardDto);
 
         // 소스코드
@@ -503,43 +488,12 @@ public class BoardController {
             finalPTFileService.saveFinalPTFile(finalPTFileDto);
         }
 
-        LanguageDto languageDto = new LanguageDto();
-        String etcDetail = request.getParameter("etcText");
-        for(String lang : langList) {
-            if(lang.equals("android")) {
-                languageDto.setLang_android(true);
-            } else if(lang.equals("cpp")) {
-                languageDto.setLang_cpp(true);
-            } else if(lang.equals("django")) {
-                languageDto.setLang_django(true);
-            } else if(lang.equals("html")) {
-                languageDto.setLang_html(true);
-            } else if(lang.equals("java")) {
-                languageDto.setLang_java(true);
-            } else if(lang.equals("nodejs")) {
-                languageDto.setLang_nodejs(true);
-            } else if(lang.equals("python")) {
-                languageDto.setLang_python(true);
-            } else if(lang.equals("rn")) {
-                languageDto.setLang_react(true);
-            } else if(lang.equals("spring")) {
-                languageDto.setLang_spring(true);
-            } else if(lang.equals("vuejs")) {
-                languageDto.setLang_vuejs(true);
-            } else if(lang.equals("etc")) {
-                languageDto.setLang_etc(etcDetail);
-            }
-            languageDto.setBoard_id(id);
-            languageService.saveLanguage(languageDto);
-        }
-
         return "redirect:/projectList";
     }
 
     @DeleteMapping("/projectPost/{id}")
     public String delete(@PathVariable("id") Long id) {
         boardService.deletePost(id);
-        languageService.deleteLanguage(id);
         proposalFileService.deleteProposalFile(id);
         finalPTFileService.deleteFinalPTFile(id);
         fairFileService.deleteFairFile(id);
