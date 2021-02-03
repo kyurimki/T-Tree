@@ -45,6 +45,8 @@
             <table id="table_list">
                 <tr>
                     <th scope="col" style="text-align: center">#</th>
+                    <th scope="col" style="text-align: center">연도</th>
+                    <th scope="col" style="text-align: center">학기</th>
                     <th scope="col" style="text-align: center">팀</th>
                     <th scope="col" style="text-align: center">1차</th>
                     <th scope="col" style="text-align: center">2차</th>
@@ -57,6 +59,12 @@
                     <form role="form" action="/admin/updateStatus" name="updateStatus" id="updateStatus" method="POST">
                         <td>
                             <p th:text="${team.teamId}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamYear}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamSemester}"></p>
                         </td>
                         <td>
                             <p th:text="${team.teamName}"></p>
@@ -75,11 +83,11 @@
                         </td>
                         <td>
                             <p th:text="${team.teamStatus4}"></p>
-                            <a href="#" th:url="@{'/admin/updateStatus/status4/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'width=500 height= 400'); return false">등록</a>
+                            <a href="#" th:url="@{'/admin/updateStatus/status4/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
                         </td>
                         <td>
                             <p th:text="${team.finalStatus}"></p>
-                            <a href="#" th:url="@{'/admin/updateStatus/statusFinal/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'width=500 height= 400'); return false">등록</a>
+                            <a href="#" th:url="@{'/admin/updateStatus/statusFinal/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
                         </td>
                         <td>
                             <p th:text="${team.finalStatusReason}"></p>

@@ -5,7 +5,6 @@
     <title>상태 업데이트</title>
 </head>
 <body onload="checkFirstVisit()">
-<input type="button" onclick="window.close()" value="닫기">
 <h2 th:text="${teamInfo.teamYear}+'-'+${teamInfo.teamSemester}+' '+${teamInfo.teamName}+' '+${statusStage}+'차'" style="text-align:center;"></h2>
 <table style="margin: auto;">
     <form role="form" th:action="@{/admin/updateStatus/status__${statusStage}__/__${teamId}__}" name="updateStatus" id="updateStatus" method="POST">
@@ -23,5 +22,11 @@
         </tr>
     </form>
 </table>
+<script>
+    if("[[${status}]]" === "end") {
+        window.opener.location.reload(true);
+        window.close();
+    }
+</script>
 </body>
 </html>

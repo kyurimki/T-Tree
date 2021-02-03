@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -165,7 +167,6 @@ public class AdminController {
     public String getTeamList(Model model) {
         List<TeamDto> teamList = teamService.getTeamList();
         model.addAttribute("teamList", teamList);
-
         return "adminUpdateStatus";
     }
 
@@ -179,7 +180,11 @@ public class AdminController {
         String yearToSearch = request.getParameter("teamYear");
         String semesterToSearch = request.getParameter("teamSemester");
         if(yearToSearch.equals("") || semesterToSearch.equals("")) {
-            model.addAttribute("ERROR", "연도와 학기가 올바르게 선택되지 않았습니다.");
+            if(yearToSearch.equals("") ^ semesterToSearch.equals("")) {
+                model.addAttribute("ERROR", "연도와 학기가 올바르게 선택되지 않았습니다.");
+            }
+            List<TeamDto> teamList = teamService.getTeamList();
+            model.addAttribute("teamList", teamList);
         } else {
             List<TeamDto> teamList = teamService.searchTeamByTime(yearToSearch, semesterToSearch);
             model.addAttribute("teamList", teamList);
@@ -193,6 +198,7 @@ public class AdminController {
         model.addAttribute("teamId", id.toString());
         model.addAttribute("teamInfo", teamDto);
         model.addAttribute("statusStage", "1");
+        model.addAttribute("status", false);
         return "adminUpdateStatusWindow";
     }
 
@@ -214,7 +220,150 @@ public class AdminController {
         teamDto.setTeamSemester(teamDto.getTeamSemester());
         teamService.saveTeam(teamDto);
 
-        return "redirect:/admin/updateStatus/status1/"+id;
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "1");
+        model.addAttribute("status", "end");
+
+        return "adminUpdateStatusWindow";
+    }
+
+    @GetMapping("/admin/updateStatus/status2/{id}")
+    public String updateStatus2(@PathVariable("id") Long id, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        model.addAttribute("teamId", id.toString());
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "2");
+        model.addAttribute("status", false);
+        return "adminUpdateStatusWindow";
+    }
+
+    @PostMapping("/admin/updateStatus/status2/{id}")
+    public String storeStatus2(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        String status = request.getParameter("status");
+        String reason = "";
+        LocalDate today = LocalDate.now();
+
+        if(status.equals("탈락")) {
+            reason = request.getParameter("reason");
+            teamDto.setTeamStatus2("["+today+"] "+status+": " +reason);
+        } else {
+            teamDto.setTeamStatus2("["+today+"] "+status);
+        }
+        teamDto.setTeamName(teamDto.getTeamName());
+        teamDto.setTeamYear(teamDto.getTeamYear());
+        teamDto.setTeamSemester(teamDto.getTeamSemester());
+        teamService.saveTeam(teamDto);
+
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "2");
+        model.addAttribute("status", "end");
+
+        return "adminUpdateStatusWindow";
+    }
+
+    @GetMapping("/admin/updateStatus/status3/{id}")
+    public String updateStatus3(@PathVariable("id") Long id, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        model.addAttribute("teamId", id.toString());
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "3");
+        model.addAttribute("status", false);
+        return "adminUpdateStatusWindow";
+    }
+
+    @PostMapping("/admin/updateStatus/status3/{id}")
+    public String storeStatus3(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        String status = request.getParameter("status");
+        String reason = "";
+        LocalDate today = LocalDate.now();
+
+        if(status.equals("탈락")) {
+            reason = request.getParameter("reason");
+            teamDto.setTeamStatus3("["+today+"] "+status+": " +reason);
+        } else {
+            teamDto.setTeamStatus3("["+today+"] "+status);
+        }
+        teamDto.setTeamName(teamDto.getTeamName());
+        teamDto.setTeamYear(teamDto.getTeamYear());
+        teamDto.setTeamSemester(teamDto.getTeamSemester());
+        teamService.saveTeam(teamDto);
+
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "3");
+        model.addAttribute("status", "end");
+
+        return "adminUpdateStatusWindow";
+    }
+
+    @GetMapping("/admin/updateStatus/status4/{id}")
+    public String updateStatus4(@PathVariable("id") Long id, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        model.addAttribute("teamId", id.toString());
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "4");
+        model.addAttribute("status", false);
+        return "adminUpdateStatusWindow";
+    }
+
+    @PostMapping("/admin/updateStatus/status4/{id}")
+    public String storeStatus4(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        String status = request.getParameter("status");
+        String reason = "";
+        LocalDate today = LocalDate.now();
+
+        if(status.equals("탈락")) {
+            reason = request.getParameter("reason");
+            teamDto.setTeamStatus4("["+today+"] "+status+": " +reason);
+        } else {
+            teamDto.setTeamStatus4("["+today+"] "+status);
+        }
+        teamDto.setTeamName(teamDto.getTeamName());
+        teamDto.setTeamYear(teamDto.getTeamYear());
+        teamDto.setTeamSemester(teamDto.getTeamSemester());
+        teamService.saveTeam(teamDto);
+
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "4");
+        model.addAttribute("status", "end");
+
+        return "adminUpdateStatusWindow";
+    }
+
+    @GetMapping("/admin/updateStatus/statusFinal/{id}")
+    public String updateStatusFinal(@PathVariable("id") Long id, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        model.addAttribute("teamId", id.toString());
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "Final");
+        model.addAttribute("status", false);
+        return "adminUpdateStatusWindow";
+    }
+
+    @PostMapping("/admin/updateStatus/statusFinal/{id}")
+    public String storeStatusFinal(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+        TeamDto teamDto = teamService.getTeam(id);
+        String status = request.getParameter("status");
+        String reason = "";
+        LocalDate today = LocalDate.now();
+
+        teamDto.setFinalStatus("["+today+"] " +status);
+        if(status.equals("탈락")) {
+            reason = request.getParameter("reason");
+            teamDto.setFinalStatusReason(reason);
+        }
+        teamDto.setTeamName(teamDto.getTeamName());
+        teamDto.setTeamYear(teamDto.getTeamYear());
+        teamDto.setTeamSemester(teamDto.getTeamSemester());
+        teamService.saveTeam(teamDto);
+
+        model.addAttribute("teamInfo", teamDto);
+        model.addAttribute("statusStage", "Final");
+        model.addAttribute("status", "end");
+
+        return "adminUpdateStatusWindow";
     }
 }
 

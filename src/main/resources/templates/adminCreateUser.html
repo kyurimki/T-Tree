@@ -56,6 +56,7 @@
             </form>
         </table>
     <script>
+        var yearStatus = "[[${teamInfo?.teamYear}]]";
         if ("[[${id_status}]]" === "NULL_ID") {
             window.alert("학번을 입력하세요.");
         } else if("[[${id_status}]]" === "INVALID_ID") {
@@ -65,9 +66,12 @@
             window.close();
         }
 
-        $(function() {
-            $("#teamYear").val([[${teamInfo?.teamYear}]]).attr("selected");
-        });
+        if("[[${teamInfo?.teamYear}]]" !== "") {
+            var year = "[[${teamInfo?.teamYear}]]";
+                var $yearOption = $('#teamYear').children('option[value="'+ year +'"]');
+                $yearOption.attr('selected', true);
+        }
+
 
         $(function() {
             $('#teamSemester').val([[${teamInfo?.teamSemester}]]).attr("selected");
