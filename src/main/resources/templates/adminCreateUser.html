@@ -56,7 +56,18 @@
             </form>
         </table>
     <script>
-        var yearStatus = "[[${teamInfo?.teamYear}]]";
+        if("[[${teamInfo?.teamYear}]]" !== "") {
+            var year = "[[${teamInfo?.teamYear}]]";
+            let yearSet = document.getElementById('teamYear');
+            yearSet.value = year;
+        }
+
+        if("[[${teamInfo?.teamSemester}]]" !== "") {
+            var semester = "[[${teamInfo?.teamSemester}]]";
+            let semSet = document.getElementById('teamSemester');
+            semSet.value = semester;
+        }
+
         if ("[[${id_status}]]" === "NULL_ID") {
             window.alert("학번을 입력하세요.");
         } else if("[[${id_status}]]" === "INVALID_ID") {
@@ -65,17 +76,6 @@
             window.alert("회원 생성 완료");
             window.close();
         }
-
-        if("[[${teamInfo?.teamYear}]]" !== "") {
-            var year = "[[${teamInfo?.teamYear}]]";
-                var $yearOption = $('#teamYear').children('option[value="'+ year +'"]');
-                $yearOption.attr('selected', true);
-        }
-
-
-        $(function() {
-            $('#teamSemester').val([[${teamInfo?.teamSemester}]]).attr("selected");
-        });
     </script>
 </body>
 </html>
