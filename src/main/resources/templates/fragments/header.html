@@ -51,7 +51,7 @@
                 </li>
                 <li>
                     <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
-                    href="/staff/staffPage"> 관리페이지 </a>
+                    href="/admin/adminPage"> 관리페이지 </a>
 
                     <a th:if ="${#authorization.expression('hasRole(''STUDENT'')')}"
                     href="/user/studentPage"> 마이페이지 </a>

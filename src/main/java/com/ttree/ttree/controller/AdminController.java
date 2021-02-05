@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
@@ -39,6 +36,9 @@ public class AdminController {
     public String student_id = "";
     public UserDto userDto;
     boolean signupRecord = false;
+
+    @RequestMapping(value = "/admin/adminPage")
+    public String adminPage(){ return "adminPage"; }
 
     public AdminController(UserService userService, AuthImageService authImageService, TeamService teamService) {
         this.userService = userService;

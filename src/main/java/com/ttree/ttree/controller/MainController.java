@@ -25,10 +25,6 @@ public class MainController {
     @RequestMapping(value = "/user/login")
     public String login(){ return "login"; }
 
-    @RequestMapping(value = "/staff/staffPage")
-    public String staffPage(){ return "staffPage"; }
-
-
     @GetMapping("/mail")
     public String dispMail() {return "mail";}
 

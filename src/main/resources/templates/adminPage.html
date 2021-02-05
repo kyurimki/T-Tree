@@ -14,13 +14,17 @@
 <div layout:fragment="content">
     <section>
         <aside class="leftsideblank">
+            <div th:replace="/fragments/sidebar.html :: sidebarFragment">
+            </div>
         </aside>
+
         <aside class="rightsideblank">
         </aside>
         <article>
             <h1>관리자페이지</h1>
-
-            <a href="#" onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=500 height= 400'); return false">회원 생성</a>
+            <a href="#"
+               onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=500 height= 400'); return false">회원
+                생성</a>
 
         </article>
     </section>
