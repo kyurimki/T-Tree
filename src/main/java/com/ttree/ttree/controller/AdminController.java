@@ -6,7 +6,6 @@ import com.ttree.ttree.dto.UserDto;
 import com.ttree.ttree.service.AuthImageService;
 import com.ttree.ttree.service.TeamService;
 import com.ttree.ttree.service.UserService;
-import org.apache.tomcat.jni.Local;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;

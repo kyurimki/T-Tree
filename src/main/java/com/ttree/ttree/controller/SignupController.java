@@ -197,13 +197,13 @@ public class SignupController {
 
         String dbPassword = customUserDetails.getPassword();
         String studentIdNum = customUserDetails.getStudentIdNum();
-        System.out.println(studentIdNum);
+        //System.out.println(studentIdNum);
 
         UserDto userDto = userService.getUserByStudentId(studentIdNum);
 
-        System.out.println("!" + dbPassword);
-        System.out.println("oldpassword: " + oldPassword);
-        System.out.println("password: " + password);
+        //System.out.println("!" + dbPassword);
+        //System.out.println("oldpassword: " + oldPassword);
+        //System.out.println("password: " + password);
 
 
         if(passwordEncoder.matches(oldPassword, dbPassword)){
@@ -235,9 +235,9 @@ public class SignupController {
 
         UserDto userDto = userService.getUserByStudentId(studentIdNum);
 
-        System.out.println("dbEmail: " + dbEmail);
-        System.out.println("oldEmail: " + oldEmail);
-        System.out.println("email: " + email);
+        //System.out.println("dbEmail: " + dbEmail);
+        //System.out.println("oldEmail: " + oldEmail);
+        //System.out.println("email: " + email);
 
         if (dbEmail.equals(oldEmail)){
             model.addAttribute("isEmailChanged", isEmailChanged);

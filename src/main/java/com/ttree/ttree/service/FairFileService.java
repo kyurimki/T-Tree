@@ -3,7 +3,6 @@ package com.ttree.ttree.service;
 import com.ttree.ttree.domain.entity.FairFile;
 import com.ttree.ttree.domain.repository.FairFileRepository;
 import com.ttree.ttree.dto.FairFileDto;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.NoSuchElementException;

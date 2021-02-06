@@ -148,7 +148,7 @@
 
 
             <div class="button">
-                <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
                         class="btn btn-primary" th:href="@{/projectPost}" role="button">글쓰기</a>
             </div>
             <br><br>

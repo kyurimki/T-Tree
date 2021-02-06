@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .cacheControl(cache -> cache.disable()))
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/projectPost", "/projectRules", "/projectNotes", "/admin/**", "/changePW", "/changeEmail").hasRole("STAFF")
+                .antMatchers("/projectPost", "/projectRules", "/projectNotes", "/admin/**", "/changePW", "/changeEmail").hasRole("ADMIN")
                 .antMatchers("/user/studentPage", "/changePW", "/changeEmail").hasRole("STUDENT")
                 .and()
                 .formLogin().loginPage("/user/login")

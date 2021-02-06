@@ -99,3 +99,8 @@ td.selected {
 .langlist{
     display: inline-block;
 }
+
+#teamYear, #teamSemester{
+    font-size: 13pt;
+    width: 100px;
+}

@@ -26,7 +26,7 @@ public class RuleController {
     public String notes(Model model){
         ProjectNotesDto projectNotesDto = ruleService.getProjectNotes(1L);
         model.addAttribute("projectNotes", projectNotesDto);
-        System.out.println(projectNotesDto);
+        //System.out.println(projectNotesDto);
         return "projectNotes";
     }
 

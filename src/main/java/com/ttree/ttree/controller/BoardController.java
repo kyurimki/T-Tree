@@ -355,7 +355,7 @@ public class BoardController {
         String etcText = request.getParameter("etcText");
 
         if (etcText != null){
-            System.out.println(langList.size());
+            //System.out.println(langList.size());
             langList.set(langList.size()-1, etcText);
             boardDto.setLanguages(langList);
         }
