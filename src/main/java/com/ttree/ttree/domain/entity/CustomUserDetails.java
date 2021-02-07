@@ -61,6 +61,7 @@ public class CustomUserDetails implements UserDetails {
 
     public String getUserEmail(){ return user.getEmail(); }
 
+    public Boolean getUserStatus(){ return user.isStatus(); }
 
 
 }

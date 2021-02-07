@@ -1,6 +1,7 @@
 package com.ttree.ttree.controller;
 
 import com.ttree.ttree.domain.entity.Board;
+import com.ttree.ttree.domain.entity.CustomUserDetails;
 import com.ttree.ttree.dto.*;
 import com.ttree.ttree.service.*;
 import com.ttree.ttree.util.MD5Generator;
@@ -12,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,22 +54,26 @@ public class BoardController {
     }
 
     @GetMapping("/projectList") //검색하지 않은 상태에서의 게시판
-    public String list(Model model) {
-        List<BoardDto> boardDtoList = boardService.getBoardList(null, null);
-        //Integer[] pageList = boardService.getPageList(pageNum);
-        //Page<Board> pageList = boardService.getBoardPage(pageable);
+    public String list(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if(customUserDetails.getUserStatus()) {
+            List<BoardDto> boardDtoList = boardService.getBoardList(null, null);
+            //Integer[] pageList = boardService.getPageList(pageNum);
+            //Page<Board> pageList = boardService.getBoardPage(pageable);
 
-        //model.addAttribute("postList", boardDtoList);
-        model.addAttribute("listPage", boardDtoList);
-        //model.addAttribute("pageList", pageList);
+            //model.addAttribute("postList", boardDtoList);
+            model.addAttribute("listPage", boardDtoList);
+            //model.addAttribute("pageList", pageList);
 
-        //System.out.println("총 element 수: " + pageList.getTotalElements());
-        //System.out.println("전체 page 수: " + pageList.getTotalPages());
-        //System.out.println("페이지에 표시할 element 수: " + pageList.getSize());
-        //System.out.println("현재 페이지 index: " + pageList.getNumber());
-        //System.out.println("현재 페이지의 element 수: " + pageList.getNumberOfElements());
+            //System.out.println("총 element 수: " + pageList.getTotalElements());
+            //System.out.println("전체 page 수: " + pageList.getTotalPages());
+            //System.out.println("페이지에 표시할 element 수: " + pageList.getSize());
+            //System.out.println("현재 페이지 index: " + pageList.getNumber());
+            //System.out.println("현재 페이지의 element 수: " + pageList.getNumberOfElements());
 
-        return "projectList";
+            return "projectList";
+        }else {
+            return "alertPage";
+        }
     }
 
     @PostMapping("/projectList")

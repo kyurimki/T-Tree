@@ -22,6 +22,9 @@ public class MainController {
         return "index";
     }
 
+    @RequestMapping(value = "/alertPage")
+    public String alertPage(){ return "alertPage"; }
+
     @RequestMapping(value = "/user/login")
     public String login(){ return "login"; }
 
