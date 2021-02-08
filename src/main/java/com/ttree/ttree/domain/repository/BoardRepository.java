@@ -8,7 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
-    List<Board> findByYear(String year);
-    //List<Board> findByLanguage(Boolean checked);
 
 }

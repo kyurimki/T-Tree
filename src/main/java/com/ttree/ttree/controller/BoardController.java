@@ -45,7 +45,7 @@ public class BoardController {
     private List<BoardDto> boardSearchList;
 
     public BoardController(BoardService boardService, SourceFileService sourceFileService, PaperFileService paperFileService, LanguageService languageService,
-                           ProposalFileService proposalFileService, FinalPTFileService finalPTFileService, FairFileService fairFileService ) {
+                           ProposalFileService proposalFileService, FinalPTFileService finalPTFileService, FairFileService fairFileService) {
         this.boardService = boardService;
         this.sourceFileService = sourceFileService;
         this.paperFileService = paperFileService;
@@ -56,15 +56,13 @@ public class BoardController {
     }
 
     @GetMapping("/projectList") //검색하지 않은 상태에서의 게시판
-    public String list(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        if(customUserDetails.getUserStatus()) {
-            List<BoardDto> boardDtoList = boardService.getBoardDtoList(null, null);
-            //Integer[] pageList = boardService.getPageList(pageNum);
-            //Page<Board> pageList = boardService.getBoardPage(pageable);
+    public String list(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails, @PageableDefault Pageable pageable) {
 
-            //model.addAttribute("postList", boardDtoList);
-            model.addAttribute("listPage", boardDtoList);
-            //model.addAttribute("pageList", pageList);
+        if (customUserDetails.getUserStatus()) {
+            //List<BoardDto> boardDtoList = boardService.getBoardDtoList(null, null);
+            Page<Board> pageList = boardService.getBoardList(pageable);
+
+            model.addAttribute("pageList", pageList);
 
             //System.out.println("총 element 수: " + pageList.getTotalElements());
             //System.out.println("전체 page 수: " + pageList.getTotalPages());
@@ -79,39 +77,37 @@ public class BoardController {
     }
 
     @PostMapping("/projectList")
-    public String search(HttpServletRequest request, Model model) {
+    public String search(HttpServletRequest request, Model model, @PageableDefault Pageable pageable) {
         List<String> yearToSearch;
         List<String> langToSearch;
         List<BoardDto> boardDtoList;
         try {
             yearToSearch = Arrays.asList(request.getParameterValues("year_select"));
-            if(yearToSearch.get(0).equals("all_year")) {
+            if (yearToSearch.get(0).equals("all_year")) {
                 yearToSearch = null;
             }
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             yearToSearch = null;
         }
         try {
             langToSearch = Arrays.asList(request.getParameterValues("language_select"));
-            if(langToSearch.get(0).equals("all_language")) {
+            if (langToSearch.get(0).equals("all_language")) {
                 langToSearch = null;
             }
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             langToSearch = null;
         }
+        if (yearToSearch == null && langToSearch == null) {
+            Page<Board> pageList = boardService.getBoardList(pageable);
+            model.addAttribute("pageList", pageList);
+            return "projectList";
 
-        //Integer[] pageList = boardService.getPageList(pageNum);
-        boardDtoList = boardService.getBoardDtoList(yearToSearch, langToSearch);
-
-//      System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
-
-        model.addAttribute("listPage", boardDtoList);
-        //model.addAttribute("pageList", pageList);
-        return "projectList";
+        } else {
+            boardDtoList = boardService.getBoardDtoList(yearToSearch, langToSearch);
+            model.addAttribute("listPage", boardDtoList);
+            return "projectListAfterSearch";
+        }
     }
-
-
-
 
 
     @GetMapping("/projectPost")
@@ -126,24 +122,23 @@ public class BoardController {
                         BoardDto boardDto, @RequestParam("checkbox") List<String> langList, HttpServletRequest request) {
         try {
             String etcText = request.getParameter("etcText");
-            if (etcText != null){
-                langList.set(langList.size()-1, etcText);
+            if (etcText != null) {
+                langList.set(langList.size() - 1, etcText);
                 boardDto.setLanguages(langList);
             }
             boardDto.setLanguages(langList);
             Long id = boardService.savePost(boardDto);
 
             // 소스코드
-            if(!sourceFile.isEmpty()) {
+            if (!sourceFile.isEmpty()) {
                 String origSourceFilename = sourceFile.getOriginalFilename();
                 String sourceFilename = new MD5Generator(origSourceFilename).toString();
 
                 String saveSourcePath = System.getProperty("user.dir") + "/sourceFiles";
                 if (!new File(saveSourcePath).exists()) {
-                    try{
+                    try {
                         new File(saveSourcePath).mkdir();
-                    }
-                    catch(Exception e){
+                    } catch (Exception e) {
                         e.getStackTrace();
                     }
                 }
@@ -160,7 +155,7 @@ public class BoardController {
             }
 
             // 논문
-            if(!paperFile.isEmpty()) {
+            if (!paperFile.isEmpty()) {
                 String origPaperFilename = paperFile.getOriginalFilename();
                 String paperFilename = new MD5Generator(origPaperFilename).toString();
                 String savePaperPath = System.getProperty("user.dir") + "/paperFiles";
@@ -185,7 +180,7 @@ public class BoardController {
 
 
             // 제안서
-            if(!proposalFile.isEmpty()) {
+            if (!proposalFile.isEmpty()) {
                 String origProposalFilename = proposalFile.getOriginalFilename();
                 String proposalFilename = new MD5Generator(origProposalFilename).toString();
                 String saveProposalPath = System.getProperty("user.dir") + "/proposalFiles";
@@ -210,7 +205,7 @@ public class BoardController {
 
 
             // 전시회자료
-            if(!fairFile.isEmpty()) {
+            if (!fairFile.isEmpty()) {
                 String origFairFilename = fairFile.getOriginalFilename();
                 String fairFilename = new MD5Generator(origFairFilename).toString();
                 String saveFairPath = System.getProperty("user.dir") + "/fairFiles";
@@ -235,7 +230,7 @@ public class BoardController {
 
 
             // 최종발표
-            if(!finalPTFile.isEmpty()) {
+            if (!finalPTFile.isEmpty()) {
                 String origFinalPTFilename = finalPTFile.getOriginalFilename();
                 String finalPTFilename = new MD5Generator(origFinalPTFilename).toString();
                 String saveFinalPTPath = System.getProperty("user.dir") + "/finalPTFiles";
@@ -258,7 +253,7 @@ public class BoardController {
                 finalPTFileService.saveFinalPTFile(finalPTFileDto);
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "redirect:/projectList";
@@ -311,7 +306,7 @@ public class BoardController {
         List<String> langList = boardDto.getLanguages();
         //System.out.println(langList);
         String langListString = "";
-        for (String s : langList){
+        for (String s : langList) {
             langListString += s + " ";
         }
         //System.out.println(langListString);
@@ -321,19 +316,19 @@ public class BoardController {
         String fairFileName = "";
         String sourceFileName = "";
         String paperFileName = "";
-        if(proposalFileService.getProposalFile(id) != null) {
+        if (proposalFileService.getProposalFile(id) != null) {
             proposalFileName = proposalFileService.getProposalFile(id).getProposal_origFilename();
         }
-        if(finalPTFileService.getFinalPTFile(id) != null) {
+        if (finalPTFileService.getFinalPTFile(id) != null) {
             finalPTFileName = finalPTFileService.getFinalPTFile(id).getFinalPT_origFilename();
         }
-        if(fairFileService.getFairFile(id) != null) {
+        if (fairFileService.getFairFile(id) != null) {
             fairFileName = fairFileService.getFairFile(id).getFair_origFilename();
         }
-        if(sourceFileService.getSourceFile(id) != null) {
+        if (sourceFileService.getSourceFile(id) != null) {
             sourceFileName = sourceFileService.getSourceFile(id).getSource_origFilename();
         }
-        if(paperFileService.getPaperFile(id) != null) {
+        if (paperFileService.getPaperFile(id) != null) {
             paperFileName = paperFileService.getPaperFile(id).getPaper_origFilename();
         }
         model.addAttribute("post", boardDto);
@@ -355,9 +350,9 @@ public class BoardController {
         boardDto.setId(id);
         String etcText = request.getParameter("etcText");
 
-        if (etcText != null){
+        if (etcText != null) {
             //System.out.println(langList.size());
-            langList.set(langList.size()-1, etcText);
+            langList.set(langList.size() - 1, etcText);
             boardDto.setLanguages(langList);
         }
 
@@ -365,16 +360,15 @@ public class BoardController {
         boardService.savePost(boardDto);
 
         // 소스코드
-        if(!sourceFile.isEmpty()) {
+        if (!sourceFile.isEmpty()) {
             String origSourceFilename = sourceFile.getOriginalFilename();
             String sourceFilename = new MD5Generator(origSourceFilename).toString();
 
             String saveSourcePath = System.getProperty("user.dir") + "/sourceFiles";
             if (!new File(saveSourcePath).exists()) {
-                try{
+                try {
                     new File(saveSourcePath).mkdir();
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     e.getStackTrace();
                 }
             }
@@ -391,7 +385,7 @@ public class BoardController {
         }
 
         // 논문
-        if(!paperFile.isEmpty()) {
+        if (!paperFile.isEmpty()) {
             String origPaperFilename = paperFile.getOriginalFilename();
             String paperFilename = new MD5Generator(origPaperFilename).toString();
             String savePaperPath = System.getProperty("user.dir") + "/paperFiles";
@@ -416,7 +410,7 @@ public class BoardController {
 
 
         // 제안서
-        if(!proposalFile.isEmpty()) {
+        if (!proposalFile.isEmpty()) {
             String origProposalFilename = proposalFile.getOriginalFilename();
             String proposalFilename = new MD5Generator(origProposalFilename).toString();
             String saveProposalPath = System.getProperty("user.dir") + "/proposalFiles";
@@ -441,7 +435,7 @@ public class BoardController {
 
 
         // 전시회자료
-        if(!fairFile.isEmpty()) {
+        if (!fairFile.isEmpty()) {
             String origFairFilename = fairFile.getOriginalFilename();
             String fairFilename = new MD5Generator(origFairFilename).toString();
             String saveFairPath = System.getProperty("user.dir") + "/fairFiles";
@@ -466,7 +460,7 @@ public class BoardController {
 
 
         // 최종발표
-        if(!finalPTFile.isEmpty()) {
+        if (!finalPTFile.isEmpty()) {
             String origFinalPTFilename = finalPTFile.getOriginalFilename();
             String finalPTFilename = new MD5Generator(origFinalPTFilename).toString();
             String saveFinalPTPath = System.getProperty("user.dir") + "/finalPTFiles";

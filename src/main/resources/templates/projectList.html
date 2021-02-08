@@ -113,7 +113,7 @@
                     <th scope="col" style="text-align: center">작성일</th>
                     <th scope="col" style="text-align: center">조회수</th>
                 </tr>
-                <tr class="text-center" th:each="post : ${listPage}">
+                <tr class="text-center" th:each="post : ${pageList}">
                     <td>
                         <p th:text="${post.id}"></p>
                     </td>
@@ -137,13 +137,44 @@
                 </tr>
             </table>
 
-            <!--
-            <div>
-                <span th:each="pageNum : ${pageList}" th:inline="text">
-                    <a th:href="@{'/projectList?page=' + ${pageNum}}">[[${pageNum}]]</a>
-                </span>
-            </div>
-            -->
+            <nav style="text-align: center;">
+                <ul class="pagination"
+                    th:with="start=${T(Math).floor(pageList.number/10)*10 + 1},
+                             last=(${start + 9 < pageList.totalPages ? start + 9 : pageList.totalPages})">
+                    <li>
+                        <!--첫 페이지로 가기 -->
+                        <a th:href="@{/projectList(page=1)}" aria-label="First">
+                            <span aria-hidden="true">First</span>
+                        </a>
+                    </li>
+
+                    <li th:class="${pageList.first} ? 'disabled'">
+                        <!--이전 페이지로 가기, 맨 처음이면 이전버튼 X -->
+                        <a th:href="${pageList.first} ? '#' :@{/projectList(page=${pageList.number})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == pageList.number + 1} ? 'active'">
+                        <!-- 현재 페이지 그룹의 페이지 나열 -->
+                        <a th:text="${page}" th:href="@{/projectList(page=${page})}"></a>
+                    </li>
+
+                    <li th:class="${pageList.last} ? 'disabled'">
+                        <!-- 다음페이지로 가기 버튼, 맨 마지막이면 버튼X -->
+                        <a th:href="${pageList.last} ? '#' : @{/projectList(page=${pageList.number + 2})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{/projectList(page=${pageList.totalPages})}" aria-label="Last">
+                            <!-- 마지막 페이지로 가기 버튼 -->
+                            <span aria-hidden="true">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
 
 
