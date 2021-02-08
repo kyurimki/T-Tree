@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class) /* JPA에게 해당 Entity는 Auditing 기능을 사용함을 알립니다. */
-public class Board {
+public class Board implements Comparable<Board> {
 
     @Id
     @GeneratedValue
@@ -65,7 +65,14 @@ public class Board {
         this.languages = languages;
     }
 
+    @Override
+    public int compareTo(Board board) {
+        return this.id.compareTo(board.id);
+    }
+
     public String getYear() {
         return year;
     }
+
+
 }

@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,54 +73,37 @@ public class BoardController {
             //System.out.println("현재 페이지의 element 수: " + pageList.getNumberOfElements());
 
             return "projectList";
-        }else {
+        } else {
             return "alertPage";
         }
     }
 
     @PostMapping("/projectList")
     public String search(HttpServletRequest request, Model model) {
-        List<String> yearToSearch = Arrays.asList(request.getParameterValues("year_select"));
-        List<String> langToSearch = Arrays.asList(request.getParameterValues("language_select"));
-        List<BoardDto> boardDtoList = null;
-        //Integer[] pageList = boardService.getPageList(pageNum);
-        //List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
-
-        if(yearToSearch.get(0).equals("all_year")) {
+        List<String> yearToSearch;
+        List<String> langToSearch;
+        List<BoardDto> boardDtoList;
+        try {
+            yearToSearch = Arrays.asList(request.getParameterValues("year_select"));
+            if(yearToSearch.get(0).equals("all_year")) {
+                yearToSearch = null;
+            }
+        } catch(NullPointerException e) {
             yearToSearch = null;
         }
-
-        if(langToSearch.get(0).equals("all_language")) {
+        try {
+            langToSearch = Arrays.asList(request.getParameterValues("language_select"));
+            if(langToSearch.get(0).equals("all_language")) {
+                langToSearch = null;
+            }
+        } catch(NullPointerException e) {
             langToSearch = null;
         }
 
+        //Integer[] pageList = boardService.getPageList(pageNum);
         boardDtoList = boardService.getBoardDtoList(yearToSearch, langToSearch);
 
-//        if((!yearToSearch[0].equals("all_year")) && (yearToSearch != null)) {
-//            for(int i = 0; i < yearToSearch.length; i++) {
-//                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
-//                if(boardDtoSearchList != null) {
-//                    for(int j = 0; j < boardDtoSearchList.size(); j++) {
-//                        if (boardDtoList == null) {
-//                            boardDtoList = boardDtoSearchList;
-//                            boardSearchList = boardDtoList;
-//                            break;
-//                        } else {
-//                            boardDtoList.add(boardDtoList.size(), boardDtoSearchList.get(j));
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            boardDtoList = boardService.getBoardList(null, null);
-//            boardSearchList = boardDtoList;
-//        }
-//
-//        if((!langToSearch[0].equals("all_language")) && (langToSearch != null)) {
-//            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService);
-//            boardSearchList = boardDtoList;
-//            //System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
-//        }
+//      System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
 
         model.addAttribute("listPage", boardDtoList);
         //model.addAttribute("pageList", pageList);
