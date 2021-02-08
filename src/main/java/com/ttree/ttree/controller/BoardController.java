@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -56,7 +57,7 @@ public class BoardController {
     @GetMapping("/projectList") //검색하지 않은 상태에서의 게시판
     public String list(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if(customUserDetails.getUserStatus()) {
-            List<BoardDto> boardDtoList = boardService.getBoardList(null, null);
+            List<BoardDto> boardDtoList = boardService.getBoardDtoList(null, null);
             //Integer[] pageList = boardService.getPageList(pageNum);
             //Page<Board> pageList = boardService.getBoardPage(pageable);
 
@@ -78,37 +79,47 @@ public class BoardController {
 
     @PostMapping("/projectList")
     public String search(HttpServletRequest request, Model model) {
-        String[] yearToSearch = request.getParameterValues("year_select");
-        String[] langToSearch = request.getParameterValues("language_select");
+        List<String> yearToSearch = Arrays.asList(request.getParameterValues("year_select"));
+        List<String> langToSearch = Arrays.asList(request.getParameterValues("language_select"));
         List<BoardDto> boardDtoList = null;
         //Integer[] pageList = boardService.getPageList(pageNum);
         //List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
 
-        if((!yearToSearch[0].equals("all_year")) && (yearToSearch != null)) {
-            for(int i = 0; i < yearToSearch.length; i++) {
-                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
-                if(boardDtoSearchList != null) {
-                    for(int j = 0; j < boardDtoSearchList.size(); j++) {
-                        if (boardDtoList == null) {
-                            boardDtoList = boardDtoSearchList;
-                            boardSearchList = boardDtoList;
-                            break;
-                        } else {
-                            boardDtoList.add(boardDtoList.size(), boardDtoSearchList.get(j));
-                        }
-                    }
-                }
-            }
-        } else {
-            boardDtoList = boardService.getBoardList(null, null);
-            boardSearchList = boardDtoList;
+        if(yearToSearch.get(0).equals("all_year")) {
+            yearToSearch = null;
         }
 
-        if((!langToSearch[0].equals("all_language")) && (langToSearch != null)) {
-            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService);
-            boardSearchList = boardDtoList;
-            //System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
+        if(langToSearch.get(0).equals("all_language")) {
+            langToSearch = null;
         }
+
+        boardDtoList = boardService.getBoardDtoList(yearToSearch, langToSearch);
+
+//        if((!yearToSearch[0].equals("all_year")) && (yearToSearch != null)) {
+//            for(int i = 0; i < yearToSearch.length; i++) {
+//                List<BoardDto> boardDtoSearchList = boardService.getBoardList("year", yearToSearch[i]);
+//                if(boardDtoSearchList != null) {
+//                    for(int j = 0; j < boardDtoSearchList.size(); j++) {
+//                        if (boardDtoList == null) {
+//                            boardDtoList = boardDtoSearchList;
+//                            boardSearchList = boardDtoList;
+//                            break;
+//                        } else {
+//                            boardDtoList.add(boardDtoList.size(), boardDtoSearchList.get(j));
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            boardDtoList = boardService.getBoardList(null, null);
+//            boardSearchList = boardDtoList;
+//        }
+//
+//        if((!langToSearch[0].equals("all_language")) && (langToSearch != null)) {
+//            boardDtoList = boardService.getBoardListFromLang(langToSearch, boardDtoList, languageService);
+//            boardSearchList = boardDtoList;
+//            //System.out.println("boardDtoSearchListLang pageNum:" + pageNum);
+//        }
 
         model.addAttribute("listPage", boardDtoList);
         //model.addAttribute("pageList", pageList);
