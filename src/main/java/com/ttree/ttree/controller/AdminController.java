@@ -1,5 +1,6 @@
 package com.ttree.ttree.controller;
 
+import com.ttree.ttree.domain.entity.CustomUserDetails;
 import com.ttree.ttree.dto.AuthImageDto;
 import com.ttree.ttree.dto.TeamDto;
 import com.ttree.ttree.dto.UserDto;
@@ -11,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,8 +36,20 @@ public class AdminController {
     public UserDto userDto;
     boolean signupRecord = false;
 
-    @RequestMapping(value = "/admin/adminPage")
-    public String adminPage(){ return "adminPage"; }
+    @GetMapping(value = "/admin/adminPage")
+    public String adminPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
+        String username = customUserDetails.getUsername();
+        String usermajor1 = customUserDetails.getMajorOne();
+        String usermajor2 = customUserDetails.getMajorTwo();
+        String studentIdNum = customUserDetails.getStudentIdNum();
+
+        model.addAttribute("username", username);
+        model.addAttribute("usermajor1", usermajor1);
+        model.addAttribute("usermajor2", usermajor2);
+        model.addAttribute("studentIdNum", studentIdNum);
+
+        return "adminPage";
+    }
 
     public AdminController(UserService userService, AuthImageService authImageService, TeamService teamService) {
         this.userService = userService;

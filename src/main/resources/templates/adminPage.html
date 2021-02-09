@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorator="layout/default">
 
 <!-- index.html 고유 CSS 추가 -->
@@ -21,11 +22,15 @@
         <aside class="rightsideblank">
         </aside>
         <article>
-            <h1 style="margin-top: 8%;">관리자페이지</h1>
-            <a href="#"
-               onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=600 height= 500'); return false">회원
-                생성</a>
+            <h1><span id="user_name" sec:authentication="name" style="color: #003087"></span>님의 회원정보</h1>
 
+            <p>학번: <span th:text="${studentIdNum}" style="color: black;"></span></p>
+            <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span></p>
+            <p>제 2 전공: <span th:text="${usermajor2}" style="color: black;"></span></p>
+
+            <a href="#" onclick="window.open('/changePW', 'changePW', 'width=500 height= 500'); return false">비밀번호 변경</a>
+            <br>
+            <a href="#" onclick="window.open('/changeEmail', 'changeEmail', 'width=500 height= 500'); return false">이메일 변경</a>
         </article>
     </section>
 

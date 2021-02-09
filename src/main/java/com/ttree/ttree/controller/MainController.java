@@ -22,6 +22,9 @@ public class MainController {
         return "index";
     }
 
+    @RequestMapping(value = "/accessDeniedPage")
+    public String accessDeniedPage() { return "accessDeniedPage"; }
+
     @RequestMapping(value = "/alertPage")
     public String alertPage(){ return "alertPage"; }
 
