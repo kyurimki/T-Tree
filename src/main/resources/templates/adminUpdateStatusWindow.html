@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>상태 업데이트</title>
+    <link rel="stylesheet" href="/css/createUserStyle.css">
 </head>
 <body onload="checkFirstVisit()">
 <h2 th:text="${teamInfo.teamYear}+'-'+${teamInfo.teamSemester}+' '+${teamInfo.teamName}+' '+${statusStage}+'차'" style="text-align:center;"></h2>
@@ -18,7 +19,7 @@
             <td colspan="2"><input type="text" name="reason" id="reasonInput" disabled></td>
         </tr>
         <tr>
-            <td colspan="3" style="text-align:center;"><button type="submit">저장</button></td>
+            <td colspan="3" style="text-align:center;"><button id="updateStatusSubmit" type="submit">저장</button></td>
         </tr>
     </form>
 </table>

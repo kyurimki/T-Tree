@@ -100,7 +100,31 @@ td.selected {
     display: inline-block;
 }
 
-#teamYear, #teamSemester{
+#teamYear, #teamSemester {
     font-size: 13pt;
     width: 100px;
+}
+
+select {
+    font-size: 13pt;
+    text-align-last: center;
+}
+
+#selectTeamYear {
+    background-color: #003087;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 3px;
+    padding: 7px;
+}
+
+#createUserButton {
+    background-color: #003087;
+    color: white;
+    padding: 15px;
+    margin: 8px 0px;
+    border: none;
+    cursor: pointer;
+    float: right;
 }

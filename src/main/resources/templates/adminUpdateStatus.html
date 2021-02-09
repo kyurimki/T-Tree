@@ -21,6 +21,10 @@
         </aside>
         <article>
             <h1>팀별 상태 업데이트</h1>
+            <div>
+                <button id="createUserButton" onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=600 height= 500'); return false">
+                    회원 생성</button>
+            </div>
             <table>
                 <tr>
                     <form role="form" action="/admin/updateStatus/search" name="searchTeam" id="searchTeam" method="POST">
@@ -41,9 +45,7 @@
                             </select>
                         </td>
                         <td>
-                            <button type="submit" name="getTeam">검색</button> &nbsp;&nbsp;
-                            <button onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=600 height= 500'); return false">
-                                회원 생성</button>
+                            <button type="submit" name="getTeam" id="selectTeamYear">검색</button> &nbsp;&nbsp;
                         </td>
                     </form>
                 </tr>
