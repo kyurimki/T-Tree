@@ -144,14 +144,14 @@
                     <li>
                         <!--첫 페이지로 가기 -->
                         <a th:href="@{/projectList(page=1)}" aria-label="First">
-                            <span aria-hidden="true">First</span>
+                            <span class="forPage" aria-hidden="true">First</span>
                         </a>
                     </li>
 
                     <li th:class="${pageList.first} ? 'disabled'">
                         <!--이전 페이지로 가기, 맨 처음이면 이전버튼 X -->
                         <a th:href="${pageList.first} ? '#' :@{/projectList(page=${pageList.number})}" aria-label="Previous">
-                            <span aria-hidden="true">&lt;</span>
+                            <span class="forPage" aria-hidden="true">&lt;</span>
                         </a>
                     </li>
 
@@ -163,14 +163,14 @@
                     <li th:class="${pageList.last} ? 'disabled'">
                         <!-- 다음페이지로 가기 버튼, 맨 마지막이면 버튼X -->
                         <a th:href="${pageList.last} ? '#' : @{/projectList(page=${pageList.number + 2})}" aria-label="Next">
-                            <span aria-hidden="true">&gt;</span>
+                            <span class="forPage" aria-hidden="true">&gt;</span>
                         </a>
                     </li>
 
                     <li>
                         <a th:href="@{/projectList(page=${pageList.totalPages})}" aria-label="Last">
                             <!-- 마지막 페이지로 가기 버튼 -->
-                            <span aria-hidden="true">Last</span>
+                            <span class="forPage" aria-hidden="true">Last</span>
                         </a>
                     </li>
                 </ul>

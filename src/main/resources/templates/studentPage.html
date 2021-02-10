@@ -3,7 +3,6 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorator="layout/default">
 
-<!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
         #table_list{
@@ -11,8 +10,11 @@
             font-size: 11pt;
             text-align: left;
             border-color: #6d788a;
+            margin-left: auto;
+            margin-right: auto;
         }
-        th, td{
+        th, td {
+            text-align: center;
             padding: 10px;
         }
     </style>
@@ -32,12 +34,18 @@
             <h1>✔ 마이페이지</h1>
             <h3><span id="user_name" sec:authentication="name" style="color: #003087"></span>님의 회원정보</h3>
 
-            <p>학번: <span th:text="${studentIdNum}" style="color: black;"></span></p>
-            <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span></p>
-            <p>제 2 전공: <span th:text="${usermajor2}" style="color: black;"></span></p>
+            <table>
+                <tr><td>학번</td><td><span th:text="${studentIdNum}" style="color: black;"></span></td></tr>
+                <tr><td>제 1전공</td><td><span th:text="${usermajor1}" style="color: black;"></span></td></tr>
+                <tr><td>제 2전공</td><td><span th:text="${usermajor2}" style="color: black;"></span></td></tr>
 
-            <br><br>
-            <p>졸업프로젝트 심사 과정 결과</p>
+
+                <tr><td><a href="#" onclick="window.open('/changePW', 'changePW', 'width=500 height= 500'); return false">비밀번호 변경</a></td>
+                    <td><a href="#" onclick="window.open('/changeEmail', 'changeEmail', 'width=500 height= 500'); return false">이메일 변경</a></td></tr>
+            </table>
+
+            <br><br><br>
+            <h3 style="text-align: center;">졸업프로젝트 심사 과정 결과</h3>
             <table id="table_list">
                 <tr>
                     <th scope="col" style="text-align: center">연도</th>
@@ -50,40 +58,36 @@
                     <th scope="col" style="text-align: center">최종</th>
                     <th scope="col" style="text-align: center">사유</th>
                 </tr>
-                <tr class="text-center" th:each="team : ${teamStatus}">
+                <tr class="text-center" th:if="${teamStatus} != null" th:each="team : ${teamStatus}" style="border-top: 2px solid">
                     <td>
-                        <p th:text="${team.teamYear}"></p>
+                        <p th:text="${team?.teamYear}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.teamSemester}"></p>
+                        <p th:text="${team?.teamSemester}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.teamName}"></p>
+                        <p th:text="${team?.teamName}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.teamStatus1}"></p>
+                        <p th:text="${team?.teamStatus1}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.teamStatus2}"></p>
+                        <p th:text="${team?.teamStatus2}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.teamStatus3}"></p>
+                        <p th:text="${team?.teamStatus3}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.teamStatus4}"></p>
+                        <p th:text="${team?.teamStatus4}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.finalStatus}"></p>
+                        <p th:text="${team?.finalStatus}"></p>
                     </td>
                     <td>
-                        <p th:text="${team.finalStatusReason}"></p>
+                        <p th:text="${team?.finalStatusReason}"></p>
                     </td>
                 </tr>
             </table>
-
-            <a href="#" onclick="window.open('/changePW', 'changePW', 'width=500 height= 500'); return false">비밀번호 변경</a>
-            <br>
-            <a href="#" onclick="window.open('/changeEmail', 'changeEmail', 'width=500 height= 500'); return false">이메일 변경</a>
         </article>
     </section>
 

@@ -22,21 +22,25 @@ public class TeamService {
 
     @Transactional
     public TeamDto getTeam(Long id) {
-        Team team = teamRepository.findById(id).get();
+        if(id != null && teamRepository.findById(id).isPresent()) {
+            Team team = teamRepository.findById(id).get();
 
-        TeamDto teamDto = TeamDto.builder()
-                .teamId(team.getTeamId())
-                .teamName(team.getTeamName())
-                .teamYear(team.getTeamYear())
-                .teamSemester(team.getTeamSemester())
-                .teamStatus1(team.getTeamStatus1())
-                .teamStatus2(team.getTeamStatus2())
-                .teamStatus3(team.getTeamStatus3())
-                .teamStatus4(team.getTeamStatus4())
-                .finalStatus(team.getFinalStatus())
-                .finalStatusReason(team.getFinalStatusReason())
-                .build();
-        return teamDto;
+            TeamDto teamDto = TeamDto.builder()
+                    .teamId(team.getTeamId())
+                    .teamName(team.getTeamName())
+                    .teamYear(team.getTeamYear())
+                    .teamSemester(team.getTeamSemester())
+                    .teamStatus1(team.getTeamStatus1())
+                    .teamStatus2(team.getTeamStatus2())
+                    .teamStatus3(team.getTeamStatus3())
+                    .teamStatus4(team.getTeamStatus4())
+                    .finalStatus(team.getFinalStatus())
+                    .finalStatusReason(team.getFinalStatusReason())
+                    .build();
+            return teamDto;
+        } else {
+            return null;
+        }
     }
 
     @Transactional

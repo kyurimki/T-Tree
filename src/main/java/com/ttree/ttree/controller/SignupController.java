@@ -179,14 +179,20 @@ public class SignupController {
         //System.out.println(username + usermajor1 + usermajor2 + studentIdNum);
 
         Long userId = customUserDetails.getTeamId();
-        TeamDto teamDto = teamService.getTeam(userId);
+        try {
+            TeamDto teamDto = teamService.getTeam(userId);
+            model.addAttribute("teamStatus", teamDto);
+        } catch(IllegalArgumentException e) {
+            model.addAttribute("teamStatus", null);
+        }
+
 
         model.addAttribute("username", username);
         model.addAttribute("usermajor1", usermajor1);
         model.addAttribute("usermajor2", usermajor2);
         model.addAttribute("studentIdNum", studentIdNum);
 
-        model.addAttribute("teamStatus", teamDto);
+
 
         return "studentPage";
     }
