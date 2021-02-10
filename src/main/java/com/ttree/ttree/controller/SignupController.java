@@ -1,12 +1,11 @@
 package com.ttree.ttree.controller;
 
 import com.ttree.ttree.domain.entity.CustomUserDetails;
+import com.ttree.ttree.domain.entity.Team;
 import com.ttree.ttree.dto.AuthImageDto;
+import com.ttree.ttree.dto.TeamDto;
 import com.ttree.ttree.dto.UserDto;
-import com.ttree.ttree.service.AuthImageService;
-import com.ttree.ttree.service.CustomUserDetailsService;
-import com.ttree.ttree.service.MailService;
-import com.ttree.ttree.service.UserService;
+import com.ttree.ttree.service.*;
 import com.ttree.ttree.token.TokenDto;
 import com.ttree.ttree.token.TokenService;
 import com.ttree.ttree.util.MD5Generator;
@@ -39,15 +38,17 @@ public class SignupController {
     private CustomUserDetailsService customUserDetailsService;
     private AuthImageService authImageService;
     private UserService userService;
+    private TeamService teamService;
 
 
     public SignupController(TokenService tokenService, MailService mailService,
-                            CustomUserDetailsService customUserDetailsService, AuthImageService authImageService, UserService userService) {
+                            CustomUserDetailsService customUserDetailsService, AuthImageService authImageService, UserService userService, TeamService teamService) {
         this.tokenService = tokenService;
         this.mailService = mailService;
         this.customUserDetailsService = customUserDetailsService;
         this.authImageService = authImageService;
         this.userService = userService;
+        this.teamService = teamService;
     }
 
     @PostMapping(value="/signup/email/getEmail")
@@ -177,10 +178,15 @@ public class SignupController {
         String studentIdNum = customUserDetails.getStudentIdNum();
         //System.out.println(username + usermajor1 + usermajor2 + studentIdNum);
 
+        Long userId = customUserDetails.getTeamId();
+        TeamDto teamDto = teamService.getTeam(userId);
+
         model.addAttribute("username", username);
         model.addAttribute("usermajor1", usermajor1);
         model.addAttribute("usermajor2", usermajor2);
         model.addAttribute("studentIdNum", studentIdNum);
+
+        model.addAttribute("teamStatus", teamDto);
 
         return "studentPage";
     }

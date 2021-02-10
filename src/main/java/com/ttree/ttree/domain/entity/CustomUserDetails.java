@@ -63,5 +63,7 @@ public class CustomUserDetails implements UserDetails {
 
     public Boolean getUserStatus(){ return user.isStatus(); }
 
+    public Long getTeamId() { return user.getTeamIdNum(); }
+
 
 }

@@ -5,7 +5,17 @@
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" type="text/css">
+    <style>
+        #table_list{
+            width: 60%;
+            font-size: 11pt;
+            text-align: left;
+            border-color: #6d788a;
+        }
+        th, td{
+            padding: 10px;
+        }
+    </style>
 </th:block>
 
 <!-- index.html 고유 스크립트 추가 -->
@@ -25,6 +35,51 @@
             <p>학번: <span th:text="${studentIdNum}" style="color: black;"></span></p>
             <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span></p>
             <p>제 2 전공: <span th:text="${usermajor2}" style="color: black;"></span></p>
+
+            <br><br>
+            <p>졸업프로젝트 심사 과정 결과</p>
+            <table id="table_list">
+                <tr>
+                    <th scope="col" style="text-align: center">연도</th>
+                    <th scope="col" style="text-align: center">학기</th>
+                    <th scope="col" style="text-align: center">팀</th>
+                    <th scope="col" style="text-align: center">1차</th>
+                    <th scope="col" style="text-align: center">2차</th>
+                    <th scope="col" style="text-align: center">3차</th>
+                    <th scope="col" style="text-align: center">4차</th>
+                    <th scope="col" style="text-align: center">최종</th>
+                    <th scope="col" style="text-align: center">사유</th>
+                </tr>
+                <tr class="text-center" th:each="team : ${teamStatus}">
+                    <td>
+                        <p th:text="${team.teamYear}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.teamSemester}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.teamName}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.teamStatus1}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.teamStatus2}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.teamStatus3}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.teamStatus4}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.finalStatus}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${team.finalStatusReason}"></p>
+                    </td>
+                </tr>
+            </table>
 
             <a href="#" onclick="window.open('/changePW', 'changePW', 'width=500 height= 500'); return false">비밀번호 변경</a>
             <br>

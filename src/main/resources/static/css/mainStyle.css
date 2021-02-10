@@ -89,6 +89,12 @@ span {
   vertical-align: middle;
 }
 
+a:link, a:visited, a:hover, a:active{
+  text-decoration: none;
+}
+
+
+
 @media screen and (min-width: 1200px) {
   .leftsideblank, .rightsideblank {
     width: 15%;
