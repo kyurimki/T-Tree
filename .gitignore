@@ -35,3 +35,4 @@ build/
 /files/
 /sourceFiles/
 /paperFiles/
+/src/main/resources/application.properties
