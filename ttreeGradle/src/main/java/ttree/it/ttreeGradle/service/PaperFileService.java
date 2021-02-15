@@ -40,6 +40,10 @@ public class PaperFileService {
 
     @Transactional
     public void deletePaperFile(Long id) {
-        paperFileRepository.deleteById(id);
+        if(paperFileRepository.findById(id).isPresent()) {
+            paperFileRepository.deleteById(id);
+        }else{
+            System.out.println("file is already empty");
+        }
     }
 }

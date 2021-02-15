@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import ttree.it.ttreeGradle.domain.entity.CustomUserDetails;
 import ttree.it.ttreeGradle.dto.AuthImageDto;
+import ttree.it.ttreeGradle.dto.TeamDto;
 import ttree.it.ttreeGradle.dto.UserDto;
-import ttree.it.ttreeGradle.service.AuthImageService;
-import ttree.it.ttreeGradle.service.CustomUserDetailsService;
-import ttree.it.ttreeGradle.service.MailService;
-import ttree.it.ttreeGradle.service.UserService;
+import ttree.it.ttreeGradle.service.*;
 import ttree.it.ttreeGradle.token.TokenDto;
 import ttree.it.ttreeGradle.token.TokenService;
 import ttree.it.ttreeGradle.util.MD5Generator;
@@ -32,48 +31,55 @@ public class SignupController {
     public String token;
     public String emailStore = "";
     public boolean status = false;
-    public boolean id_status = false;
+    public boolean boolIdStatus = false;
+    public String student_id = "";
+
 
     private CustomUserDetailsService customUserDetailsService;
     private AuthImageService authImageService;
     private UserService userService;
+    private TeamService teamService;
 
 
     public SignupController(TokenService tokenService, MailService mailService,
-                            CustomUserDetailsService customUserDetailsService, AuthImageService authImageService, UserService userService) {
+                            CustomUserDetailsService customUserDetailsService, AuthImageService authImageService, UserService userService, TeamService teamService) {
         this.tokenService = tokenService;
         this.mailService = mailService;
         this.customUserDetailsService = customUserDetailsService;
         this.authImageService = authImageService;
         this.userService = userService;
+        this.teamService = teamService;
+    }
+
+    @PostMapping(value="/signup/email/getEmail")
+    public String getEmail(HttpServletRequest request, Model model) {
+        emailStore = request.getParameter("email");
+        try {
+            model.addAttribute("inputEmailID", emailStore);
+            emailStore = emailStore + "@sookmyung.ac.kr";
+            setEmail(emailStore);
+
+            TokenDto tokenDto = new TokenDto();
+            tokenDto.setEmail(emailStore);
+            token = UUID.randomUUID().toString();
+            tokenDto.setToken(token);
+            tokenDto.setCreatedDate(LocalDate.now());
+            tokenService.saveToken(tokenDto);
+
+            mailService.mailTokenSend(emailStore, token);
+            model.addAttribute("status", status);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "SignupEmail";
     }
 
     @PostMapping(value="/signup/email")
     public String signupEmail(HttpServletRequest request, Model model) {
-        String email = request.getParameter("email");
         String code = request.getParameter("code");
-        if(code == null) {
-            try {
-                model.addAttribute("inputEmailID", email);
-                email = email + "@sookmyung.ac.kr";
-                setEmail(email);
-
-                TokenDto tokenDto = new TokenDto();
-                tokenDto.setEmail(email);
-                token = UUID.randomUUID().toString();
-                tokenDto.setToken(token);
-                tokenDto.setCreatedDate(LocalDate.now());
-                tokenService.saveToken(tokenDto);
-
-                mailService.mailTokenSend(email, token);
-                model.addAttribute("status", status);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            status = tokenService.checkToken(code);
-            model.addAttribute("status", status);
-        }
+        status = tokenService.checkToken(emailStore, code);
+        model.addAttribute("status", status);
+        status = false;
         return "SignupEmail";
     }
 
@@ -88,75 +94,81 @@ public class SignupController {
     }
 
     @GetMapping(value = "/signup/info")
-    public String signup(HttpServletRequest request, Model model) {
-
-        model.addAttribute("user", new UserDto());
-
-        String studentIdNum = request.getParameter("studentIdNum");
-        id_status = userService.idCheck(studentIdNum);
-        System.out.println("~~~~");
-        System.out.println(studentIdNum);
-        model.addAttribute("idAvail", id_status);
-
-        return "SignupInfo";
+    public String signup(Model model, HttpServletRequest request) {
+        if(request.getHeader("REFERER") == null){
+            return "SignupEmail";
+        } else {
+            model.addAttribute("user", new UserDto());
+            model.addAttribute("boolStatus", boolIdStatus);
+            return "SignupInfo";
+        }
     }
 
-    @PostMapping(value = "/signup/info")
-    public String checkId(HttpServletRequest request, Model model){
-        String studentIdNum = request.getParameter("studentIdNum");
-        id_status = userService.idCheck(studentIdNum);
-        System.out.println("~~~~");
-        System.out.println(studentIdNum);
-        model.addAttribute("idAvail", id_status);
-
-        return "SignupInfo";
-    }
-
-    @PostMapping("/process_register")
-    public String processRegister(UserDto userDto, @RequestParam("authImg") MultipartFile files, HttpServletRequest request, Model model) {
-
-        try {
-            String origFilename = files.getOriginalFilename();
-            String filename = new MD5Generator(origFilename).toString();
-            /* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-            String savePath = System.getProperty("user.dir") + "/files";
-            /* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-            if (!new File(savePath).exists()) {
-                try {
-                    new File(savePath).mkdir();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+    @PostMapping(value="/signup/info/idCheck")
+    public String idCheck(@RequestParam("studentIdNum") String id, Model model) {
+        if(id == null) {
+            model.addAttribute("id_status", "NULL_ID");
+            model.addAttribute("boolStatus", boolIdStatus);
+        } else {
+            if(userService.idCheck(id)) {
+                model.addAttribute("id_status", "SAME_ID");
+                model.addAttribute("boolStatus", boolIdStatus);
+            } else {
+                boolIdStatus = true;
+                model.addAttribute("boolStatus", boolIdStatus);
+                student_id = id;
+                model.addAttribute("id", student_id);
             }
-            String filePath = savePath + "/" + filename;
-            files.transferTo(new File(filePath));
+        }
+        return "SignupInfo";
+    }
 
-            AuthImageDto authImageDto = new AuthImageDto();
-            authImageDto.setOrigFilename(origFilename);
-            authImageDto.setFilename(filename);
-            authImageDto.setFilePath(filePath);
+   @PostMapping("/signup/info")
+   public String processRegister(UserDto userDto, @RequestParam("identity") String identity, @RequestParam("authImg") MultipartFile files, Model model) {
+        if(student_id.equals("")) {
+            model.addAttribute("id_status", "INVALID_ID");
+        } else {
+            try {
+                userDto.setStudentIdNum(student_id);
+                userDto.setRole(identity);
+                userDto.setEmail(emailStore);
 
-            Long fileId = authImageService.saveAuthImage(authImageDto);
-            userDto.setId(fileId);
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+                userDto.setPassword(encodedPassword);
 
-            userDto.setEmail(emailStore);
+                Long userId = userService.saveUser(userDto);
+                boolIdStatus = false;
 
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 
-            userDto.setPassword(encodedPassword);
-            userService.saveUser(userDto);
+                String origFilename = files.getOriginalFilename();
+                String filename = new MD5Generator(origFilename).toString();
+                String savePath = System.getProperty("user.dir") + "/files";
+                if (!new File(savePath).exists()) {
+                    try {
+                        new File(savePath).mkdir();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                }
+                String filePath = savePath + "/" + filename;
+                files.transferTo(new File(filePath));
 
-        }catch(Exception e) {
-            e.printStackTrace();
+                AuthImageDto authImageDto = new AuthImageDto();
+                authImageDto.setImage_id(userId);
+                authImageDto.setOrigFilename(origFilename);
+                authImageDto.setFilename(filename);
+                authImageDto.setFilePath(filePath);
+
+                authImageService.saveAuthImage(authImageDto);
+
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
         }
         return "login";
     }
 
-
-
-    @RequestMapping(value ="/user/studentPage")
-    public String studentPage(){ return "studentPage"; }
 
     @GetMapping(value = "/user/studentPage")
     public String currentUserDetail(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
@@ -166,13 +178,91 @@ public class SignupController {
         String studentIdNum = customUserDetails.getStudentIdNum();
         //System.out.println(username + usermajor1 + usermajor2 + studentIdNum);
 
+        Long userId = customUserDetails.getTeamId();
+        try {
+            TeamDto teamDto = teamService.getTeam(userId);
+            model.addAttribute("teamStatus", teamDto);
+        } catch(IllegalArgumentException e) {
+            model.addAttribute("teamStatus", null);
+        }
+
+
         model.addAttribute("username", username);
         model.addAttribute("usermajor1", usermajor1);
         model.addAttribute("usermajor2", usermajor2);
         model.addAttribute("studentIdNum", studentIdNum);
 
+
+
         return "studentPage";
     }
+
+    @RequestMapping(value="/changePW")
+    public String changePW() { return "changePW";}
+
+    @PostMapping(value = "/changePW")
+    public String changePW(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("oldpw") String oldPassword, @RequestParam("pass") String password, Model model){
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        boolean isChanged = true;
+
+        String dbPassword = customUserDetails.getPassword();
+        String studentIdNum = customUserDetails.getStudentIdNum();
+        //System.out.println(studentIdNum);
+
+        UserDto userDto = userService.getUserByStudentId(studentIdNum);
+
+        //System.out.println("!" + dbPassword);
+        //System.out.println("oldpassword: " + oldPassword);
+        //System.out.println("password: " + password);
+
+
+        if(passwordEncoder.matches(oldPassword, dbPassword)){
+            model.addAttribute("isChanged", isChanged);
+            String newPassword = passwordEncoder.encode(password);
+            userDto.setPassword(newPassword);
+            userService.saveUser(userDto);
+
+        }else{
+            isChanged = false;
+            model.addAttribute("isChanged", isChanged);
+        }
+       return "changePW";
+    }
+
+    @RequestMapping(value="/changeEmail")
+    public String changeEmail(){ return "changeEmail"; }
+
+    @PostMapping(value = "/changeEmail")
+    public String changeEmail(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                              @RequestParam("oldEmail") String oldEmail, @RequestParam("email") String email, Model model){
+        boolean isEmailChanged = true;
+
+        String dbEmail = customUserDetails.getUserEmail();
+        String studentIdNum = customUserDetails.getStudentIdNum();
+
+        oldEmail = oldEmail + "@sookmyung.ac.kr";
+        email = email + "@sookmyung.ac.kr";
+
+        UserDto userDto = userService.getUserByStudentId(studentIdNum);
+
+        //System.out.println("dbEmail: " + dbEmail);
+        //System.out.println("oldEmail: " + oldEmail);
+        //System.out.println("email: " + email);
+
+        if (dbEmail.equals(oldEmail)){
+            model.addAttribute("isEmailChanged", isEmailChanged);
+            userDto.setEmail(email);
+            userService.saveUser(userDto);
+        } else{
+            isEmailChanged = false;
+            model.addAttribute("isEmailChanged", isEmailChanged);
+        }
+        return "changeEmail";
+    }
+
+
+
 
     @GetMapping(value = "/login/findPW")
     public String findPW() {

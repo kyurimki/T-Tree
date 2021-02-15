@@ -20,11 +20,11 @@ public class TokenService {
     }
 
     @Transactional
-    public boolean checkToken(String token) {
+    public boolean checkToken(String email, String token) {
         boolean status = false;
         tokenList = (List<Token>) tokenRepository.findAll();
         for(Token tokenFromDB : tokenList) {
-            if(token.equals(tokenFromDB.getToken())) {
+            if(token.equals(tokenFromDB.getToken()) && email.equals(tokenFromDB.getEmail())) {
                 status = true;
                 deletePost(tokenFromDB.getEmail());
                 break;
@@ -38,4 +38,5 @@ public class TokenService {
         tokenRepository.deleteById(id);
     }
 }
+
 

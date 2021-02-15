@@ -23,10 +23,10 @@
                     <form action="/projectPost" method="post" enctype="multipart/form-data">
                         <tr>
                             <td> 프로젝트 이름 </td>
-                            <td><input type="text" name="title"></td>
+                            <td><input type="text" name="title" required></td>
                         </tr>
                         <tr>
-                            <td> 연도 </td>
+                            <td> 연도/학기 </td>
                             <td>
                                 <select name="year">
                                     <option value="">연도</option>
@@ -49,21 +49,25 @@
                             <td>
                                 <table>
                                     <tr>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="android">Android</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="cpp">C/C++</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="django">Django</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="html">HTML5</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="java">Java</label></td></tr>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="Android">Android</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="C/C++">C/C++</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="Django">Django</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="HTML5">HTML5</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="Java">Java</label></td></tr>
                                     <tr>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="nodejs">NodeJS</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="python">Python</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="rn">React Native</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="spring">Spring</label></td>
-                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="vuejs">VueJS</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="NodeJS">NodeJS</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="Python">Python</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="React-Native">React-Native</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="Spring">Spring</label></td>
+                                        <td><label><input name="checkbox" class="language_select" type="checkbox" value="VueJS">VueJS</label></td>
                                         <td>
-                                            <label><input name="checkbox" class="language_select" type="checkbox" value="etc"
-                                                          onclick="if (this.checked){ document.getElementById('changeMode').removeAttribute('disabled');}">기타</label>
-                                            <input name="etcText" id="changeMode" class="language_select" type="text" value="etc" disabled placeholder="기타 개발환경" />
+                                            <label><input name="checkbox" id="etc" class="language_select" type="checkbox" value="etc"
+                                                          onclick="if (this.checked){
+                                                              document.getElementById('changeMode').removeAttribute('disabled');
+                                                          }else {
+                                                              document.getElementById('changeMode').disabled = true;
+                                                          }">기타</label>
+                                            <input name="etcText" id="changeMode" class="language_select" type="text" disabled placeholder="기타 개발환경" />
                                         </td>
                                     </tr></table>
                             </td>
@@ -159,6 +163,13 @@
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+
+    /*
+    if($("#changeMode").prop("checked")){
+        $("#etc").val("this");
+    }
+
+     */
 </script>
 </body>
 </html>

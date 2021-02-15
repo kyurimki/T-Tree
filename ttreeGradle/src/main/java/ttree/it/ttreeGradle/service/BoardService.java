@@ -1,24 +1,32 @@
 package ttree.it.ttreeGradle.service;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ttree.it.ttreeGradle.domain.entity.Board;
 import ttree.it.ttreeGradle.domain.repository.BoardRepository;
 import ttree.it.ttreeGradle.dto.BoardDto;
-import ttree.it.ttreeGradle.dto.LanguageDto;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class BoardService {
     private BoardRepository boardRepository;
-    List<Board> boardList = null;
-    List<BoardDto> boardDtoList = new ArrayList<>();
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
+    }
+
+    public Page<Board> getBoardList(Pageable pageable) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+        pageable = PageRequest.of(page, 10);
+
+        return boardRepository.findAll(pageable);
     }
 
     @Transactional
@@ -27,88 +35,75 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardDto> getBoardList(String index, String toSearch) {
-        boardList = boardRepository.findAll();
-        List<BoardDto> boardDtoList = new ArrayList<>();
-        if(index == null) {
-            for(Board board : boardList) {
-                BoardDto boardDto = BoardDto.builder()
-                        .id(board.getId())
-                        .title(board.getTitle())
-                        .year(board.getYear())
-                        .semester(board.getSemester())
-                        .content(board.getContent())
-                        .createdDate(board.getCreatedDate())
-                        .hit(board.getHit())
-                        .build();
-                boardDtoList.add(boardDto);
-            }
-        }
-        else if (index.equals("year")) {
-            for(Board board : boardList) {
-                if(toSearch.equals(board.getYear())) {
-                    BoardDto boardDto = BoardDto.builder()
-                            .id(board.getId())
-                            .title(board.getTitle())
-                            .year(board.getYear())
-                            .semester(board.getSemester())
-                            .content(board.getContent())
-                            .createdDate(board.getCreatedDate())
-                            .hit(board.getHit())
-                            .build();
-                    boardDtoList.add(boardDto);
-                }
-            }
-        }
-        return boardDtoList;
-    }
+    public List<BoardDto> getBoardDtoList(List<String> yearToSearch, List<String> langToSearch) {
 
-    @Transactional
-    public List<BoardDto> getBoardListFromLang(String[] languageSet, List<BoardDto> boardDtoList, LanguageService languageService) {
-        if(boardDtoList != null) {
-            for(int i = 0; i < boardDtoList.size(); i++) {
-                Long id = boardDtoList.get(i).getId();
-                LanguageDto languageDto = languageService.getLanguage(id);
-                boolean status = true;
-                for(String lang : languageSet) {
-                    if(lang.equals("android")) {
-                        status = languageDto.isLang_android();
-                    } else if(lang.equals("cpp")) {
-                        status = languageDto.isLang_cpp();
-                    } else if(lang.equals("django")) {
-                        status = languageDto.isLang_django();
-                    } else if(lang.equals("html")) {
-                        status = languageDto.isLang_html();
-                    } else if(lang.equals("java")) {
-                        status = languageDto.isLang_java();
-                    } else if(lang.equals("nodejs")) {
-                        status = languageDto.isLang_nodejs();
-                    } else if(lang.equals("python")) {
-                        status = languageDto.isLang_python();
-                    } else if(lang.equals("rn")) {
-                        status = languageDto.isLang_react();
-                    } else if(lang.equals("spring")) {
-                        status = languageDto.isLang_spring();
-                    } else if(lang.equals("vuejs")) {
-                        status = languageDto.isLang_vuejs();
-                    } else if(lang.equals("etc")) {
-                        String etcStatus = languageDto.getLang_etc();
-                        if(etcStatus == null) {
-                            status = false;
-                        } else {
-                            status = true;
-                        }
+        List<Board> boardList = new ArrayList<>();
+        List<BoardDto> boardDtoList = new ArrayList<>();
+        List<String> langList = Arrays.asList("Android", "C/C++", "Django", "HTML5", "Java", "NodeJS", "Python", "React-Native", "Spring", "VueJS");
+
+        List<Board> tmpList = boardRepository.findAll();
+
+        if(yearToSearch != null) {
+            for(String year : yearToSearch) {
+                for(Board board : tmpList) {
+                    if(year.equals(board.getYear())) {
+                        boardList.add(board);
                     }
                 }
-                if(!status) {
-                    boardDtoList.remove(i);
-                    i--;
+            }
+        } else {
+            boardList = tmpList;
+        }
+
+        tmpList = boardList;
+
+        if(langToSearch != null) {
+            if(langToSearch.get(langToSearch.size()-1).equals("etc")) {
+                int i = 0;
+                while(i < tmpList.size()) {
+                    if(langList.contains(tmpList.get(i).getLanguages().get(tmpList.get(i).getLanguages().size()-1))) {
+                       boardList.remove(tmpList.get(i));
+                    } else {
+                        i++;
+                    }
                 }
+                langToSearch = langToSearch.subList(0, langToSearch.size()-1);
+                tmpList = boardList;
+            }
+
+            int j = 0;
+            while(j  < tmpList.size()) {
+                int k = 0;
+                while(k < langToSearch.size()) {
+                    if(tmpList.get(j).getLanguages().contains(langToSearch.get(k))) {
+                        k++;
+                    } else {
+                        boardList.remove(tmpList.get(j));
+                        j--;
+                        break;
+                    }
+                }
+                j++;
             }
         }
+        Collections.sort(boardList);
+
+        for (Board board : boardList) {
+            BoardDto boardDto = BoardDto.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .year(board.getYear())
+                    .semester(board.getSemester())
+                    .content(board.getContent())
+                    .createdDate(board.getCreatedDate())
+                    .hit(board.getHit())
+                    .languages(board.getLanguages())
+                    .build();
+            boardDtoList.add(boardDto);
+        }
+
         return boardDtoList;
     }
-
 
     @Transactional
     public BoardDto getPost(Long id) {
@@ -124,6 +119,7 @@ public class BoardService {
                 .effect(board.getEffect())
                 .createdDate(board.getCreatedDate())
                 .hit(board.getHit())
+                .languages(board.getLanguages())
                 .build();
         return boardDto;
     }

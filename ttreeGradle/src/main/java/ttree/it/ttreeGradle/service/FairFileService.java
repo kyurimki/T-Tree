@@ -1,6 +1,5 @@
 package ttree.it.ttreeGradle.service;
 
-
 import org.springframework.stereotype.Service;
 import ttree.it.ttreeGradle.domain.entity.FairFile;
 import ttree.it.ttreeGradle.domain.repository.FairFileRepository;
@@ -41,5 +40,11 @@ public class FairFileService {
     }
 
     @Transactional
-    public void deleteFairFile(Long id) { fairFileRepository.deleteById(id);}
+    public void deleteFairFile(Long id) {
+        if(fairFileRepository.findById(id).isPresent()){
+            fairFileRepository.deleteById(id);
+        }else{
+            System.out.println("file is already empty");
+        }
+    }
 }

@@ -3,7 +3,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <header th:fragment="headerFragment">
-    <img src="/character.jpg" alt="logo" width="200" height="240" align="middle">
+    <a href="/">
+        <img src="/character.jpg" alt="logo" width="200" height="240" align="middle">
+    </a>
     <!-- Home, Login, 학과사이트 -->
     <div class="link">
         <ul>
@@ -21,7 +23,7 @@
                 </form>
             </li>
             <li>
-                <a href="http://it.sookmyung.ac.kr/it/index.do"><span> 학과사이트 </span></a>
+                <a href="http://it.sookmyung.ac.kr/it/index.do" target="_blank"><span> 학과사이트 </span></a>
             </li>
         </ul>
     </div>
@@ -31,22 +33,27 @@
         <label class="menulabel" for="toggle">&#9776;</label>
         <input type="checkbox" id="toggle"/>
         <div class ="menu">
-            <ul>
+            <ul class = "flexnav">
                 <li>
                     <a href="/projectProcess"> 졸업작품 진행 개요 </a>
                 </li>
-                <li>
-                    <a href="/projectRules"> 졸업작품 시행 규칙 </a>
+                <li><a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                       href="/projectRules"> 졸업작품 시행 규칙 </a>
+                    <a th:if="${#authorization.expression('!hasRole(''ADMIN'')')}"
+                       href="/projectRulesSaved"> 졸업작품 시행 규칙 </a>
                 </li>
                 <li>
-                    <a href="/projectNotes"> 졸업작품 유의사항 </a>
+                    <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                       href="/projectNotes"> 졸업작품 유의사항 </a>
+                    <a th:if="${#authorization.expression('!hasRole(''ADMIN'')')}"
+                       href="/projectNotesSaved"> 졸업작품 유의사항 </a>
                 </li>
                 <li>
                     <a href="/projectList"> 졸업작품 소개 </a>
                 </li>
                 <li>
-                    <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
-                    href="/staff/staffPage"> 관리페이지 </a>
+                    <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                    href="/admin/adminPage"> 관리페이지 </a>
 
                     <a th:if ="${#authorization.expression('hasRole(''STUDENT'')')}"
                     href="/user/studentPage"> 마이페이지 </a>

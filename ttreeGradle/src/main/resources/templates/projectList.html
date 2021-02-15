@@ -22,7 +22,7 @@
             <form action="/projectList" method="post">
             <table class="year">
                 <tr>
-                    <td><label><input id="total_year" name="year_select" type="radio" value="all_year"> 전체 </label></td>
+                    <td><label><input id="total_year" name="year_select" type="radio" value="all_year" checked> 전체 </label></td>
                     <td><label><input class="year_select" name="year_select" type="checkbox" value="2016"> 2016 </label></td>
                     <td><label><input class="year_select" name="year_select" type="checkbox" value="2017"> 2017 </label></td>
                     <td><label><input class="year_select" name="year_select" type="checkbox" value="2018"> 2018 </label></td>
@@ -34,17 +34,17 @@
 
             <table class="language">
                 <tr>
-                    <td><label><input id="language_total_year" name="language_select" type="radio" value="all_language">전체</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="android">Android</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="cpp">C/C++</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="django">Django</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="html">HTML5</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="java">Java</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="nodejs">NodeJS</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="python">Python</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="rn">React Native</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="spring">Spring</label></td>
-                    <td><label><input class="language_select" name="language_select" type="checkbox" value="vuejs">VueJS</label></td>
+                    <td><label><input id="language_total_year" name="language_select" type="radio" value="all_language" checked>전체</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="Android">Android</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="C/C++">C/C++</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="Django">Django</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="HTML5">HTML5</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="Java">Java</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="NodeJS">NodeJS</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="Python">Python</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="React-Native">React Native</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="Spring">Spring</label></td>
+                    <td><label><input class="language_select" name="language_select" type="checkbox" value="VueJS">VueJS</label></td>
                     <td><label><input class="language_select" name="language_select" type="checkbox" value="etc">기타</label></td>
                 </tr>
             </table>
@@ -113,7 +113,7 @@
                     <th scope="col" style="text-align: center">작성일</th>
                     <th scope="col" style="text-align: center">조회수</th>
                 </tr>
-                <tr class="text-center" th:each="post : ${postList}">
+                <tr class="text-center" th:each="post : ${pageList}">
                     <td>
                         <p th:text="${post.id}"></p>
                     </td>
@@ -137,23 +137,76 @@
                 </tr>
             </table>
 
+            <nav style="text-align: center;">
+                <ul class="pagination"
+                    th:with="start=${T(Math).floor(pageList.number/10)*10 + 1},
+                             last=(${start + 9 < pageList.totalPages ? start + 9 : pageList.totalPages})">
+                    <li>
+                        <!--첫 페이지로 가기 -->
+                        <a th:href="@{/projectList(page=1)}" aria-label="First">
+                            <span class="forPage" aria-hidden="true">First</span>
+                        </a>
+                    </li>
+
+                    <li th:class="${pageList.first} ? 'disabled'">
+                        <!--이전 페이지로 가기, 맨 처음이면 이전버튼 X -->
+                        <a th:href="${pageList.first} ? '#' :@{/projectList(page=${pageList.number})}" aria-label="Previous">
+                            <span class="forPage" aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == pageList.number + 1} ? 'active'">
+                        <!-- 현재 페이지 그룹의 페이지 나열 -->
+                        <a th:text="${page}" th:href="@{/projectList(page=${page})}"></a>
+                    </li>
+
+                    <li th:class="${pageList.last} ? 'disabled'">
+                        <!-- 다음페이지로 가기 버튼, 맨 마지막이면 버튼X -->
+                        <a th:href="${pageList.last} ? '#' : @{/projectList(page=${pageList.number + 2})}" aria-label="Next">
+                            <span class="forPage" aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{/projectList(page=${pageList.totalPages})}" aria-label="Last">
+                            <!-- 마지막 페이지로 가기 버튼 -->
+                            <span class="forPage" aria-hidden="true">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+
+
             <div class="button">
-                <a th:if="${#authorization.expression('hasRole(''STAFF'')')}"
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
                         class="btn btn-primary" th:href="@{/projectPost}" role="button">글쓰기</a>
             </div>
             <br><br>
             <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
             <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
             <script>
+                if($("input[type=radio]").is(':checked')) {
+                    $("input[type=radio]").parent().parent().css('color', '#ffffff');
+                    $("input[type=radio]").parent().parent().css('background-color', '#003087');
+                } else {
+                    $("input[type=radio]").parent().parent().css('color', '#000000');
+                    $("input[type=radio]").parent().parent().css('background-color', '');
+                }
+
                 $('#total_year').click( function () {
                     if ($(this).is(':checked')) {
                         $('.year_select').prop('checked', false);
+                        $('#total_year').parent().parent().css('color', '#ffffff');
+                        $('#total_year').parent().parent().css('background-color', '#003087');
                     }
                 });
 
                 $('.year_select').change( function () {
                     if ($(this).is(':checked')) {
                         $('#total_year').prop('checked', false);
+                        $('#total_year').parent().parent().css('color', '#000000');
+                        $('#total_year').parent().parent().css('background-color', '');
                     }
                 });
 
@@ -161,12 +214,16 @@
                 $('#language_total_year').click( function () {
                     if ($(this).is(':checked')) {
                         $('.language_select').prop('checked', false);
+                        $('#language_total_year').parent().parent().css('color', '#ffffff');
+                        $('#language_total_year').parent().parent().css('background-color', '#003087');
                     }
                 });
 
                 $('.language_select').change( function () {
                     if ($(this).is(':checked')) {
                         $('#language_total_year').prop('checked', false);
+                        $('#language_total_year').parent().parent().css('color', '#000000');
+                        $('#language_total_year').parent().parent().css('background-color', '');
                     }
                 });
             </script>

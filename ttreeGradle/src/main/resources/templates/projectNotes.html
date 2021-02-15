@@ -4,11 +4,16 @@
 
 <!-- 해당페이지 고유 CSS 추가 -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/projectNotesStyle.css}">
+    <style>
+        .ck-editor__editable{
+            min-height: 500px;
+        }
+    </style>
 </th:block>
 
 <!-- 해당페이지 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
+    <script th:src="@{/ckeditor/build/ckeditor.js}"></script>
 </th:block>
 
 <div layout:fragment="content">
@@ -19,125 +24,54 @@
         <aside class="rightsideblank">
         </aside>
         <article>
-            <h1>졸업작품 유의사항</h1>
-            <h3 class="miniTitle">ICT융합공학부 IT공학전공 졸업논문 유의사항</h3>
-            <br>
-
-            <h3>◼ 지도교수 결정</h3>
-            <ul>
-                <li>"졸업프로젝트" 과목 수강신청
-                    <ul>
-                        <li>IT공학과 제1전공 학생은 7번째 등록학기에 필수 이수과목인 “졸업프로젝트”를 수강한다.</li>
-                        <li>복수전공 학생은 7학기(혹은 그 이후)에 IT공학 전공과목 24학점 이상 이수한 후 “졸업프로젝트”를 수강한다.</li>
-                        <li>기타 특별한 사유가 있는 학생이 수강을 하려고 할 경우 학기 시작 전에 근거 서류와 사유서를 제출하여 교수회의에서 미리 허락을 받아야 한다.</li>
-                        <li>가을학기의 조기수강 신청 제도는 운영하지 않는다.</li>
-                    </ul>
-                </li>
-
-                <li> 지도교수 신청
-                    <ul>
-                        <li>해당학기 개강 첫 주까지 팀을 구성하여 원하는 주제(또는 분야)와 희망 지도교수 1,2,3지망을 반드시 기입한 후 학과 사무실로 제출한다. (학과 사무실에서 신청
-                            용지 배포)
-                        </li>
-                        <li>프로젝트 팀을 구성할 때는 2인 이내로 구성한다.</li>
-                    </ul>
-                </li>
-
-                <li> 지도교수 배정
-                    <ul>
-                        <li>해당 학기 개강 첫 주 교수회의에서 지도교수 배정 후 공고한다.</li>
-                        <li>신청 학생들은 희망하는 지도교수와 사전 면담할 필요 없으며, 교수회의에서 종합적인 상황을 고려하여 안배한다.</li>
-                    </ul>
-                </li>
-            </ul>
-            <br>
-
-            <h3>◼ 교과목 운영</h3>
-            <ul>
-                <li>담당교수의 역할
-                    <ul>
-                        <li>“졸업프로젝트” 담당교수는 해당학기 졸업작품과 졸업논문의 행정적인 진행과정을 책임진다.</li>
-                        <li>담당교수는 제안서발표, 중간발표, 최종발표, 실습실 및 장비 배정 등을 주관하여 일정계획을 지도교수들에게 통보하고 학생들의 발표내용 중 혹시 지적할 사항이 있으면
-                            지도교수 또는 학과회의에서 협의한다.
-                        </li>
-                    </ul>
-                </li>
-
-                <li> 지도교수의 역할
-                    <ul>
-                        <li>졸업작품의 주제나 기술적인 구현 내용 등 품질수준에 관련된 사항의 지도는 지도교수에게 일임한다.</li>
-                        <li>단, 교과목 운영 시 꼭 필요한 경우를 제외하고 가급적 지도교수의 표시를 배제하여 학생들이 수행하는 졸업프로젝트라는 의미를 부각시킨다.</li>
-                        <li>또한, 지도교수는 학생의 취업과 관련하여 지도하며 졸업 후 연락처 등을 관리한다.</li>
-                    </ul>
-                </li>
-
-                <li> 졸업작품/논문의 주제
-                    <ul>
-                        <li>졸업 작품의 목적은 4년간 배운 실력을 작품/논문을 통하여 보여주는 것이다. 기술적인 내용(프로그래밍, 시스템 구축 또는 콘텐츠의 경우에는 그에 준하는 과정)이
-                            포함되어야 한다. 적용된 기술이나 내용이 졸업작품으로서 품격이 맞는지는 지도교수와 상의하여 결정한다.
-                        </li>
-                        <li>필요에 따라 부분적으로 다른 소스를 이용하는 경우는 사전에 지도교수와 의논하여 계획서에 명시하도록 한다. 만약 나중에 밝혀지면 남의 소스를 도용한 것으로
-                            간주된다.
-                        </li>
-                    </ul>
-                </li>
-
-                <li> 교과목 성적
-                    <ul>
-                        <li>교과목 성적은 지도교수와 담당교수의 평가를 합산하여 산출한다. 수업시간의 참석 및 발표, 프로젝트 진도에 대해서 교과목 담당교수가 1차로 평가한다. 지도교수는
-                            졸업작품 수행실적에 대한 개인별 능력평가를 실시하여 1차 성적에 합산하여 교과목 담당교수에게 전달한다. 단, 최종성적은 지도교수와 담당교수의 협의를 거쳐 확정한다.
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <br>
-
-            <h3>◼ 졸업작품 발표</h3>
-            <ul>
-                <li>졸업프로젝트 담당교수의 역할
-                    <ul>
-                        <li>“졸업프로젝트” 담당교수는 이전학기 수강학생의 졸업작품 발표과정의 진행을 책임진다. 졸업작품 발표는 졸업작품 출품심사와 졸업작품 전시회로 구성된다.</li>
-                    </ul>
-                </li>
-
-                <li> 졸업작품 출품심사
-                    <ul>
-                        <li>졸업작품 출품심사는 3월 초순과 9월 초순에 실시함을 원칙으로 하고 학과교수 2인 이상이 참여한다. 심사시 지적할 사항이 있는 경우 학과회의에서 논의하여
-                            결정한다.
-                        </li>
-                    </ul>
-                </li>
-
-                <li> 졸업작품 전시회
-                    <ul>
-                        <li>졸업작품 전시회는 졸업작품 출품심사를 통과한 학생을 대상으로 4월 초순과 10월 초순에 실시한다. 졸업예정자는 전시회 시간동안 제대로 참여하여야 통과한 것으로
-                            인정한다.
-                        </li>
-                        <li>단, 졸업프로젝트 과목의 이수와 발표회를 동일 학기에 진행할 학생은 학과회의의 사전 승인을 받아야 하며, 지도교수와 의논하여 개강 전에 졸업작품의 대부분을 미리
-                            진행하여야 한다.
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <br>
-
-            <h3>◼ 논문 사정회</h3>
-            <ul>
-                <li> 작품전시회 실시 후 4월과 10월 IT공학과 교수 전원으로 사정위원회를 개최한다.</li>
-                <li> “졸업프로젝트” 담당교수는 해당 학생들이 다음 사항들을 제출 완료하였는지 확인하고 졸업작품 최종확인서를 사정위원회에 제출한다.
-                    <br>작품 실행 파일, 작품 소스 파일, 작품 소스 및 주요 결과 출력물, 논문 (출력물 2부, 지도교수 서명 요함), 논문 파일, 관련 서류
-                </li>
-                <li> 졸업작품 최종확인서는 주임교수 및 학과교수의 서명을 득하여 학과 사무실에서 보관한다.</li>
-            </ul>
-
-            <br>
-            <div class="revisionBox">
-                <p> 2008년 5월 14일 작성 </p>
-                <p> 2017년 6월 15일 수정 </p>
-                <p> 2018년 3월 15일 수정 </p>
-                <p class="prof"> 숙명여자대학교 IT공학과 교수 일동 </p>
-            </div>
+            <form action="/projectNotes" method="post">
+                <div class="editor_wrap">
+                    <textarea type="text" name="content" class="form-control" id="content" cols="40" rows="10">
+                        [[${projectNotes.content}]]
+                    </textarea>
+                </div>
+                <br><br><br>
+                <input class="btn btn-primary" type="submit" role="button" value="저장">
+                <input class="btn btn-primary" role="button" value="게시글 보기" onclick="location.href='projectNotesSaved'">
+            </form>
         </article>
+        <script type="text/javascript">
+            ClassicEditor
+                .create( document.querySelector( '#content' ), {
+
+                    toolbar: {
+                        items: [
+                            'heading',
+                            '|',
+                            'bold',
+                            'italic',
+                            'link',
+                            'bulletedList',
+                            'numberedList',
+                            '|',
+                            'indent',
+                            'outdent',
+                            '|',
+                            'blockQuote',
+                            'undo',
+                            'redo',
+                            'alignment'
+                        ]
+                    },
+                    language: 'ko',
+                    licenseKey: '',
+
+                } )
+                .then( editor => {
+                    window.editor = editor;
+                } )
+                .catch( error => {
+                    console.error( 'Oops, something went wrong!' );
+                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+                    console.warn( 'Build id: i18actvydgwm-f2rh0gfvttay' );
+                    console.error( error );
+                } );
+        </script>
     </section>
 </div>
 </html>

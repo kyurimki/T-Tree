@@ -4,117 +4,142 @@
 
 <!-- 해당페이지 고유 CSS 추가 -->
 <th:block layout:fragment="css">
-  <link rel="stylesheet" type="text/css" th:href="@{/css/SignupInfoStyle.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/SignupInfoStyle.css}">
 </th:block>
 
 <!-- 해당페이지 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
-  <script>
-    // function getQueryStringValue (key) {
-    //   return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
-    // }
-    // var email = getQueryStringValue("emailInput");
-    // window.alert(email);
+    <script>
+        function check_pw() {
+            var pw = document.getElementById('pw').value;
+            var SC = ["!", "@", "$", "&", "*"];
+            var check_SC = 0;
 
-    function check_pw() { //???? ???? ??
-      var pw = document.getElementById('pw').value;
-      var SC = ["!", "@", "$", "&", "*"];
-      var check_SC = 0;
+            for (var i = 0; i < SC.length; i++) {
+                if (pw.indexOf(SC[i]) != -1) {
+                    check_SC = 1;
+                }
+            }
 
-      for (var i = 0; i < SC.length; i++) {
-        if (pw.indexOf(SC[i]) != -1) {
-          check_SC = 1;
+            if (check_SC == 0) {
+                window.alert("!, @, $, &, * 를 포함하여 비밀번호를 입력하여주세요!")
+                document.getElementById('pw').value = '';
+            }
+
+            if (document.getElementById('pw').value != '' && document.getElementById('pwCheck').value != '') {
+                if (document.getElementById('pw').value == document.getElementById('pwCheck').value) {
+                    document.getElementById('check').innerHTML = '입력하신 비밀번호가 일치합니다.'
+                    document.getElementById('check').style.color = 'blue';
+                } else {
+                    document.getElementById('check').innerHTML = '입력하신 비밀번호가 일치하지 않습니다.'
+                    document.getElementById('check').style.color = 'red';
+                }
+            }
         }
-      }
-
-      if (check_SC == 0) {
-        window.alert("!, @, $, &, * 를 포함하여 비밀번호를 입력하여주세요!")
-        document.getElementById('pw').value = '';
-      }
-
-      if (document.getElementById('pw').value != '' && document.getElementById('pwCheck').value != '') {
-        if (document.getElementById('pw').value == document.getElementById('pwCheck').value) {
-          document.getElementById('check').innerHTML = '입력하신 비밀번호가 일치합니다.'
-          document.getElementById('check').style.color = 'blue';
-        } else {
-          document.getElementById('check').innerHTML = '입력하신 비밀번호가 일치하지 않습니다.'
-          document.getElementById('check').style.color = 'red';
-        }
-      }
-    }
-  </script>
+    </script>
 </th:block>
 
 <div layout:fragment="content">
-  <section>
-    <aside class="leftsideblank">
-    </aside>
-    <aside class="rightsideblank">
-    </aside>
-    <article>
-      <h1>✔ 회원가입</h1>
-      <form th:action="@{/process_register}" th:object="${user}"
-            enctype="multipart/form-data" method="post">
-        <div class="registerForm">
-          <table border="0">
-            <tr>
-              <td>이름</td>
-              <td><input type="text" th:field="*{name}" id="name" required></td>
-            </tr>
-            <tr>
-              <td>학번(ID)</td>
-              <td><input type="text" th:field="*{studentIdNum}" id="studentIdNum" name="studentIdNum" required></td>
-              <td><input type="button" name="IDcheck" value="중복확인" onclick="showStatus()"></td>
-              <td id="check_id">사용여부: [[${idAvail}]]</td>
-            </tr>
-            <tr>
-              <td>비밀번호</td>
-              <td><input type="password" th:field="*{password}" id="pw" value=""
-                         required minlength="6" maxlength="10" onchange="check_pw()"></td>
-            </tr>
-            <tr>
-              <td>비밀번호 확인</td>
-              <td><input type="password" id="pwCheck" value=""
-                         required minlength="6" maxlength="16" onchange="check_pw()">
-                <br> <span id="check"></span></td>
-            </tr>
-            <tr>
-              <td>신분</td>
-              <td><input type="radio" name="identity" value="ROLE_STUDENT" th:field="*{role}">학생</td>
-              <td><input type="radio" name="identity" value="ROLE_STAFF" th:field="*{role}">교수자/조교</td>
-            </tr>
-            <tr>
-              <td>제1전공</td>
-              <td><input type="text" th:field="*{major1}" required/></td>
-            </tr>
-            <tr>
-              <td>제2전공</td>
-              <td><input type="text" th:field="*{major2}"></td>
-            </tr>
-            <tr>
-              <td rowspan="2">숙명포털 인증</td>
-              <td><input type="file" name="authImg" value="authImg"></td>
-            </tr>
-          </table>
-          <button type="submit" name="SignupEnd">작성 완료</button>
-        </div>
-        <br><br><br>
-      </form>
-      <script>
-        function showStatus(){
-          if ([[${idAvail}]]) {
-            document.getElementById('check_id').innerHTML = '사용할 수 있는 ID입니다.'
-            document.getElementById('check_id').style.color = 'blue'
-          }
-          else{
-              document.getElementById('check_id').innerHTML = '입력하신 비밀번호가 일치하지 않습니다.'
-              document.getElementById('check_id').style.color = 'red';
-              document.getElementById('check_id').value = ''
-            }
-        }
-      </script>
-    </article>
-  </section>
+    <section>
+        <aside class="leftsideblank">
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>✔ 회원가입</h1>
+
+            <div class="registerForm">
+                <table border="0">
+                    <tr>
+                        <form action="/signup/info/idCheck" method="post">
+                            <td>학번(ID)</td>
+                            <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${id}" required></td>
+                            <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
+                            <td><input type="submit" name="IDcheck" value="중복확인"></td>
+                        </form>
+                    </tr>
+                    <form action="/signup/info" enctype="multipart/form-data" method="post">
+                        <tr>
+                            <td>이름</td>
+                            <td><input type="text" name="name" id="name" required></td>
+                        </tr>
+                        <tr>
+                            <td>비밀번호</td>
+                            <td><input type="password" name="password" id="pw" value=""
+                                       required minlength="6" maxlength="10" onchange="check_pw()"></td>
+                        </tr>
+                        <tr>
+                            <td>비밀번호 확인</td>
+                            <td><input type="password" id="pwCheck" value=""
+                                       required minlength="6" maxlength="16" onchange="check_pw()">
+                                <br> <span id="check"></span></td>
+                        </tr>
+                        <tr>
+                            <td>신분</td>
+                            <td><input type="radio" name="identity" value="ROLE_STUDENT">학생</td>
+                            <td><input type="radio" name="identity" value="ROLE_ADMIN">교수자/조교</td>
+                        </tr>
+                        <tr>
+                            <td>제1전공</td>
+                            <td><input type="text" name="major1" required/></td>
+                        </tr>
+                        <tr>
+                            <td>제2전공</td>
+                            <td><input type="text" name="major2"></td>
+                        </tr>
+                        <tr>
+                            <td>숙명포털 인증</td>
+                            <td>
+                                <input type="file" name="authImg" value="authImg" required>
+                                <p style="color: red; font-size: 10pt; margin-bottom: -2px; margin-top: 5px;">* 학사 > 학적정보 > 학적 기본사항관리 > 전공선택/전과내역 선택 후 캡쳐해주세요</p>
+                                <p style="color: red; font-size: 10pt;">* 파일 이름은 학번_이름 형식으로 해주세요</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="submit" name="SignupEnd" onclick="alertMessage()">작성 완료</button>
+                            </td>
+                        </tr>
+
+                    </form>
+                </table>
+
+            </div>
+            <br><br><br>
+
+            <script>
+                if ("[[${id_status}]]" === "NULL_ID") {
+                    window.alert("학번을 입력하세요.");
+                } else if ("[[${id_status}]]" === "SAME_ID") {
+                    window.alert("가입 이력이 있는 회원입니다.");
+                } else if ("[[${id_status}]]" === "INVALID_ID") {
+                    window.alert("학번이 유효하지 않습니다.");
+                }
+
+                if([[${boolStatus}]]){
+                    $("#studentIdNum").attr("disabled", true);
+                }
+
+
+                function alertMessage(isFilled) {
+                    $('input').filter('[required]').each(function () {
+                        if ($(this).val() == "") {
+                            isFilled = false;
+                        } else {
+                            isFilled = true;
+                        }
+                    })
+                    if (isFilled) {
+                        window.alert("회원가입이 완료되었습니다")
+                    } else {
+                        window.alert("필수 창을 모두 입력하여주세요.")
+                    }
+                }
+
+            </script>
+        </article>
+    </section>
 </div>
 </html>
 

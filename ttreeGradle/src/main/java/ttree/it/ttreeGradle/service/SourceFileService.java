@@ -40,6 +40,10 @@ public class SourceFileService {
 
     @Transactional
     public void deleteSourceFile(Long id) {
-        sourceFileRepository.deleteById(id);
+        if(sourceFileRepository.findById(id).isPresent()) {
+            sourceFileRepository.deleteById(id);
+        }else{
+            System.out.println("file is already empty");
+        }
     }
 }

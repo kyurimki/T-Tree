@@ -20,14 +20,10 @@ public class Token {
 
     public LocalDate createdDate;
 
-    @Column(columnDefinition = "boolean default false")
-    public boolean flag;
-
     @Builder
-    public Token(String email, String token, LocalDate createdDate, boolean flag) {
+    public Token(String email, String token, LocalDate createdDate) {
         this.email = email;
         this.token = token;
         this.createdDate = createdDate;
-        this.flag = flag;
     }
 }

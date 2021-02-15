@@ -17,8 +17,7 @@ public class ProposalFileService {
     }
 
     @Transactional
-    public void saveProposalFile(
-            ProposalFileDto proposalFileDto){
+    public void saveProposalFile(ProposalFileDto proposalFileDto){
         proposalFileRepository.save(proposalFileDto.toEntity());
     }
 
@@ -40,7 +39,11 @@ public class ProposalFileService {
     }
 
     @Transactional
-    public void deleteProposalFile(Long id){
-        proposalFileRepository.deleteById(id);
+    public void deleteProposalFile(Long id) {
+        if (proposalFileRepository.findById(id).isPresent()) {
+            proposalFileRepository.deleteById(id);
+        } else{
+            System.out.println("file is already empty");
+        }
     }
 }

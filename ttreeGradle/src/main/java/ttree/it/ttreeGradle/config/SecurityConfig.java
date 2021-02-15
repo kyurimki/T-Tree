@@ -1,5 +1,6 @@
 package ttree.it.ttreeGradle.config;
 
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import ttree.it.ttreeGradle.service.CustomUserDetailsService;
 
@@ -59,18 +61,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         httpSecurity.csrf().disable()
                 .httpBasic()
                 .and()
+                .headers(headers -> headers //게시글 뒤로가기 시 발생하는 오류 없애기 위해
+                        .cacheControl(cache -> cache.disable()))
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/projectPost").hasRole("STAFF")
+                .antMatchers("/projectPost/**", "/projectRules", "/projectNotes", "/admin/**", "/changePW", "/changeEmail").hasRole("ADMIN")
+                .antMatchers("/user/studentPage", "/changeEmail").hasRole("STUDENT")
+                .antMatchers("/download/**", "/projectList", "/changePW").authenticated()
                 .and()
                 .formLogin().loginPage("/user/login")
                 .defaultSuccessUrl("/")
                 .permitAll()
                 .and()
+                .exceptionHandling().accessDeniedPage("/accessDeniedPage")
+                .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/").permitAll();
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true) //로그아웃시 세션제거
+                .deleteCookies("JSESSIONID") // 쿠키제거
+                .clearAuthentication(true)
+                .permitAll()
+                .and()
+                .sessionManagement()
+                .maximumSessions(1)//같은 id로 한명만 로그인 가능
+                .expiredUrl("/user/login")
+                .maxSessionsPreventsLogin(true);
     }
+
+    /*
+    @Bean
+    public SessionRegistry sessionRegistry(){
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public static ServletListenerRegistrationBean httpSessionEventPulisher(){
+        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
+    }
+
+     */
 
     /*사용자 임의로 넣기
     @Override
@@ -82,4 +112,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
      */
+
+    @Bean //invalidateHttpSession(true)가 작동하지 않을 때 사용
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
+    }
 }

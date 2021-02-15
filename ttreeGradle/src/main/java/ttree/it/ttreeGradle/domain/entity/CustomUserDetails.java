@@ -19,9 +19,6 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
         authList.add(new SimpleGrantedAuthority(user.getRole()));
-        System.out.println("!");
-        System.out.println(user.getRole());
-        System.out.println(authList);
         return authList;
     }
 
@@ -61,6 +58,11 @@ public class CustomUserDetails implements UserDetails {
 
     public String getMajorTwo(){ return user.getMajor2(); }
 
+    public String getUserEmail(){ return user.getEmail(); }
+
+    public Boolean getUserStatus(){ return user.isStatus(); }
+
+    public Long getTeamId() { return user.getTeamIdNum(); }
 
 
 }

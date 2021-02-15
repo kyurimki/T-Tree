@@ -1,19 +1,24 @@
 package ttree.it.ttreeGradle.domain.entity;
 
-import lombok.*;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ttree.it.ttreeGradle.util.StringToListConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class) /* JPA에게 해당 Entity는 Auditing 기능을 사용함을 알립니다. */
-public class Board {
+public class Board implements Comparable<Board> {
 
     @Id
     @GeneratedValue
@@ -47,8 +52,12 @@ public class Board {
     @Column
     private int hit;
 
+    @Column
+    @Convert(converter = StringToListConverter.class)
+    private List<String> languages;
+
     @Builder
-    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit) {
+    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit, List<String> languages) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -57,9 +66,17 @@ public class Board {
         this.content = content;
         this.effect = effect;
         this.hit = hit;
+        this.languages = languages;
+    }
+
+    @Override
+    public int compareTo(Board board) {
+        return this.id.compareTo(board.id);
     }
 
     public String getYear() {
         return year;
     }
+
+
 }

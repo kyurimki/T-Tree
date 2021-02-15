@@ -1,8 +1,13 @@
 package ttree.it.ttreeGradle.domain.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Getter
 @Entity
@@ -10,8 +15,7 @@ import javax.persistence.*;
 public class AuthImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long image_id;
 
     @Column(nullable = false)
     private String origFilename;
@@ -23,8 +27,8 @@ public class AuthImage {
     private String filePath;
 
     @Builder
-    public AuthImage (Long id, String origFilename, String filename, String filePath){
-        this.id = id;
+    public AuthImage (Long image_id, String origFilename, String filename, String filePath){
+        this.image_id = image_id;
         this.origFilename = origFilename;
         this.filename = filename;
         this.filePath = filePath;

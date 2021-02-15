@@ -1,6 +1,5 @@
 package ttree.it.ttreeGradle.dto;
 
-
 import lombok.*;
 import ttree.it.ttreeGradle.domain.entity.FairFile;
 
