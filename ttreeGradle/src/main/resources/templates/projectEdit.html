@@ -77,7 +77,6 @@
                     <tr>
                         <td> 개발 목적 </td>
                         <td>
-                            <p class="form-control"  th:text="${post.languages}"> </p>
                             <textarea type="text" name="purpose" class="form-control" id="inputPurpose" cols="40" rows="10" th:text="${post.purpose}"> </textarea>
                         </td>
                     </tr>
@@ -166,7 +165,6 @@
                 $(function() {
 
                     var langListArray = "[[${postLang}]]".split(' ');
-                    window.alert(langListArray);
                     var count = 0;
                     for(var i=0; i <langListArray.length; i++) {
                         if(langListArray[i] == "Android") {

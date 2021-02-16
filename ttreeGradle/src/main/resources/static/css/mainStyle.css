@@ -98,7 +98,7 @@ a:link, a:visited, a:hover, a:active{
 @media screen and (min-width: 1200px) {
   .leftsideblank, .rightsideblank {
     width: 15%;
-    height: 100vh;
+    height: 150vh;
   }
 }
 
@@ -139,7 +139,7 @@ a:link, a:visited, a:hover, a:active{
 
   .leftsideblank, .rightsideblank {
     width: 12.5%;
-    height: 100vh;
+    height: 150vh;
   }
 
   #toggle:checked + .menu{

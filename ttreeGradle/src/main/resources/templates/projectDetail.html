@@ -33,17 +33,27 @@
                 <div class="card-body">
                     <h2 th:text="${post.title}"></h2>
                     <div>
-                        <p class="langlist" style="font-size: 12pt">개발환경: </p>
-                        <p class="langlist" th:text="${post.languages}" style="font-size: 12pt"></p>
+                        <p class="langlist" style="font-size: 12pt; display: inline-block;">개발환경: </p>
+                        <p class="langlist" th:text="${post.languages}" style="font-size: 12pt; display: inline-block"></p>
                     </div>
                     <p style="text-align: right">
                         <small th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></small>
                     </p>
                     <hr/>
 
-                    <p class="card-text" style="font-size: 15pt" th:text="'개발목적: '+${post.purpose}"></p>
-                    <p class="card-text" th:text="'프로젝트 설명: '+${post.content}" style="font-size: 15pt"></p>
-                    <p class="card-text" th:text="'기대효과: '+${post.effect}" style="font-size: 15pt"></p>
+                    <p class="card-text" style="font-size: 18pt; font-weight: bold">개발목적</p>
+                    <p style="font-size: 13pt; line-height: 2.2;"
+                            th:text="${post.purpose}"></p>
+                    <br>
+
+                    <p class="card-text" style="font-size: 18pt; font-weight: bold">프로젝트 설명</p>
+                    <p style="font-size: 13pt; line-height: 2.2;"
+                            th:text="${post.content}"></p>
+                    <br>
+
+                    <p class="card-text" style="font-size: 18pt; font-weight: bold">기대효과</p>
+                    <p style="font-size: 13pt; line-height: 2.2;"
+                            th:text="${post.effect}"></p>
 
 
                     <table id="fileTable">

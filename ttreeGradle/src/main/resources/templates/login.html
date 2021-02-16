@@ -21,12 +21,14 @@
             <h1>✔ 로그인</h1>
             <div class="loginForm">
                 <form action="/user/login" method="post">
-                    <p>학번(ID)</p>
+
+                    <p style="display: inline-block; font-weight: bold; font-size: 13pt">학번(ID)</p> &nbsp;
                     <input type="text" name="username" required>
-                    <p>비밀번호</p>
+                    <br>
+                    <p style="display: inline-block; font-weight: bold; font-size: 13pt">비밀번호</p> &nbsp;
                     <input type="password" name="password" required>
-                    <p style="font-size: 10pt; color: darkred"> * 회원가입이 아닌 일괄추가된 경우 초기비밀번호는 p+학번+! 입니다 </p>
-                    <p style="font-size: 10pt; color: darkred"> ex) p11111! </p>
+
+                    <p style="font-size: 10pt; color: darkred"> * 회원가입이 아닌 일괄추가된 경우 초기비밀번호는 p+학번+! 입니다 ex) p11111! </p>
                     <button type="submit">로그인</button>
                 </form>
             </div>
