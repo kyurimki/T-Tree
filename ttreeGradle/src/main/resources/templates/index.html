@@ -4,6 +4,14 @@
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
+    <style>
+        h1, h3{
+            text-align: center;
+        }
+        #thumbnail{
+            max-width: 100%;
+        }
+    </style>
 </th:block>
 
 <!-- index.html 고유 스크립트 추가 -->
@@ -11,10 +19,16 @@
 </th:block>
 
 <div layout:fragment="content">
-    <br><br>
-    <div style="border: 1px solid red">
-        index.html
+    <div style="margin-top: -50px">
+        <img id= "thumbnail" src="/thumbnail2.png">
     </div>
+    <section>
+        <article>
+            <h3>졸업프로젝트 관련 자료는 학과 학생들에게만 제공됩니다.</h3>
+        </article>
+    </section>
+
+
 
 </div>
 </html>

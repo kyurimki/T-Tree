@@ -62,11 +62,15 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/userApproval")
-    public String userList(Model model) {
-        List<UserDto> notApprovedUserList = userService.getNotApprovedUser();
-        model.addAttribute("studentList", notApprovedUserList);
+    public String userList(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+        if(customUserDetails.getUserStatus()) {
+            List<UserDto> notApprovedUserList = userService.getNotApprovedUser();
+            model.addAttribute("studentList", notApprovedUserList);
 
-        return "adminUserApproval";
+            return "adminUserApproval";
+        }else{
+            return "alertPage";
+        }
     }
 
     @PostMapping(value = "/admin/userApproval")
@@ -92,8 +96,12 @@ public class AdminController {
     }
 
     @GetMapping("/admin/createUser")
-    public String createUserPage() {
-        return "adminCreateUser";
+    public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if(customUserDetails.getUserStatus()) {
+            return "adminCreateUser";
+        }else{
+            return "alertPage";
+        }
     }
 
     @PostMapping("/admin/createUser/checkId")
@@ -179,10 +187,14 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/updateStatus")
-    public String getTeamList(Model model) {
-        List<TeamDto> teamList = teamService.getTeamList();
-        model.addAttribute("teamList", teamList);
-        return "adminUpdateStatus";
+    public String getTeamList(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+        if(customUserDetails.getUserStatus()) {
+            List<TeamDto> teamList = teamService.getTeamList();
+            model.addAttribute("teamList", teamList);
+            return "adminUpdateStatus";
+        }else{
+            return "alertPage";
+        }
     }
 
     @GetMapping("/admin/updateStatus/search")

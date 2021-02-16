@@ -1,10 +1,12 @@
 package ttree.it.ttreeGradle.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ttree.it.ttreeGradle.domain.entity.CustomUserDetails;
 import ttree.it.ttreeGradle.dto.ProjectNotesDto;
 import ttree.it.ttreeGradle.dto.ProjectRulesDto;
 import ttree.it.ttreeGradle.service.RuleService;
@@ -23,11 +25,15 @@ public class RuleController {
 
 
     @GetMapping(value = "/projectNotes")
-    public String notes(Model model){
-        ProjectNotesDto projectNotesDto = ruleService.getProjectNotes(1L);
-        model.addAttribute("projectNotes", projectNotesDto);
-        //System.out.println(projectNotesDto);
-        return "projectNotes";
+    public String notes(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
+        if(customUserDetails.getUserStatus()) {
+            ProjectNotesDto projectNotesDto = ruleService.getProjectNotes(1L);
+            model.addAttribute("projectNotes", projectNotesDto);
+            //System.out.println(projectNotesDto);
+            return "projectNotes";
+        }else{
+            return "alertPage";
+        }
     }
 
     @PostMapping(value = "/projectNotes")
@@ -47,10 +53,14 @@ public class RuleController {
     }
 
     @GetMapping(value = "/projectRules")
-    public String rules(Model model){
-        ProjectRulesDto projectRulesDto = ruleService.getProjectRules(1L);
-        model.addAttribute("projectRules", projectRulesDto);
-        return "projectRules";
+    public String rules(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
+        if(customUserDetails.getUserStatus()) {
+            ProjectRulesDto projectRulesDto = ruleService.getProjectRules(1L);
+            model.addAttribute("projectRules", projectRulesDto);
+            return "projectRules";
+        }else{
+            return "alertPage";
+        }
     }
 
     @PostMapping(value = "/projectRules")
