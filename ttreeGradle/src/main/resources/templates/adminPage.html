@@ -3,12 +3,41 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorator="layout/default">
 
-<!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" type="text/css">
+    <style>
+    #table_info{
+        font-size: 18pt;
+        text-align: center;
+        width: 25%;
+        border-color: #111111;
+    }
+    .infoText{
+        background-color: #003087;
+        opacity: 0.8;
+        color: white;
+    }
+
+    .changeButton{
+        background-color: #003087;
+        font-size: 15px;
+        width: 10%;
+        color: white;
+        padding: 15px;
+        margin: 10px 0px;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.7;
+    }
+
+    td{
+        padding: 6px;
+    }
+    </style>
 </th:block>
 
-<!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
 </th:block>
 
@@ -22,15 +51,35 @@
         <aside class="rightsideblank">
         </aside>
         <article>
-            <h1><span id="user_name" sec:authentication="name" style="color: #003087"></span>님의 회원정보</h1>
+            <h1 style="font-weight: bold">
+                <span id="user_name" sec:authentication="name" style="color: #003087"></span>님의 회원정보
+            </h1>
 
-            <p>학번: <span th:text="${studentIdNum}" style="color: black;"></span></p>
-            <p>제 1전공: <span th:text="${usermajor1}" style="color: black;"></span></p>
-            <p>제 2 전공: <span th:text="${usermajor2}" style="color: black;"></span></p>
+            <table border="1" id="table_info">
+                <tr>
+                    <td class="infoText">학번</td>
+                    <td>
+                        <p th:text="${studentIdNum}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoText">제 1전공</td>
+                    <td>
+                        <p th:text="${usermajor1}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoText">제 2전공</td>
+                    <td>
+                        <p th:text="${usermajor2}"></p>
+                    </td>
+                </tr>
+            </table>
 
-            <a href="#" onclick="window.open('/changePW', 'changePW', 'width=500 height= 500'); return false">비밀번호 변경</a>
-            <br>
-            <a href="#" onclick="window.open('/changeEmail', 'changeEmail', 'width=500 height= 500'); return false">이메일 변경</a>
+            <br><br>
+            <button class="changeButton" onclick="window.open('/changePW', 'changePW', 'width=500 height= 500'); return false">비밀번호 변경</button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="changeButton" onclick="window.open('/changeEmail', 'changeEmail', 'width=500 height= 500'); return false">이메일 변경</button>
         </article>
     </section>
 
