@@ -498,69 +498,90 @@ public class BoardController {
     }
 
     @GetMapping("/download/source/{id}")
-    public ResponseEntity<Resource> sourceFileDownload(@PathVariable("id") Long fileId) throws IOException {
-        SourceFileDto sourceFileDto = sourceFileService.getSourceFile(fileId);
-        Path sourcePath = Paths.get(sourceFileDto.getSource_filePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(sourcePath));
-        String sourceFilename = sourceFileDto.getSource_origFilename();
+    public ResponseEntity<Resource> sourceFileDownload(@PathVariable("id") Long fileId, HttpServletRequest request) throws IOException {
+        if(request.getHeader("REFERER") == null){
+            return ResponseEntity.ok().body(null);
+        }else {
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(sourceFilename, "utf-8") + "\"")
-                .body(resource);
+            SourceFileDto sourceFileDto = sourceFileService.getSourceFile(fileId);
+            Path sourcePath = Paths.get(sourceFileDto.getSource_filePath());
+            Resource resource = new InputStreamResource(Files.newInputStream(sourcePath));
+            String sourceFilename = sourceFileDto.getSource_origFilename();
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(sourceFilename, "utf-8") + "\"")
+                    .body(resource);
+        }
     }
 
     @GetMapping("/download/paper/{id}")
-    public ResponseEntity<Resource> paperFileDownload(@PathVariable("id") Long fileId) throws IOException {
-        PaperFileDto paperFileDto = paperFileService.getPaperFile(fileId);
-        Path paperPath = Paths.get(paperFileDto.getPaper_filePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(paperPath));
-        String paperFilename = paperFileDto.getPaper_origFilename();
+    public ResponseEntity<Resource> paperFileDownload(@PathVariable("id") Long fileId, HttpServletRequest request) throws IOException {
+        if(request.getHeader("REFERER") == null){
+            return ResponseEntity.ok().body(null);
+        }else {
+            PaperFileDto paperFileDto = paperFileService.getPaperFile(fileId);
+            Path paperPath = Paths.get(paperFileDto.getPaper_filePath());
+            Resource resource = new InputStreamResource(Files.newInputStream(paperPath));
+            String paperFilename = paperFileDto.getPaper_origFilename();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(paperFilename, "utf-8") + "\"")
-                .body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(paperFilename, "utf-8") + "\"")
+                    .body(resource);
+        }
     }
 
     @GetMapping("/download/proposal/{id}")
-    public ResponseEntity<Resource> proposalFileDownload(@PathVariable("id") Long fileId) throws IOException {
-        ProposalFileDto proposalFileDto = proposalFileService.getProposalFile(fileId);
-        Path proposalPath = Paths.get(proposalFileDto.getProposal_filePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(proposalPath));
-        String proposalFilename = proposalFileDto.getProposal_origFilename();
+    public ResponseEntity<Resource> proposalFileDownload(@PathVariable("id") Long fileId, HttpServletRequest request) throws IOException {
+        if(request.getHeader("REFERER") == null){
+            return ResponseEntity.ok().body(null);
+        }else {
+            ProposalFileDto proposalFileDto = proposalFileService.getProposalFile(fileId);
+            Path proposalPath = Paths.get(proposalFileDto.getProposal_filePath());
+            Resource resource = new InputStreamResource(Files.newInputStream(proposalPath));
+            String proposalFilename = proposalFileDto.getProposal_origFilename();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(proposalFilename, "utf-8") + "\"")
-                .body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(proposalFilename, "utf-8") + "\"")
+                    .body(resource);
+        }
     }
 
 
     @GetMapping("/download/finalPT/{id}")
-    public ResponseEntity<Resource> finalPTFileDownload(@PathVariable("id") Long fileId) throws IOException {
-        FinalPTFileDto finalPTFileDto = finalPTFileService.getFinalPTFile(fileId);
-        Path finalPTPath = Paths.get(finalPTFileDto.getFinalPT_filePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(finalPTPath));
-        String finalPTFilename = finalPTFileDto.getFinalPT_origFilename();
+    public ResponseEntity<Resource> finalPTFileDownload(@PathVariable("id") Long fileId, HttpServletRequest request) throws IOException {
+        if(request.getHeader("REFERER") == null){
+            return ResponseEntity.ok().body(null);
+        }else {
+            FinalPTFileDto finalPTFileDto = finalPTFileService.getFinalPTFile(fileId);
+            Path finalPTPath = Paths.get(finalPTFileDto.getFinalPT_filePath());
+            Resource resource = new InputStreamResource(Files.newInputStream(finalPTPath));
+            String finalPTFilename = finalPTFileDto.getFinalPT_origFilename();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(finalPTFilename, "utf-8") + "\"")
-                .body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(finalPTFilename, "utf-8") + "\"")
+                    .body(resource);
+        }
     }
 
     @GetMapping("/download/fair/{id}")
-    public ResponseEntity<Resource> fairFileDownload(@PathVariable("id") Long fileId) throws IOException {
-        FairFileDto fairFileDto = fairFileService.getFairFile(fileId);
-        Path fairPath = Paths.get(fairFileDto.getFair_filePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(fairPath));
-        String fairFilename = fairFileDto.getFair_origFilename();
+    public ResponseEntity<Resource> fairFileDownload(@PathVariable("id") Long fileId, HttpServletRequest request) throws IOException {
+        if(request.getHeader("REFERER") == null){
+            return ResponseEntity.ok().body(null);
+        }else {
+            FairFileDto fairFileDto = fairFileService.getFairFile(fileId);
+            Path fairPath = Paths.get(fairFileDto.getFair_filePath());
+            Resource resource = new InputStreamResource(Files.newInputStream(fairPath));
+            String fairFilename = fairFileDto.getFair_origFilename();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(fairFilename, "utf-8") + "\"")
-                .body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(fairFilename, "utf-8") + "\"")
+                    .body(resource);
+        }
     }
 
 }
