@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -86,21 +88,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .sessionManagement()
                 .maximumSessions(1)//같은 id로 한명만 로그인 가능
                 .expiredUrl("/user/login")
-                .maxSessionsPreventsLogin(true);
+                .maxSessionsPreventsLogin(false)
+                .sessionRegistry(sessionRegistry());
     }
-
-    /*
-    @Bean
-    public SessionRegistry sessionRegistry(){
-        return new SessionRegistryImpl();
-    }
-
-    @Bean
-    public static ServletListenerRegistrationBean httpSessionEventPulisher(){
-        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
-    }
-
-     */
 
     /*사용자 임의로 넣기
     @Override
@@ -113,8 +103,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
      */
 
-    @Bean //invalidateHttpSession(true)가 작동하지 않을 때 사용
+    @Bean
+    public SessionRegistry sessionRegistry(){
+        return new SessionRegistryImpl();
+    }
+
+    @Bean  //invalidateHttpSession(true)가 작동하지 않을 때 사용
+    public static ServletListenerRegistrationBean httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
+    }
+
+    /*
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
         return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
     }
+
+     */
+
+
 }
