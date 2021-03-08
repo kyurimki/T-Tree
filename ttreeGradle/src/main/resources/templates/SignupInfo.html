@@ -31,7 +31,7 @@
                                        required>
                             </td>
                             <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
-                            <td><input type="submit" name="IDcheck" value="중복확인"></td>
+                            <td><input type="submit" name="IDcheck" value="중복확인" onclick="checkStudentIdNum()"></td>
                         </form>
                     </tr>
                     <form action="/signup/info" enctype="multipart/form-data" method="post" onsubmit="return checkConditions();">
@@ -41,13 +41,13 @@
                         </tr>
                         <tr>
                             <td>비밀번호</td>
-                            <td><input type="password" name="password" id="pw" value=""
-                                       required minlength="6" maxlength="10" onchange="check_pw()"></td>
+                            <td><input type="password" name="password" id="pw" value="" onchange="pw_format()"
+                                       required minlength="6" onkeyup="check_pw()"></td>
                         </tr>
                         <tr>
                             <td>비밀번호 확인</td>
-                            <td><input type="password" id="pwCheck" value=""
-                                       required minlength="6" maxlength="16" onchange="check_pw()">
+                            <td><input type="password" id="pwCheck" value="" onchange="pw_format()"
+                                       required minlength="6" onkeyup="check_pw()">
                                 <br> <span id="check"></span></td>
                         </tr>
                         <tr>
@@ -89,24 +89,26 @@
                 let check_password;
                 let check_studentIDNum;
 
-                if ("[[${id_status}]]" === "NULL_ID") {
-                    check_studentIDNum = false;
-                    window.alert("학번을 입력하세요.");
-                } else if ("[[${id_status}]]" === "SAME_ID") {
-                    check_studentIDNum = false;
-                    window.alert("가입 이력이 있는 회원입니다.");
-                } else if ("[[${id_status}]]" === "INVALID_ID") {
-                    check_studentIDNum = false;
-                    window.alert("학번이 유효하지 않습니다.");
-                } else {
-                    check_studentIDNum = true;
+                function checkStudentIdNum() {
+                    if ("[[${id_status}]]" === "NULL_ID" || document.getElementById("studentIdNum").value.length == 0) {
+                        check_studentIDNum = false;
+                        window.alert("학번을 입력하세요.");
+                    } else if ("[[${id_status}]]" === "SAME_ID") {
+                        check_studentIDNum = false;
+                        window.alert("가입 이력이 있는 회원입니다.");
+                    } else if ("[[${id_status}]]" === "INVALID_ID") {
+                        check_studentIDNum = false;
+                        window.alert("학번이 유효하지 않습니다.");
+                    } else {
+                        check_studentIDNum = true;
+                    }
                 }
 
                 if ([[${boolStatus}]]) {
                     $("#studentIdNum").attr("disabled", true);
                 }
 
-                function check_pw() {
+                function pw_format(){
                     var pw = document.getElementById('pw').value;
                     var SC = ["!", "@", "$", "&", "*"];
                     var check_SC = 0;
@@ -121,6 +123,22 @@
                         window.alert("!, @, $, &, * 를 포함하여 비밀번호를 입력하여주세요!")
                         check_password = false;
                         document.getElementById('pw').value = '';
+                    }
+                }
+
+                function check_pw() {
+                    var pw = document.getElementById('pw').value;
+                    var SC = ["!", "@", "$", "&", "*"];
+                    var check_SC = 0;
+
+                    for (var i = 0; i < SC.length; i++) {
+                        if (pw.indexOf(SC[i]) != -1) {
+                            check_SC = 1;
+                        }
+                    }
+
+                    if (check_SC == 0) {
+                        check_password = false;
                     }
 
                     if (document.getElementById('pw').value != '' && document.getElementById('pwCheck').value != '') {
@@ -146,7 +164,7 @@
 
                 function buttonCheck(){
                     if (check_password && check_studentIDNum){
-                        window.alert("회원가입에 성공하셨습니다");
+                        window.alert("회원가입에 성공하셨습니다" + "\n" + "check_password: " + check_password + "\n" + "checkStudentIdNum" + check_studentIDNum);
                     } else if(!check_password){
                         window.alert("비밀번호 일치여부를 확인해주세요!" + check_password);
                     } else if(!check_studentIDNum) {

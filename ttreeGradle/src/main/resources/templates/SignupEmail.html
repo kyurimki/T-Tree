@@ -30,7 +30,7 @@
                                 <td><input type="text" name="email" id="email" required="required" th:value="${inputEmailID}">@sookmyung.ac.kr</td>
                             </tr>
                         </table>
-                        <input type="submit" name="emailSubmit" value="인증번호 발송" onclick="alert('입력된 이메일로 인증번호가 발송되었습니다');">
+                        <input type="submit" name="emailSubmit" value="인증번호 발송" onclick="checkEmail();">
                     </div>
                 </div>
             </form>
@@ -43,21 +43,39 @@
                         <tr>
                             <td>인증번호:</td>
                             <td><input name="code" type="text" id="verfiCode"></td>
-                            <td><input type="submit" name="authSubmit" value="확인"></td>
+                            <td><input type="submit" name="authSubmit" value="확인" onclick="checkVerifCode()"></td>
                         </tr>
                         <tr>
-                            <td colspan="3" style="text-align:right" id="status">이메일 인증 상태: [[${status}]]</td>
+                            <td colspan="3" style="text-align:left; font-size: 10pt; font-weight: bold;" id="status">이메일 인증 상태: [[${status}]]</td>
                         </tr>
                     </table>
                 </div>
             </form>
             <script>
-                if([[${status}]]) {
-                    document.getElementById("status").style.color= 'blue';
+                if ([[${status}]]) {
                     window.alert("인증 완료! 회원가입을 완료하세요.");
-                    window.location.href="/signup/info";
-                } else {
-                    document.getElementById("status").style.color= 'red';
+                    window.location.href = "/signup/info";
+                    document.getElementById("status").style.color = 'blue';
+                }
+                if(document.getElementById('verfiCode').value.length == 0) {
+                    document.getElementById("status").style.color = 'red';
+                }
+                if(![[${status}]] && document.getElementById('verfiCode').value.length != 0){
+                    document.getElementById("status").style.color = 'red';
+                }
+
+                function checkVerifCode(){
+                    if(document.getElementById('verfiCode').value.length == 0){
+                        window.alert("인증번호를 입력해주세요!");
+                    }
+                }
+
+                function checkEmail(){
+                    if(document.getElementById('email').value.length == 0){
+                        window.alert("이메일을 입력해주세요");
+                    } else {
+                        window.alert("입력하신 이메일로 코드가 전송되었습니다.");
+                    }
                 }
             </script>
             <br><br><br>
