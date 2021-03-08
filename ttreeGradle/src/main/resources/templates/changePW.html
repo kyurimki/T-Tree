@@ -56,17 +56,17 @@
     <div class="oldPW">
         <p>현재 비밀번호 입력:</p>
         <input type="password" id="oldpw" value="" name="oldpw"
-               required minlength="6">
+               required minlength="6" maxlength="10">
     </div>
     <br>
     <div class="PW">
         <p>새로운 비밀번호 입력:</p>
         <input type="password" id="newPW" value="" name="pass"
-               required minlength="6" onchange="check_pw()">
+               required minlength="6" maxlength="10" onchange="check_pw()">
 
         <p>비밀번호 확인:</p>
-        <input type="password" id="newPW_check" value="" name="password_check"
-               required minlength="6" onchange="check_pw()">
+        <input type="password" id="newPW_check" value="" name="pass"
+               required minlength="6" maxlength="10" onchange="check_pw()">
         <br> <span id="check"></span>
     </div>
     <br> </td>
