@@ -30,7 +30,7 @@
                                 <td><input type="text" name="email" id="email" required="required" th:value="${inputEmailID}">@sookmyung.ac.kr</td>
                             </tr>
                         </table>
-                        <input type="submit" name="emailSubmit" value="인증번호 발송" onclick="alert('입력된 이메일로 인증번호가 발송되었습니다');">
+                        <input type="submit" name="emailSubmit" value="인증번호 발송" onclick="checkEmail();">
                     </div>
                 </div>
             </form>
@@ -43,7 +43,7 @@
                         <tr>
                             <td>인증번호:</td>
                             <td><input name="code" type="text" id="verfiCode"></td>
-                            <td><input type="submit" name="authSubmit" value="확인"></td>
+                            <td><input type="submit" name="authSubmit" value="확인" onclick="checkVerifCode()"></td>
                         </tr>
                         <tr>
                             <td colspan="3" style="text-align:right" id="status">이메일 인증 상태: [[${status}]]</td>
@@ -52,12 +52,29 @@
                 </div>
             </form>
             <script>
-                if([[${status}]]) {
-                    document.getElementById("status").style.color= 'blue';
-                    window.alert("인증 완료! 회원가입을 완료하세요.");
-                    window.location.href="/signup/info";
+                if ([[${status}]]) {
+                    document.getElementById("status").style.color = 'blue';
                 } else {
-                    document.getElementById("status").style.color= 'red';
+                    document.getElementById("status").style.color = 'red';
+                }
+
+                function checkEmail(){
+                    if(document.getElementById('email').value.length == 0){
+                        window.alert("이메일을 입력해주세요");
+                    } else {
+                        window.alert("입력하신 이메일로 코드가 전송되었습니다.");
+                    }
+                }
+
+                function checkVerifCode() {
+                    if ([[${status}]]) {
+                        document.getElementById("status").style.color = 'blue';
+                        window.alert("인증 완료! 회원가입을 완료하세요.");
+                        window.location.href = "/signup/info";
+                    } else {
+                        document.getElementById("status").style.color = 'red';
+                        window.alert("인증번호를 올바르게 입력해주세요.");
+                    }
                 }
             </script>
             <br><br><br>
