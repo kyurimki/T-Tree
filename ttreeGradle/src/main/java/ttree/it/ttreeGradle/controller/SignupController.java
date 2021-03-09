@@ -118,6 +118,7 @@ public class SignupController {
                 model.addAttribute("boolStatus", boolIdStatus);
                 student_id = id;
                 model.addAttribute("id", student_id);
+                boolIdStatus = false;
             }
         }
         return "SignupInfo";

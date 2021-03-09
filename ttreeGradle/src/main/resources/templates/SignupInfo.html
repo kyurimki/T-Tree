@@ -31,10 +31,11 @@
                                        required>
                             </td>
                             <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
-                            <td><input type="submit" name="IDcheck" value="중복확인" onclick="checkStudentIdNum()"></td>
+                            <td><input type="submit" name="IDcheck" value="중복확인"></td>
                         </form>
                     </tr>
-                    <form action="/signup/info" enctype="multipart/form-data" method="post" onsubmit="return checkConditions();">
+                    <form action="/signup/info" enctype="multipart/form-data" method="post"
+                          onsubmit="return checkConditions();">
                         <tr>
                             <td>이름</td>
                             <td><input type="text" name="name" id="name" required></td>
@@ -57,7 +58,7 @@
                         </tr>
                         <tr>
                             <td>제1전공</td>
-                            <td><input type="text" name="major1" required/></td>
+                            <td><input type="text" name="major1" id="major1" required/></td>
                         </tr>
                         <tr>
                             <td>제2전공</td>
@@ -66,7 +67,7 @@
                         <tr>
                             <td>숙명포털 인증</td>
                             <td>
-                                <input type="file" name="authImg" value="authImg" required>
+                                <input type="file" name="authImg" value="authImg" id="authImg" required>
                                 <p style="color: red; font-size: 10pt; margin-bottom: -2px; margin-top: 5px;">* 학사 >
                                     학적정보 > 학적 기본사항관리 > 전공선택/전과내역 선택 후 캡쳐해주세요</p>
                                 <p style="color: red; font-size: 10pt;">* 파일 이름은 학번_이름 형식으로 해주세요</p>
@@ -89,26 +90,26 @@
                 let check_password;
                 let check_studentIDNum;
 
-                function checkStudentIdNum() {
-                    if ("[[${id_status}]]" === "NULL_ID" || document.getElementById("studentIdNum").value.length == 0) {
-                        check_studentIDNum = false;
-                        window.alert("학번을 입력하세요.");
-                    } else if ("[[${id_status}]]" === "SAME_ID") {
-                        check_studentIDNum = false;
-                        window.alert("가입 이력이 있는 회원입니다.");
-                    } else if ("[[${id_status}]]" === "INVALID_ID") {
-                        check_studentIDNum = false;
-                        window.alert("학번이 유효하지 않습니다.");
-                    } else {
-                        check_studentIDNum = true;
-                    }
+
+                if ("[[${id_status}]]" === "NULL_ID") {
+                    check_studentIDNum = false;
+                } else if ("[[${id_status}]]" === "SAME_ID") {
+                    check_studentIDNum = false;
+                    window.alert("가입 이력이 있는 회원입니다.");
+                } else if ("[[${id_status}]]" === "INVALID_ID") {
+                    check_studentIDNum = false;
+                    window.alert("학번이 유효하지 않습니다.");
+                } else if (![[${boolStatus}]]){
+                    check_studentIDNum = false;
+                } else {
+                    check_studentIDNum = true;
                 }
 
                 if ([[${boolStatus}]]) {
                     $("#studentIdNum").attr("disabled", true);
                 }
 
-                function pw_format(){
+                function pw_format() {
                     var pw = document.getElementById('pw').value;
                     var SC = ["!", "@", "$", "&", "*"];
                     var check_SC = 0;
@@ -154,23 +155,33 @@
                     }
                 }
 
-                function checkConditions(){
-                    if (check_password && check_studentIDNum){
+                function checkConditions() {
+                    if (check_password && check_studentIDNum) {
                         return true;
                     } else {
                         return false;
                     }
                 }
 
-                function buttonCheck(){
-                    if (check_password && check_studentIDNum){
-                        window.alert("회원가입에 성공하셨습니다" + "\n" + "check_password: " + check_password + "\n" + "checkStudentIdNum" + check_studentIDNum);
-                    } else if(!check_password){
+                function buttonCheck() {
+                    if (document.getElementById("studentIdNum").value.length == 0){
+                        window.alert("학번을 입력해주세요!");
+                    } else if (document.getElementById("name").value.length == 0){
+                        window.alert("이름을 입력해주세요!");
+                    } else if (document.getElementById("pw").value.length == 0){
+                        window.alert("비밀번호를 입력해주세요!");
+                    } else if (document.getElementById("pwCheck").value.length == 0){
+                        window.alert("비밀번호 확인을 입력해주세요!");
+                    } else if (document.getElementById("major1").value.length == 0){
+                        window.alert("제 1 전공을 입력해주세요!");
+                    } else if (document.getElementById("authImg").value.length == 0) {
+                        window.alert("사진을 첨부해주세요");
+                    } else if (!check_password) {
                         window.alert("비밀번호 일치여부를 확인해주세요!" + check_password);
-                    } else if(!check_studentIDNum) {
+                    } else if (!check_studentIDNum) {
                         window.alert("학번확인을 눌러주세요!" + check_studentIDNum);
-                    } else {
-                        window.alert("빠진 부분이 없는지 확인해주세요!");
+                    } else if (check_password && check_studentIDNum) {
+                        window.alert("회원가입에 성공하셨습니다" + "\n" + "check_password: " + check_password + "\n" + "checkStudentIdNum" + check_studentIDNum);
                     }
                 }
 
