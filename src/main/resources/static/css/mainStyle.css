@@ -1,0 +1,148 @@
+*{
+  margin: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+h1{
+  margin-top: 3%;
+  padding-bottom: 100px;
+  font-size: 20pt;
+}
+
+img{
+  display: block;
+  margin: auto;
+  margin-top: 3%;
+}
+
+span {
+  color: #54D17A;
+}
+
+.leftsideblank {
+  float: left;
+}
+
+.rightsideblank {
+  float: right;
+}
+
+#toggle {
+  display: none;
+}
+
+.menulabel {
+  margin: 0 40px 0 0;
+  font-size: 26px;
+  line-height: 70px;
+  display: none;
+}
+
+.link ul{
+  float: right;
+  margin-right: 10%;
+}
+
+.link ul li{
+  display: inline-block;
+  line-height: 40px;
+  margin: 0 10px;
+}
+
+.link ul li a{
+  color: #737272;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menubar{
+  text-align: right;
+  height: 50px;
+  line-height: 50px;
+  position:relative;
+}
+
+.menu ul {
+  background: #003087;
+  height: auto;
+  width: 100%;
+  text-align: center;
+  padding: 0.4em 0;
+}
+
+.menu ul li{
+  display: inline-block;
+  padding: 0 2em;
+  vertical-align: middle;
+  border-left: 0.5px solid #c0c0c0;
+  line-height: 15px;
+}
+
+.menu ul li:first-child{
+  border-left: none;
+}
+
+.menu ul li a{
+  font-size: 20px;
+  color: white;
+  vertical-align: middle;
+}
+
+a:link, a:visited, a:hover, a:active{
+  text-decoration: none;
+}
+
+
+
+@media screen and (min-width: 1200px) {
+  .leftsideblank, .rightsideblank {
+    width: 15%;
+    height: 200vh;
+  }
+}
+
+@media screen and (max-width: 1200px){
+  .menulabel{
+    display: block;
+    cursor: pointer;
+  }
+
+  .menu{
+    text-align: center;
+    width: 100%;
+    display: none;
+  }
+
+  .menu ul{
+    background-color: rgb(0, 48, 135);
+    z-index: 999;
+  }
+
+  .menubar{
+    z-index: 999;
+  }
+
+  .menu ul li{
+    display: block;
+    border-top: 1px solid #EAEAEB;
+    border-left: none;
+    padding-top: 1.3em;
+    padding-bottom: 1.3em;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .menu ul li:first-child{
+    border-top: none;
+  }
+
+  .leftsideblank, .rightsideblank {
+    width: 12.5%;
+    height: 500vh;
+  }
+
+  #toggle:checked + .menu{
+    display: block;
+  }
+}

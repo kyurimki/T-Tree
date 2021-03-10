@@ -1,0 +1,114 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminUserApprovalStyle.css}">
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <section>
+        <aside class="leftsideblank">
+            <div th:replace="fragments/sidebar.html :: sidebarFragment">
+            </div>
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>팀별 상태 업데이트</h1>
+            <div>
+                <button id="createUserButton" onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=600 height= 500'); return false">
+                    회원 생성</button>
+            </div>
+            <table>
+                <tr>
+                    <form role="form" action="/admin/updateStatus/search" name="searchTeam" id="searchTeam" method="POST">
+                        <td>
+                            <select name="teamYear" id="teamYear">
+                                <option value="">연도</option>
+                                <option value="2021">2021년</option>
+                                <option value="2022">2022년</option>
+                                <option value="2023">2023년</option>
+                                <option value="2024">2024년</option>
+                                <option value="2025">2025년</option>
+                            </select>
+
+                            <select name="teamSemester" id="teamSemester">
+                                <option value="">학기</option>
+                                <option value="1">1학기</option>
+                                <option value="2">2학기</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="getTeam" id="selectTeamYear">검색</button> &nbsp;&nbsp;
+                        </td>
+                    </form>
+                </tr>
+            </table>
+            <table id="table_list">
+                <tr>
+                    <th scope="col" style="text-align: center">#</th>
+                    <th scope="col" style="text-align: center">연도</th>
+                    <th scope="col" style="text-align: center">학기</th>
+                    <th scope="col" style="text-align: center">팀</th>
+                    <th scope="col" style="text-align: center">1차</th>
+                    <th scope="col" style="text-align: center">2차</th>
+                    <th scope="col" style="text-align: center">3차</th>
+                    <th scope="col" style="text-align: center">4차</th>
+                    <th scope="col" style="text-align: center">최종</th>
+                    <th scope="col" style="text-align: center">사유</th>
+                </tr>
+                <tr class="text-center" th:each="team : ${teamList}">
+                    <form role="form" action="/admin/updateStatus" name="updateStatus" id="updateStatus" method="POST">
+                        <td>
+                            <p th:text="${team.teamId}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamYear}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamSemester}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamName}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamStatus1}"></p>
+                            <a href="#" th:url="@{'/admin/updateStatus/status1/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamStatus2}"></p>
+                            <a href="#" th:url="@{'/admin/updateStatus/status2/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamStatus3}"></p>
+                            <a href="#" th:url="@{'/admin/updateStatus/status3/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
+                        </td>
+                        <td>
+                            <p th:text="${team.teamStatus4}"></p>
+                            <a href="#" th:url="@{'/admin/updateStatus/status4/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
+                        </td>
+                        <td>
+                            <p th:text="${team.finalStatus}"></p>
+                            <a href="#" th:url="@{'/admin/updateStatus/statusFinal/' + ${team.teamId}}" onclick="window.open(this.getAttribute('url'), 'adminUpdateStatusWindow', 'width=500 height= 400'); return false">등록</a>
+                        </td>
+                        <td>
+                            <p th:text="${team.finalStatusReason}"></p>
+                        </td>
+                    </form>
+                </tr>
+            </table>
+        </article>
+        <script>
+            if("[[${ERROR}]]") {
+                window.alert("[[${ERROR}]]");
+            }
+        </script>
+    </section>
+</div>
+</html>
