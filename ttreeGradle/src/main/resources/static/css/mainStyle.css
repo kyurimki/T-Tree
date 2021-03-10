@@ -139,7 +139,7 @@ a:link, a:visited, a:hover, a:active{
 
   .leftsideblank, .rightsideblank {
     width: 12.5%;
-    height: 200vh;
+    height: 500vh;
   }
 
   #toggle:checked + .menu{

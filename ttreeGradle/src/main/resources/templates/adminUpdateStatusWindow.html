@@ -25,7 +25,7 @@
 </table>
 <script>
     if("[[${status}]]" === "end") {
-        window.opener.location.reload(true);
+        self.opener.location.reload();
         window.close();
     }
 </script>
