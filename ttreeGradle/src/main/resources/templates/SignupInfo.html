@@ -30,7 +30,10 @@
                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                        required>
                             </td>
-                            <td>학번 중복 확인 여부: [[${boolStatus}]]</td>
+                            <td>학번 중복 확인 여부: [[${boolStatus}]] <br>
+                                <p style="color: red; font-size: 10pt;">* 학번 중복 확인 후에 정보를 입력할 수 있습니다</p>
+                            </td>
+
                             <td><input type="submit" name="IDcheck" value="중복확인"></td>
                         </form>
                     </tr>
@@ -38,36 +41,36 @@
                           onsubmit="return checkConditions();">
                         <tr>
                             <td>이름</td>
-                            <td><input type="text" name="name" id="name" required></td>
+                            <td><input type="text" name="name" id="name" required disabled></td>
                         </tr>
                         <tr>
                             <td>비밀번호</td>
                             <td><input type="password" name="password" id="pw" value="" onchange="pw_format()"
-                                       required minlength="6" onkeyup="check_pw()"></td>
+                                       required minlength="6" onkeyup="check_pw()" disabled></td>
                         </tr>
                         <tr>
                             <td>비밀번호 확인</td>
                             <td><input type="password" id="pwCheck" value="" onchange="pw_format()"
-                                       required minlength="6" onkeyup="check_pw()">
+                                       required minlength="6" onkeyup="check_pw()" disabled>
                                 <br> <span id="check"></span></td>
                         </tr>
                         <tr>
                             <td>신분</td>
-                            <td><input type="radio" name="identity" value="ROLE_STUDENT">학생</td>
+                            <td><input type="radio" name="identity" value="ROLE_STUDENT" checked required>학생</td>
                             <td><input type="radio" name="identity" value="ROLE_ADMIN">교수자/조교</td>
                         </tr>
                         <tr>
                             <td>제1전공</td>
-                            <td><input type="text" name="major1" id="major1" required/></td>
+                            <td><input type="text" name="major1" id="major1" required disabled /></td>
                         </tr>
                         <tr>
                             <td>제2전공</td>
-                            <td><input type="text" name="major2"></td>
+                            <td><input type="text" name="major2" id="major2" disabled></td>
                         </tr>
                         <tr>
                             <td>숙명포털 인증</td>
                             <td>
-                                <input type="file" name="authImg" value="authImg" id="authImg" required>
+                                <input type="file" name="authImg" value="authImg" id="authImg" required disabled>
                                 <p style="color: red; font-size: 10pt; margin-bottom: -2px; margin-top: 5px;">* 학사 >
                                     학적정보 > 학적 기본사항관리 > 전공선택/전과내역 선택 후 캡쳐해주세요</p>
                                 <p style="color: red; font-size: 10pt;">* 파일 이름은 학번_이름 형식으로 해주세요</p>
@@ -107,6 +110,12 @@
 
                 if ([[${boolStatus}]]) {
                     $("#studentIdNum").attr("disabled", true);
+                    $("#name").attr("disabled", false);
+                    $("#pw").attr("disabled", false);
+                    $("#pwCheck").attr("disabled", false);
+                    $("#major1").attr("disabled", false);
+                    $("#major2").attr("disabled", false);
+                    $("#authImg").attr("disabled", false);
                 }
 
                 function pw_format() {

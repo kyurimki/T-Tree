@@ -29,6 +29,7 @@
                     <th scope="col" style="text-align: center">제1전공</th>
                     <th scope="col" style="text-align: center">제2전공</th>
                     <th scope="col" style="text-align: center">학적정보</th>
+                    <th scope="col" style="text-align: center">신분</th>
                     <th scope="col" style="text-align: center">승인</th>
                 </tr>
                 <tr class="text-center" th:each="student : ${studentList}">
@@ -50,6 +51,9 @@
                         </td>
                         <td>
                             <a th:href="@{'/admin/userApproval/' +${student.user_id}}" th:text="다운로드"></a>
+                        </td>
+                        <td>
+                            <p th:text="${student.role}"></p>
                         </td>
                         <td>
                             <input type="hidden" name="id" th:value="${student.user_id}">
