@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ttree.it.ttreeGradle.domain.entity.CustomUserDetails;
 import ttree.it.ttreeGradle.dto.AuthImageDto;
+import ttree.it.ttreeGradle.dto.StudentDto;
 import ttree.it.ttreeGradle.dto.TeamDto;
 import ttree.it.ttreeGradle.dto.UserDto;
 import ttree.it.ttreeGradle.service.AuthImageService;
@@ -29,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -391,6 +393,26 @@ public class AdminController {
         model.addAttribute("status", "end");
 
         return "adminUpdateStatusWindow";
+    }
+
+    @GetMapping("/admin/manageStudent")
+    public String getStudentList(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+        if(customUserDetails.getUserStatus()) {
+            List<UserDto> userList = userService.getUserList();
+            model.addAttribute("userList", userList);
+            List<TeamDto> teamList = teamService.getTeamList();
+//            List<StudentDto> studentList = new ArrayList<StudentDto>();
+//            for(int i = 0; i < userList.size(); i++) {
+//                if(userList.get(i).getTeamIdNum() != null) {
+//                    studentList.set(i, student)
+//                }
+//            }
+
+            model.addAttribute("teamList", teamList);
+            return "adminManageStudent";
+        }else{
+            return "alertPage";
+        }
     }
 }
 

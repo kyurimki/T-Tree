@@ -21,10 +21,6 @@
         </aside>
         <article>
             <h1>팀별 상태 업데이트</h1>
-            <div>
-                <button id="createUserButton" onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=600 height= 500'); return false">
-                    회원 생성</button>
-            </div>
             <table>
                 <tr>
                     <form role="form" action="/admin/updateStatus/search" name="searchTeam" id="searchTeam" method="POST">
@@ -56,10 +52,14 @@
                     <th scope="col" style="text-align: center">연도</th>
                     <th scope="col" style="text-align: center">학기</th>
                     <th scope="col" style="text-align: center">팀</th>
-                    <th scope="col" style="text-align: center">1차</th>
-                    <th scope="col" style="text-align: center">2차</th>
-                    <th scope="col" style="text-align: center">3차</th>
-                    <th scope="col" style="text-align: center">4차</th>
+                    <th scope="col" style="text-align: center"><div class="step">1차
+                        <span class="tip">졸프 팀명, 인원, 학생 정보 신청</span></div></th>
+                    <th scope="col" style="text-align: center"><div class="step">2차
+                        <span class="tip">심사 영상 제출</span></div></th>
+                    <th scope="col" style="text-align: center"><div class="step">3차
+                        <span class="tip">전시회 영상 업로드</span></div></th>
+                    <th scope="col" style="text-align: center"><div class="step">4차
+                        <span class="tip">졸업논문 및 코드 제출</span></div></th>
                     <th scope="col" style="text-align: center">최종</th>
                     <th scope="col" style="text-align: center">사유</th>
                 </tr>

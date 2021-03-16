@@ -1,8 +1,10 @@
 package ttree.it.ttreeGradle.service;
 
 import org.springframework.stereotype.Service;
+import ttree.it.ttreeGradle.domain.entity.Team;
 import ttree.it.ttreeGradle.domain.entity.User;
 import ttree.it.ttreeGradle.domain.repository.UserRepository;
+import ttree.it.ttreeGradle.dto.TeamDto;
 import ttree.it.ttreeGradle.dto.UserDto;
 
 import javax.transaction.Transactional;
@@ -41,7 +43,18 @@ public class UserService {
                 .teamIdNum(user.getTeamIdNum())
                 .build();
         return userDto;
+    }
 
+    @Transactional
+    public List<UserDto> getUserList() {
+        List<User> userList = userRepository.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for(User user : userList) {
+            Long id = user.getUser_id();
+            UserDto userDto = getUser(id);
+            userDtoList.add(userDto);
+        }
+        return userDtoList;
     }
 
     @Transactional

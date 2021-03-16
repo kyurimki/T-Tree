@@ -1,0 +1,94 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminUserApprovalStyle.css}">
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <section>
+        <aside class="leftsideblank">
+            <div th:replace="fragments/sidebar.html :: sidebarFragment">
+            </div>
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>학생 관리</h1>
+            <div>
+                <button id="createUserButton" onclick="window.open('/admin/createUser', 'adminCreateUser', 'width=600 height= 500'); return false">
+                    회원 생성</button>
+            </div>
+            <table>
+                <tr>
+                    <form role="form" action="/admin/updateStatus/search" name="searchTeam" id="searchTeam" method="POST">
+                        <td>
+                            <select name="teamYear" id="teamYear">
+                                <option value="">연도</option>
+                                <option value="2021">2021년</option>
+                                <option value="2022">2022년</option>
+                                <option value="2023">2023년</option>
+                                <option value="2024">2024년</option>
+                                <option value="2025">2025년</option>
+                            </select>
+
+                            <select name="teamSemester" id="teamSemester">
+                                <option value="">학기</option>
+                                <option value="1">1학기</option>
+                                <option value="2">2학기</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="getTeam" id="selectTeamYear">검색</button> &nbsp;&nbsp;
+                        </td>
+                    </form>
+                </tr>
+            </table>
+            <table id="table_list">
+                <tr>
+                    <th scope="col" style="text-align: center">#</th>
+                    <th scope="col" style="text-align: center">학번</th>
+                    <th scope="col" style="text-align: center">이름</th>
+                    <th scope="col" style="text-align: center">제1전공</th>
+                    <th scope="col" style="text-align: center">제2전공</th>
+                    <th scope="col" style="text-align: center">연도</th>
+                    <th scope="col" style="text-align: center">학기</th>
+                    <th scope="col" style="text-align: center">팀 이름</th>
+                </tr>
+                <tr class="text-center" th:each="user : ${userList}">
+                        <td>
+                            <p th:text="${user.user_id}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${user.studentIdNum}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${user.name}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${user.major1}"></p>
+                        </td>
+                        <td>
+                            <p th:text="${user.major2}"></p>
+                        </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    </form>
+                </tr>
+            </table>
+        </article>
+        <script>
+            if("[[${ERROR}]]") {
+                window.alert("[[${ERROR}]]");
+            }
+        </script>
+    </section>
+</div>
+</html>
