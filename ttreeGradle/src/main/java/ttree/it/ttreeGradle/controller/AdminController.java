@@ -112,7 +112,7 @@ public class AdminController {
     public String idCheck(@RequestParam("studentIdNum") String id, Model model) {
         student_id = id;
         model.addAttribute("studentId", student_id);
-        if(userService.getUserByStudentInfo(0, id) != null) {
+        if(userService.getUserByStudentInfo(0, id).size() != 0) {
             signupRecord = true;
             userDto = userService.getUserByStudentInfo(0, id).get(0);
             model.addAttribute("userInfo", userDto);
@@ -393,27 +393,42 @@ public class AdminController {
         return "adminUpdateStatusWindow";
     }
 
-    public List<StudentDto> getUserAndTeam(List<UserDto> userList, List<TeamDto> teamList) {
+    public List<StudentDto> getUserAndTeam(int type, List<UserDto> userList, List<TeamDto> teamList) {
         List<StudentDto> studentList = new ArrayList<>();
 
-        for (UserDto userDto : userList) {
-            StudentDto studentDto = new StudentDto();
-            studentDto.setUserDto(userDto);
-            boolean flag = false;
-            for (TeamDto teamDto : teamList) {
-                if (userDto.getTeamIdNum()!= null && userDto.getTeamIdNum().equals(teamDto.getTeamId())) {
-                    studentDto.setTeamDto(teamDto);
-                    flag = true;
-                    break;
+        switch(type) {
+            case 0:
+                for (UserDto userDto : userList) {
+                    StudentDto studentDto = new StudentDto();
+                    studentDto.setUserDto(userDto);
+                    boolean flag = false;
+                    for (TeamDto teamDto : teamList) {
+                        if (userDto.getTeamIdNum()!= null && userDto.getTeamIdNum().equals(teamDto.getTeamId())) {
+                            studentDto.setTeamDto(teamDto);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if(!flag) {
+                        studentDto.setTeamDto(null);
+                    }
+                    studentList.add(studentDto);
                 }
-            }
-            if(!flag) {
-                studentDto.setTeamDto(null);
-            }
-            studentList.add(studentDto);
+                return studentList;
+            case 1:
+                for(TeamDto teamDto : teamList) {
+                    for(UserDto userDto : userList) {
+                        StudentDto studentDto = new StudentDto();
+                        if(teamDto.getTeamId().equals(userDto.getTeamIdNum())) {
+                            studentDto.setUserDto(userDto);
+                            studentDto.setTeamDto(teamDto);
+                            studentList.add(studentDto);
+                        }
+                    }
+                }
+                return studentList;
         }
-
-        return studentList;
+    return null;
     }
 
     @GetMapping("/admin/manageStudent")
@@ -421,7 +436,7 @@ public class AdminController {
         if(customUserDetails.getUserStatus()) {
             List<UserDto> userList = userService.getUserList();
             List<TeamDto> teamList = teamService.getTeamList();
-            List<StudentDto> studentList = getUserAndTeam(userList, teamList);
+            List<StudentDto> studentList = getUserAndTeam(0, userList, teamList);
             model.addAttribute("studentList", studentList);
             return "adminManageStudent";
         }else{
@@ -438,15 +453,21 @@ public class AdminController {
     public String getStudentInfo(HttpServletRequest request, Model model) {
         String searchType = request.getParameter("searchType");
         String inputText = request.getParameter("searchText");
-        List<UserDto> userList = new ArrayList<>();
-        List<TeamDto> teamList = teamService.getTeamList();
+        List<UserDto> userList;
+        List<TeamDto> teamList;
         List<StudentDto> studentList = new ArrayList<>();
         if(searchType.equals("studentId")) {
             userList = userService.getUserByStudentInfo(0, inputText);
-            studentList = getUserAndTeam(userList, teamList);
+            teamList = teamService.getTeamList();
+            studentList = getUserAndTeam(0, userList, teamList);
         } else if(searchType.equals("studentName")) {
             userList = userService.getUserByStudentInfo(1, inputText);
-            studentList = getUserAndTeam(userList, teamList);
+            teamList = teamService.getTeamList();
+            studentList = getUserAndTeam(0, userList, teamList);
+        } else if(searchType.equals("teamName")) {
+            userList = userService.getUserList();
+            teamList = teamService.getTeamListByName(inputText);
+            studentList = getUserAndTeam(1, userList, teamList);
         }
         model.addAttribute("studentList", studentList);
         return "adminManageStudent";
@@ -454,7 +475,26 @@ public class AdminController {
 
     @PostMapping("/admin/manageStudent/teamSearch")
     public String getTeamInfo(HttpServletRequest request, Model model) {
+        String yearToSearch = request.getParameter("teamYear");
+        String semesterToSearch = request.getParameter("teamSemester");
 
+        List<UserDto> userList = userService.getUserList();
+        List<TeamDto> teamList;
+        List<StudentDto> studentList = new ArrayList<>();
+
+        if(yearToSearch.equals("")) {
+            if(!semesterToSearch.equals("")) {
+                model.addAttribute("ERROR", "올바르게 선택되지 않았습니다.");
+            }
+            teamList = teamService.getTeamList();
+        } else {
+            teamList = teamService.searchTeamByTime(yearToSearch, semesterToSearch);
+            model.addAttribute("yearSearched", yearToSearch);
+            model.addAttribute("semSearched", semesterToSearch);
+        }
+        studentList = getUserAndTeam(1, userList, teamList);
+
+        model.addAttribute("studentList", studentList);
         return "adminManageStudent";
     }
 }
