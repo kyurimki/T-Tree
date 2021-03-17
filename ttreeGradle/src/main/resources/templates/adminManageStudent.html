@@ -27,7 +27,22 @@
             </div>
             <table>
                 <tr>
-                    <form role="form" action="/admin/updateStatus/search" name="searchTeam" id="searchTeam" method="POST">
+                    <form role="form" action="/admin/manageStudent/studentSearch" name="searchInfo" id="searchInfo" method="POST">
+                        <td>
+                            <select name="searchType" id="searchType">
+                                <option value="studentId">학번</option>
+                                <option value="studentName">학생 이름</option>
+                                <option value="teamName">팀 이름</option>
+                            </select>
+                            <input type="text" id="searchText" name="searchText">
+                        </td>
+                        <td>
+                            <button type="submit" name="getInfoSearch" id="getInfoSearch">검색</button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form role="form" action="/admin/manageStudent/teamSearch" name="searchTeam" id="searchTeam" method="POST">
                         <td>
                             <select name="teamYear" id="teamYear">
                                 <option value="">연도</option>
@@ -45,7 +60,7 @@
                             </select>
                         </td>
                         <td>
-                            <button type="submit" name="getTeam" id="selectTeamYear">검색</button> &nbsp;&nbsp;
+                            <button type="submit" name="getTeamSearch" id="getTeamSearch">검색</button> &nbsp;&nbsp;
                         </td>
                     </form>
                 </tr>

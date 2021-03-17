@@ -58,16 +58,28 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto getUserByStudentId(String studentId) {
+    public List<UserDto> getUserByStudentInfo(int type, String toSearch) {
         List<User> userList = userRepository.findAll();
-        for(User user : userList) {
-            if(studentId.equals(user.getStudentIdNum())) {
-                Long id = user.getUser_id();
-                UserDto userDto = getUser(id);
-                return userDto;
-            }
+        List<UserDto> userDtoList = new ArrayList<>();
+        switch(type) {
+            case 0:
+                for(User user : userList) {
+                    if(toSearch.equals(user.getStudentIdNum())) {
+                        Long id = user.getUser_id();
+                        UserDto userDto = getUser(id);
+                        userDtoList.add(userDto);
+                    }
+                }
+            case 1:
+                for(User user : userList) {
+                    if(toSearch.equals(user.getName())) {
+                        Long id = user.getUser_id();
+                        UserDto userDto = getUser(id);
+                        userDtoList.add(userDto);
+                    }
+                }
         }
-        return null;
+        return userDtoList;
     }
 
     @Transactional

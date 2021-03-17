@@ -112,9 +112,9 @@ public class AdminController {
     public String idCheck(@RequestParam("studentIdNum") String id, Model model) {
         student_id = id;
         model.addAttribute("studentId", student_id);
-        if(userService.getUserByStudentId(id) != null) {
+        if(userService.getUserByStudentInfo(0, id) != null) {
             signupRecord = true;
-            userDto = userService.getUserByStudentId(id);
+            userDto = userService.getUserByStudentInfo(0, id).get(0);
             model.addAttribute("userInfo", userDto);
             if(userDto.getTeamIdNum() != null) {
                 Long teamId = userDto.getTeamIdNum();
@@ -393,28 +393,35 @@ public class AdminController {
         return "adminUpdateStatusWindow";
     }
 
+    public List<StudentDto> getUserAndTeam(List<UserDto> userList, List<TeamDto> teamList) {
+        List<StudentDto> studentList = new ArrayList<>();
+
+        for (UserDto userDto : userList) {
+            StudentDto studentDto = new StudentDto();
+            studentDto.setUserDto(userDto);
+            boolean flag = false;
+            for (TeamDto teamDto : teamList) {
+                if (userDto.getTeamIdNum()!= null && userDto.getTeamIdNum().equals(teamDto.getTeamId())) {
+                    studentDto.setTeamDto(teamDto);
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag) {
+                studentDto.setTeamDto(null);
+            }
+            studentList.add(studentDto);
+        }
+
+        return studentList;
+    }
+
     @GetMapping("/admin/manageStudent")
     public String getStudentList(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
             List<UserDto> userList = userService.getUserList();
             List<TeamDto> teamList = teamService.getTeamList();
-            List<StudentDto> studentList = new ArrayList<StudentDto>();
-            for (UserDto userDto : userList) {
-                StudentDto studentDto = new StudentDto();
-                studentDto.setUserDto(userDto);
-                boolean flag = false;
-                for (TeamDto teamDto : teamList) {
-                    if (userDto.getTeamIdNum()!= null && userDto.getTeamIdNum().equals(teamDto.getTeamId())) {
-                        studentDto.setTeamDto(teamDto);
-                        flag = true;
-                        break;
-                    }
-                }
-                if(!flag) {
-                    studentDto.setTeamDto(null);
-                }
-                studentList.add(studentDto);
-            }
+            List<StudentDto> studentList = getUserAndTeam(userList, teamList);
             model.addAttribute("studentList", studentList);
             return "adminManageStudent";
         }else{
@@ -422,8 +429,32 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/admin/manageStudent/teamSearch")
+    @GetMapping({"/admin/manageStudent/studentSearch", "/admin/manageStudent/teamSearch"})
     public String redirectToManageStudent() {
+        return "redirect:/admin/manageStudent";
+    }
+
+    @PostMapping("/admin/manageStudent/studentSearch")
+    public String getStudentInfo(HttpServletRequest request, Model model) {
+        String searchType = request.getParameter("searchType");
+        String inputText = request.getParameter("searchText");
+        List<UserDto> userList = new ArrayList<>();
+        List<TeamDto> teamList = teamService.getTeamList();
+        List<StudentDto> studentList = new ArrayList<>();
+        if(searchType.equals("studentId")) {
+            userList = userService.getUserByStudentInfo(0, inputText);
+            studentList = getUserAndTeam(userList, teamList);
+        } else if(searchType.equals("studentName")) {
+            userList = userService.getUserByStudentInfo(1, inputText);
+            studentList = getUserAndTeam(userList, teamList);
+        }
+        model.addAttribute("studentList", studentList);
+        return "adminManageStudent";
+    }
+
+    @PostMapping("/admin/manageStudent/teamSearch")
+    public String getTeamInfo(HttpServletRequest request, Model model) {
+
         return "adminManageStudent";
     }
 }

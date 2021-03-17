@@ -211,7 +211,7 @@ public class SignupController {
         String studentIdNum = customUserDetails.getStudentIdNum();
         //System.out.println(studentIdNum);
 
-        UserDto userDto = userService.getUserByStudentId(studentIdNum);
+        UserDto userDto = userService.getUserByStudentInfo(0, studentIdNum).get(0);
 
         //System.out.println("!" + dbPassword);
         //System.out.println("oldpassword: " + oldPassword);
@@ -245,7 +245,7 @@ public class SignupController {
         oldEmail = oldEmail + "@sookmyung.ac.kr";
         email = email + "@sookmyung.ac.kr";
 
-        UserDto userDto = userService.getUserByStudentId(studentIdNum);
+        UserDto userDto = userService.getUserByStudentInfo(0, studentIdNum).get(0);
 
         //System.out.println("dbEmail: " + dbEmail);
         //System.out.println("oldEmail: " + oldEmail);
@@ -272,7 +272,7 @@ public class SignupController {
 
     @PostMapping(value = "/login/findPW")
     public String findPW(@RequestParam("id") String studentId, Model model){
-        UserDto userDto = userService.getUserByStudentId(studentId);
+        UserDto userDto = userService.getUserByStudentInfo(0, studentId).get(0);
         boolean infoExist = false;
         if(userDto != null) {
             String password = randomPWGenerator();
