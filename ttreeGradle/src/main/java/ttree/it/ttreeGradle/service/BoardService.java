@@ -98,6 +98,7 @@ public class BoardService {
                     .createdDate(board.getCreatedDate())
                     .hit(board.getHit())
                     .languages(board.getLanguages())
+                    .link(board.getLink())
                     .build();
             boardDtoList.add(boardDto);
         }
@@ -120,6 +121,7 @@ public class BoardService {
                 .createdDate(board.getCreatedDate())
                 .hit(board.getHit())
                 .languages(board.getLanguages())
+                .link(board.getLink())
                 .build();
         return boardDto;
     }

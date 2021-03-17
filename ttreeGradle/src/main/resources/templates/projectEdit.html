@@ -121,6 +121,10 @@
                                 <input name="fairFile" type="file" class="custom-file-input" id="customFairFile">
                                 <label class="custom-file-label" for="customFairFile">파일을 선택해 주세요.</label>
                             </div>
+                            <br>
+                            <label for="customLink">전시회 링크: </label>
+                            <input type="text" name="link" id="customLink" size="40" th:value="${post.link}">
+                            <p style="color: red; font-size: 10pt;">* http:// 나 https:// 까지 붙여서 입력해주세요</p>
                         </td>
                     </tr>
                     <tr>

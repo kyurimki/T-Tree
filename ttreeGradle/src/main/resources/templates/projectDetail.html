@@ -58,6 +58,10 @@
                     <p class="card-text" style="font-size: 18pt; font-weight: bold">기대효과 (결론)</p>
                     <p style="font-size: 13pt; line-height: 2.2;"
                             th:text="${post.effect}"></p>
+                    <br>
+
+                    <p class="card-text" style="font-size: 15pt; font-weight: bold">전시회 링크:  <a th:href="${post.link}" target="_blank" style="font-size: 13pt; font-weight: lighter">[[${post.link}]]</a> </p>
+
 
 
                     <table id="fileTable">

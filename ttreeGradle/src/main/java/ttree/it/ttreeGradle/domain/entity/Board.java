@@ -56,8 +56,11 @@ public class Board implements Comparable<Board> {
     @Convert(converter = StringToListConverter.class)
     private List<String> languages;
 
+    @Column
+    private String link;
+
     @Builder
-    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit, List<String> languages) {
+    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit, List<String> languages, String link) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -67,6 +70,7 @@ public class Board implements Comparable<Board> {
         this.effect = effect;
         this.hit = hit;
         this.languages = languages;
+        this.link = link;
     }
 
     @Override

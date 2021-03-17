@@ -22,6 +22,7 @@ public class BoardDto {
     private int hit;
 
     private List<String> languages;
+    private String link;
 
     private Long fileId;
     private String filename;
@@ -39,12 +40,13 @@ public class BoardDto {
                 .effect(effect)
                 .hit(hit)
                 .languages(languages)
+                .link(link)
                 .build();
         return build;
     }
 
     @Builder
-    public BoardDto(Long id, String title, String year, String semester, String purpose, String content, String effect, Long fileId, LocalDateTime createdDate, LocalDateTime modifiedDate, int hit, List<String> languages) {
+    public BoardDto(Long id, String title, String year, String semester, String purpose, String content, String effect, Long fileId, LocalDateTime createdDate, LocalDateTime modifiedDate, int hit, List<String> languages, String link) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -57,5 +59,6 @@ public class BoardDto {
         this.modifiedDate = modifiedDate;
         this.hit = hit;
         this.languages = languages;
+        this.link = link;
     }
 }
