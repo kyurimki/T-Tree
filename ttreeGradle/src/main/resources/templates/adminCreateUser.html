@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/createUserStyle.css">
 </head>
 <body>
-<h1>회원 생성</h1>
+<h1>회원 생성/정보 업데이트</h1>
 <div class="createUserForm">
     <table>
         <tr>
@@ -76,12 +76,22 @@
         semSet.value = semester;
     }
 
+    if("[[${idCheckStatus}]]" === "TRUE") {
+        window.alert("!");
+        $('#studentIdNum').attr('disabled', true);
+        window.alert("@");
+        if("[[${userInfo?.name}]]" != null) {
+            $("#studentName").attr("disabled", true);
+        }
+    }
+
     if ("[[${id_status}]]" === "NULL_ID") {
         window.alert("학번을 입력하세요.");
     } else if ("[[${id_status}]]" === "INVALID_ID") {
         window.alert("학번이 유효하지 않습니다.");
     } else if ("[[${id_status}]]" === "OK") {
         window.alert("회원 생성 완료");
+        self.opener.location.reload();
         window.close();
     }
 </script>

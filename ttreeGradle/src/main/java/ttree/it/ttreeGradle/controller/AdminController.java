@@ -98,8 +98,9 @@ public class AdminController {
     }
 
     @GetMapping("/admin/createUser")
-    public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
+            model.addAttribute("idCheckStatus", "FALSE");
             return "adminCreateUser";
         }else{
             return "alertPage";
@@ -122,6 +123,7 @@ public class AdminController {
                     TeamDto teamDto = teamService.getTeam(teamId);
                     model.addAttribute("teamInfo", teamDto);
                 }
+                model.addAttribute("idCheckStatus", "TRUE");
             }
         }
         return "adminCreateUser";
@@ -399,20 +401,34 @@ public class AdminController {
     public String getStudentList(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
             List<UserDto> userList = userService.getUserList();
-            model.addAttribute("userList", userList);
             List<TeamDto> teamList = teamService.getTeamList();
-//            List<StudentDto> studentList = new ArrayList<StudentDto>();
-//            for(int i = 0; i < userList.size(); i++) {
-//                if(userList.get(i).getTeamIdNum() != null) {
-//                    studentList.set(i, student)
-//                }
-//            }
-
-            model.addAttribute("teamList", teamList);
+            List<StudentDto> studentList = new ArrayList<StudentDto>();
+            for (UserDto userDto : userList) {
+                StudentDto studentDto = new StudentDto();
+                studentDto.setUserDto(userDto);
+                boolean flag = false;
+                for (TeamDto teamDto : teamList) {
+                    if (userDto.getTeamIdNum()!= null && userDto.getTeamIdNum().equals(teamDto.getTeamId())) {
+                        studentDto.setTeamDto(teamDto);
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag) {
+                    studentDto.setTeamDto(null);
+                }
+                studentList.add(studentDto);
+            }
+            model.addAttribute("studentList", studentList);
             return "adminManageStudent";
         }else{
             return "alertPage";
         }
+    }
+
+    @GetMapping("/admin/manageStudent/teamSearch")
+    public String redirectToManageStudent() {
+        return "adminManageStudent";
     }
 }
 

@@ -1,13 +1,22 @@
 package ttree.it.ttreeGradle.dto;
 
 public class StudentDto {
-    private Long id;
     private UserDto userDto;
     private TeamDto teamDto;
 
-    public StudentDto(Long id, UserDto userDto, TeamDto teamDto) {
-        this.id = id;
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public TeamDto getTeamDto() {
+        return teamDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
         this.userDto = userDto;
+    }
+
+    public void setTeamDto(TeamDto teamDto) {
         this.teamDto = teamDto;
     }
 }
