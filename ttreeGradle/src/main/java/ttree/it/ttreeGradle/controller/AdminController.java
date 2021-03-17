@@ -101,6 +101,7 @@ public class AdminController {
     public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
             model.addAttribute("idCheckStatus", false);
+            model.addAttribute("id_status", false);
             return "adminCreateUser";
         }else{
             return "alertPage";
@@ -109,22 +110,18 @@ public class AdminController {
 
     @PostMapping("/admin/createUser/checkId")
     public String idCheck(@RequestParam("studentIdNum") String id, Model model) {
-        if (id == null) {
-            model.addAttribute("id_status", "NULL_ID");
-        } else {
-            student_id = id;
-            model.addAttribute("studentId", student_id);
-            if(userService.getUserByStudentId(id) != null) {
-                signupRecord = true;
-                userDto = userService.getUserByStudentId(id);
-                model.addAttribute("userInfo", userDto);
-                if(userDto.getTeamIdNum() != null) {
-                    Long teamId = userDto.getTeamIdNum();
-                    TeamDto teamDto = teamService.getTeam(teamId);
-                    model.addAttribute("teamInfo", teamDto);
-                }
-                model.addAttribute("idCheckStatus", true);
+        student_id = id;
+        model.addAttribute("studentId", student_id);
+        if(userService.getUserByStudentId(id) != null) {
+            signupRecord = true;
+            userDto = userService.getUserByStudentId(id);
+            model.addAttribute("userInfo", userDto);
+            if(userDto.getTeamIdNum() != null) {
+                Long teamId = userDto.getTeamIdNum();
+                TeamDto teamDto = teamService.getTeam(teamId);
+                model.addAttribute("teamInfo", teamDto);
             }
+            model.addAttribute("idCheckStatus", true);
         }
         return "adminCreateUser";
     }
@@ -132,62 +129,57 @@ public class AdminController {
     @PostMapping("/admin/createUser")
     public String createUser(HttpServletRequest request, Model model) {
         String name = request.getParameter("studentName");
-        if (name == null) {
-            model.addAttribute("id_status", "INVALID_ID");
-        } else {
-            String email = request.getParameter("studentEmail");
-            String phoneNum = request.getParameter("studentPhoneNum");
-            try {
-                if(!signupRecord) {
-                    userDto = new UserDto();
+        String email = request.getParameter("studentEmail");
+        String phoneNum = request.getParameter("studentPhoneNum");
+        try {
+            if(!signupRecord) {
+                userDto = new UserDto();
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = passwordEncoder.encode("p" + student_id + "!");
+                userDto.setPassword(encodedPassword);
+                userDto.setMajor1("IT공학전공");
+            } else {
+                userDto.setPassword(userDto.getPassword());
+                userDto.setMajor1(userDto.getMajor1());
+                userDto.setMajor2(userDto.getMajor2());
+                userDto.setTeamIdNum(userDto.getTeamIdNum());
+            }
+            userDto.setStudentIdNum(student_id);
+            userDto.setName(name);
+            userDto.setRole("ROLE_STUDENT");
+            userDto.setEmail(email);
+            userDto.setPhoneNum(phoneNum);
+            userDto.setStatus(true);
 
-                    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                    String encodedPassword = passwordEncoder.encode("p" + student_id + "!");
-                    userDto.setPassword(encodedPassword);
-                    userDto.setMajor1("IT공학전공");
-                } else {
-                    userDto.setPassword(userDto.getPassword());
-                    userDto.setMajor1(userDto.getMajor1());
-                    userDto.setMajor2(userDto.getMajor2());
-                    userDto.setTeamIdNum(userDto.getTeamIdNum());
-                }
-                userDto.setStudentIdNum(student_id);
-                userDto.setName(name);
-                userDto.setRole("ROLE_STUDENT");
-                userDto.setEmail(email);
-                userDto.setPhoneNum(phoneNum);
-                userDto.setStatus(true);
+            String teamName = request.getParameter("teamName");
+            String teamYear = request.getParameter("teamYear");
+            String teamSemester = request.getParameter("teamSemester");
 
-                String teamName = request.getParameter("teamName");
-                String teamYear = request.getParameter("teamYear");
-                String teamSemester = request.getParameter("teamSemester");
-
-                List<TeamDto> teamDtoList = teamService.getTeamListByName(teamName);
-                TeamDto teamDto;
-                boolean flag = false;
-                if(!teamDtoList.isEmpty()) {
-                    for(TeamDto team : teamDtoList) {
-                        if(team.getTeamYear().equals(teamYear) && team.getTeamSemester().equals(teamSemester)) {
-                            userDto.setTeamIdNum(team.getTeamId());
-                            flag = true;
-                            break;
-                        }
+            List<TeamDto> teamDtoList = teamService.getTeamListByName(teamName);
+            TeamDto teamDto;
+            boolean flag = false;
+            if(!teamDtoList.isEmpty()) {
+                for(TeamDto team : teamDtoList) {
+                    if(team.getTeamYear().equals(teamYear) && team.getTeamSemester().equals(teamSemester)) {
+                        userDto.setTeamIdNum(team.getTeamId());
+                        flag = true;
+                        break;
                     }
                 }
-                if(!flag) {
-                    teamDto = new TeamDto();
-                    teamDto.setTeamName(teamName);
-                    teamDto.setTeamYear(teamYear);
-                    teamDto.setTeamSemester(teamSemester);
-                    Long teamId = teamService.saveTeam(teamDto);
-                    userDto.setTeamIdNum(teamId);
-                }
-                userService.saveUser(userDto);
-                signupRecord = false;
-                model.addAttribute("id_status", "OK");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            if(!flag) {
+                teamDto = new TeamDto();
+                teamDto.setTeamName(teamName);
+                teamDto.setTeamYear(teamYear);
+                teamDto.setTeamSemester(teamSemester);
+                Long teamId = teamService.saveTeam(teamDto);
+                userDto.setTeamIdNum(teamId);
+            }
+            userService.saveUser(userDto);
+            signupRecord = false;
+            model.addAttribute("id_status", true);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "adminCreateUser";
     }
@@ -212,15 +204,17 @@ public class AdminController {
     public String searchTeam(HttpServletRequest request, Model model) {
         String yearToSearch = request.getParameter("teamYear");
         String semesterToSearch = request.getParameter("teamSemester");
-        if(yearToSearch.equals("") || semesterToSearch.equals("")) {
-            if(yearToSearch.equals("") ^ semesterToSearch.equals("")) {
-                model.addAttribute("ERROR", "연도와 학기가 올바르게 선택되지 않았습니다.");
+        if(yearToSearch.equals("")) {
+            if(!semesterToSearch.equals("")) {
+                model.addAttribute("ERROR", "올바르게 선택되지 않았습니다.");
             }
             List<TeamDto> teamList = teamService.getTeamList();
             model.addAttribute("teamList", teamList);
         } else {
             List<TeamDto> teamList = teamService.searchTeamByTime(yearToSearch, semesterToSearch);
             model.addAttribute("teamList", teamList);
+            model.addAttribute("yearSearched", yearToSearch);
+            model.addAttribute("semSearched", semesterToSearch);
         }
         return "adminUpdateStatus";
     }

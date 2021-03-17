@@ -64,6 +64,7 @@
     </table>
 </div>
 <script>
+    var status = false;
     if ("[[${teamInfo?.teamYear}]]" !== "") {
         var year = "[[${teamInfo?.teamYear}]]";
         let yearSet = document.getElementById('teamYear');
@@ -79,16 +80,17 @@
     if([[${idCheckStatus}]]) {
         document.getElementById("studentIdNum").setAttribute("disabled", true);
         if("[[${userInfo?.name}]]" != null) {
-            document.getElementById("studentName").setAttribute("disabled", true);
+            document.getElementById("studentName").setAttribute("readonly", true);
         }
+        status = true;
     }
 
-    if ("[[${id_status}]]" === "NULL_ID") {
-        window.alert("학번을 입력하세요.");
-    } else if ("[[${id_status}]]" === "INVALID_ID") {
-        window.alert("학번이 유효하지 않습니다.");
-    } else if ("[[${id_status}]]" === "OK") {
-        window.alert("회원 생성 완료");
+    if ([[${id_status}]] && status) {
+        if(status) {
+            alert("회원 정보 수정 완료");
+        } else {
+            alert("회원 생성 완료");
+        }
         self.opener.location.reload();
         window.close();
     }

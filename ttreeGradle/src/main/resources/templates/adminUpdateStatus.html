@@ -108,6 +108,18 @@
             if("[[${ERROR}]]") {
                 window.alert("[[${ERROR}]]");
             }
+
+            if ("[[${yearSearched}]]" !== "") {
+                var year = "[[${yearSearched}]]";
+                let yearSet = document.getElementById('teamYear');
+                yearSet.value = year;
+            }
+
+            if ("[[${semSearched}]]" !== "") {
+                var semester = "[[${semSearched}]]";
+                let semSet = document.getElementById('teamSemester');
+                semSet.value = semester;
+            }
         </script>
     </section>
 </div>

@@ -73,13 +73,24 @@ public class TeamService {
     public List<TeamDto> searchTeamByTime(String yearToSearch, String semesterToSearch) {
         List<Team> teamList = teamRepository.findAll();
         List<TeamDto> teamDtoList = new ArrayList<>();
-        for(Team team : teamList) {
-            if(yearToSearch.equals(team.getTeamYear()) && semesterToSearch.equals(team.getTeamSemester())) {
-                Long id = team.getTeamId();
-                TeamDto teamDto = getTeam(id);
-                teamDtoList.add(teamDto);
+        if(semesterToSearch.equals("")) {
+            for(Team team : teamList) {
+                if(yearToSearch.equals(team.getTeamYear())) {
+                    Long id = team.getTeamId();
+                    TeamDto teamDto = getTeam(id);
+                    teamDtoList.add(teamDto);
+                }
+            }
+        } else {
+            for(Team team : teamList) {
+                if(yearToSearch.equals(team.getTeamYear()) && semesterToSearch.equals(team.getTeamSemester())) {
+                    Long id = team.getTeamId();
+                    TeamDto teamDto = getTeam(id);
+                    teamDtoList.add(teamDto);
+                }
             }
         }
+
         return teamDtoList;
     }
 }
