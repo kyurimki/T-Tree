@@ -76,12 +76,10 @@
         semSet.value = semester;
     }
 
-    if("[[${idCheckStatus}]]" === "TRUE") {
-        window.alert("!");
-        $('#studentIdNum').attr('disabled', true);
-        window.alert("@");
+    if([[${idCheckStatus}]]) {
+        document.getElementById("studentIdNum").setAttribute("disabled", true);
         if("[[${userInfo?.name}]]" != null) {
-            $("#studentName").attr("disabled", true);
+            document.getElementById("studentName").setAttribute("disabled", true);
         }
     }
 

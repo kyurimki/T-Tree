@@ -100,7 +100,7 @@ public class AdminController {
     @GetMapping("/admin/createUser")
     public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
-            model.addAttribute("idCheckStatus", "FALSE");
+            model.addAttribute("idCheckStatus", false);
             return "adminCreateUser";
         }else{
             return "alertPage";
@@ -123,7 +123,7 @@ public class AdminController {
                     TeamDto teamDto = teamService.getTeam(teamId);
                     model.addAttribute("teamInfo", teamDto);
                 }
-                model.addAttribute("idCheckStatus", "TRUE");
+                model.addAttribute("idCheckStatus", true);
             }
         }
         return "adminCreateUser";
@@ -170,9 +170,11 @@ public class AdminController {
                         if(team.getTeamYear().equals(teamYear) && team.getTeamSemester().equals(teamSemester)) {
                             userDto.setTeamIdNum(team.getTeamId());
                             flag = true;
+                            break;
                         }
                     }
-                } else {
+                }
+                if(!flag) {
                     teamDto = new TeamDto();
                     teamDto.setTeamName(teamName);
                     teamDto.setTeamYear(teamYear);
