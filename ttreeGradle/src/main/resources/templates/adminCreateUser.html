@@ -12,13 +12,15 @@
         <tr>
             <form role="form" action="/admin/createUser/checkId" name="createUserCheckId" id="checkId" method="POST">
                 <td>학번</td>
-                <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${studentId}" required></td>
+                <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${studentId}"
+                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required></td>
                 <td>
                     <button type="submit" name="checkStudentId" id="checkStudentId">검색</button>
                 </td>
             </form>
         </tr>
-        <form role="form" action="/admin/createUser" name="createUser" id="createUser" method="POST">
+        <form role="form" action="/admin/createUser" name="createUser" id="createUser" method="POST"
+              onsubmit="return checkConditions();">
             <tr>
                 <td>이름</td>
                 <td><input type="text" id="studentName" name="studentName" th:value="${userInfo?.name}" required></td>
@@ -30,7 +32,8 @@
             </tr>
             <tr>
                 <td>메일 주소</td>
-                <td><input type="text" id="studentEmail" name="studentEmail" th:value="${userInfo?.email}"></td>
+                <td><input type="text" id="studentEmail" name="studentEmail" th:value="${userInfo?.email}">
+                </td>
             </tr>
             <tr>
                 <td>팀 이름</td>
@@ -54,17 +57,21 @@
                         <option value="2">2학기</option>
                     </select>
                 </td>
+                <td>[[${id_status}]]
+                <td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <button type="submit" name="createUserEnd" id="createUserEnd">회원 등록</button>
+                    <button type="submit" name="createUserEnd" id="createUserEnd" onclick="buttonCheck()">회원 등록</button>
                 </td>
             </tr>
         </form>
     </table>
 </div>
 <script>
-    var status = false;
+    let status = false;
+    let check_studentIdNum;
+
     if ("[[${teamInfo?.teamYear}]]" !== "") {
         var year = "[[${teamInfo?.teamYear}]]";
         let yearSet = document.getElementById('teamYear');
@@ -77,22 +84,40 @@
         semSet.value = semester;
     }
 
-    if([[${idCheckStatus}]]) {
+    if ([[${idCheckStatus}]]) {
         document.getElementById("studentIdNum").setAttribute("disabled", true);
-        if("[[${userInfo?.name}]]" != null) {
+        if ("[[${userInfo?.name}]]" != null) {
             document.getElementById("studentName").setAttribute("readonly", true);
         }
         status = true;
+        check_studentIdNum = true;
+    }else {
+        check_studentIdNum = false;
     }
 
     if ([[${id_status}]] && status) {
-        if(status) {
-            alert("회원 정보 수정 완료");
+        if (status) {
+            window.alert("회원 정보 수정 완료");
         } else {
-            alert("회원 생성 완료");
+            window.alert("회원 생성 완료");
         }
         self.opener.location.reload();
         window.close();
+    }
+
+    function checkConditions(){
+        if(check_studentIdNum){
+            window.alert("회원 정보 수정 완료");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function buttonCheck() {
+        if (document.getElementById("studentIdNum").value.length == 0) {
+            window.alert("학번을 입력해주세요!");
+        }
     }
 </script>
 </body>

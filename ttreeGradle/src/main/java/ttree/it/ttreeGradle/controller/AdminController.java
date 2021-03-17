@@ -41,6 +41,10 @@ public class AdminController {
     public String student_id = "";
     public UserDto userDto;
     boolean signupRecord = false;
+    public boolean id_status = false;
+    public boolean idCheckStatus = false;
+
+
 
     @GetMapping(value = "/admin/adminPage")
     public String adminPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model){
@@ -121,7 +125,9 @@ public class AdminController {
                 TeamDto teamDto = teamService.getTeam(teamId);
                 model.addAttribute("teamInfo", teamDto);
             }
-            model.addAttribute("idCheckStatus", true);
+            idCheckStatus = true;
+            model.addAttribute("idCheckStatus", idCheckStatus);
+            idCheckStatus = false;
         }
         return "adminCreateUser";
     }
@@ -177,7 +183,9 @@ public class AdminController {
             }
             userService.saveUser(userDto);
             signupRecord = false;
-            model.addAttribute("id_status", true);
+            id_status = true;
+            model.addAttribute("id_status", id_status);
+            id_status = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
