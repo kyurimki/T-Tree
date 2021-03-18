@@ -6,6 +6,8 @@ import ttree.it.ttreeGradle.domain.repository.ApplicationFormRepository;
 import ttree.it.ttreeGradle.dto.ApplicationFormDto;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ApplicationFormService {
@@ -38,6 +40,25 @@ public class ApplicationFormService {
 
         return applicationFormDto;
 
+    }
+
+    public List<ApplicationFormDto> getApplicationFormList(){
+        List<ApplicationForm> applicationFormList = applicationFormRepository.findAll();
+        List<ApplicationFormDto> applicationFormDtoList = new ArrayList<>();
+
+        for(ApplicationForm applicationForm : applicationFormList){
+            ApplicationFormDto applicationFormDto = ApplicationFormDto.builder()
+                    .id(applicationForm.getId())
+                    .year(applicationForm.getYear())
+                    .semester(applicationForm.getSemester())
+                    .teamName(applicationForm.getTeamName())
+                    .teamMember(applicationForm.getTeamMember())
+                    .origFilename(applicationForm.getOrigFilename())
+                    .build();
+            applicationFormDtoList.add(applicationFormDto);
+
+        }
+        return applicationFormDtoList;
     }
 
     @Transactional

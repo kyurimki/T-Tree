@@ -1,0 +1,59 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminUserApprovalStyle.css}">
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <section>
+        <aside class="leftsideblank">
+            <div th:replace="fragments/sidebar.html :: sidebarFragment">
+            </div>
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>졸업프로젝트 신청서 관리</h1>
+            <table id="table_list">
+                <tr>
+                    <th scope="col" style="text-align: center">#</th>
+                    <th scope="col" style="text-align: center">연도</th>
+                    <th scope="col" style="text-align: center">학기</th>
+                    <th scope="col" style="text-align: center">팀이름</th>
+                    <th scope="col" style="text-align: center">팀원</th>
+                    <th scope="col" style="text-align: center">파일</th>
+
+                </tr>
+                <tr class="text-center" th:each="applicationForm : ${applicationFormList}">
+
+                    <td>
+                        <p th:text="${applicationForm.id}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${applicationForm.year}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${applicationForm.semester}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${applicationForm.teamName}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${applicationForm.teamMember}"></p>
+                    </td>
+                    <td>
+                        <a th:href="@{'/admin/applicationForm/' +${applicationForm.id}}" th:text="${applicationForm.origFilename}"></a>
+                    </td>
+                </tr>
+            </table>
+        </article>
+    </section>
+</div>
+</html>

@@ -1,0 +1,77 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectPostStyle.css}">
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div layout:fragment="content">
+    <section>
+        <aside class="leftsideblank">
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <h1>졸업작품 신청서 제출</h1>
+            <table class="inputTable">
+                <form action="/projectProcess/upload" method="post" enctype="multipart/form-data">
+                    <tr>
+                        <td> 연도/학기</td>
+                        <td>
+                            <select name="year" required>
+                                <option value="">연도</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+
+                            <select name="semester" required>
+                                <option value="">학기</option>
+                                <option value="1">1학기</option>
+                                <option value="2">2학기</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> 팀 이름 </td>
+                        <td><input type="text" name="teamName" size="70" required></td>
+                    </tr>
+                    <tr>
+                        <td> 팀원 </td>
+                        <td>
+                            <textarea type="text" name="teamMember" class="form-control" id="inputContent" cols="40"
+                                      rows="10"></textarea>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td> 신청서 파일 </td>
+                        <td>
+                            <div class="custom-file" id="inputApplicationFile">
+                                <label class="custom-file-label" for="customApplicationFile">파일을 선택해 주세요.</label>
+                                <input name="applicationFile" type="file" class="custom-file-input" id="customApplicationFile">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input class="btn btn-primary" type="submit" role="button" value="제출">
+                        </td>
+                    </tr>
+                </form>
+            </table>
+        </article>
+    </section>
+</div>
+</body>
+</html>

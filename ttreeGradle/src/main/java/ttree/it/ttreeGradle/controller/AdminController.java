@@ -9,16 +9,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import ttree.it.ttreeGradle.domain.entity.CustomUserDetails;
-import ttree.it.ttreeGradle.dto.AuthImageDto;
-import ttree.it.ttreeGradle.dto.StudentDto;
-import ttree.it.ttreeGradle.dto.TeamDto;
-import ttree.it.ttreeGradle.dto.UserDto;
+import ttree.it.ttreeGradle.dto.*;
+import ttree.it.ttreeGradle.service.ApplicationFormService;
 import ttree.it.ttreeGradle.service.AuthImageService;
 import ttree.it.ttreeGradle.service.TeamService;
 import ttree.it.ttreeGradle.service.UserService;
@@ -38,6 +33,8 @@ public class AdminController {
     private UserService userService;
     private AuthImageService authImageService;
     private TeamService teamService;
+    private ApplicationFormService applicationFormService;
+
     public String student_id = "";
     public UserDto userDto;
     boolean signupRecord = false;
@@ -61,10 +58,11 @@ public class AdminController {
         return "adminPage";
     }
 
-    public AdminController(UserService userService, AuthImageService authImageService, TeamService teamService) {
+    public AdminController(UserService userService, AuthImageService authImageService, TeamService teamService, ApplicationFormService applicationFormService) {
         this.userService = userService;
         this.authImageService = authImageService;
         this.teamService = teamService;
+        this.applicationFormService = applicationFormService;
     }
 
     @GetMapping(value = "/admin/userApproval")
@@ -504,6 +502,26 @@ public class AdminController {
 
         model.addAttribute("studentList", studentList);
         return "adminManageStudent";
+    }
+
+    @GetMapping("/admin/applicationForm")
+    public String manageApplicationForm(Model model){
+        List<ApplicationFormDto> applicationFormList = applicationFormService.getApplicationFormList();
+        model.addAttribute("applicationFormList", applicationFormList);
+        return "adminManageAppliForm";
+    }
+
+    @GetMapping("/admin/applicationForm/{id}")
+    public ResponseEntity<Resource> applicationFormFileDownload(@PathVariable("id") Long fileId) throws IOException {
+        ApplicationFormDto applicationFormDto = applicationFormService.getApplicationForm(fileId);
+        Path appliFilePath = Paths.get(applicationFormDto.getFilePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(appliFilePath));
+        String appliFilename = applicationFormDto.getOrigFilename();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + URLEncoder.encode(appliFilename, "utf-8") + "\"")
+                .body(resource);
     }
 }
 

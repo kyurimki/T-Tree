@@ -50,7 +50,7 @@
                             <p th:text="${student.major2}"></p>
                         </td>
                         <td>
-                            <a th:href="@{'/admin/userApproval/' +${student.user_id}}" th:text="다운로드"></a>
+                            <a th:href="@{'/admin/userApproval/' +${student.user_id}}" th:text="${student.studentIdNum}+'_'+${student.name} "></a>
                         </td>
                         <td>
                             <p th:text="${student.role}"></p>
