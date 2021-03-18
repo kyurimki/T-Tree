@@ -76,8 +76,8 @@
                     <th scope="col" style="text-align: center">학기</th>
                     <th scope="col" style="text-align: center">팀 이름</th>
                 </tr>
-                <tr class="text-center" th:each="student : ${studentList}">
-                    <td><p th:text="${student.userDto.user_id}"></td>
+                <tr class="text-center" th:each="student, i : ${studentList}">
+                    <td><p th:text="${i.count}"></td>
                     <td><p th:text="${student.userDto.studentIdNum}"></p></td>
                     <td><p th:text="${student.userDto.name}"></p></td>
                     <td><p th:text="${student.userDto.major1}"></p></td>
