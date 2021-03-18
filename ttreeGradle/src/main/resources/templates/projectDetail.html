@@ -38,7 +38,7 @@
                     <h2 th:text="${post.title}"></h2>
                     <div>
                         <p class="langlist" style="font-size: 12pt; display: inline-block;">개발환경: </p>
-                        <p class="langlist" th:text="${post.languages}" style="font-size: 12pt; display: inline-block"></p>
+                        <p class="langlist" th:text="${post.languages} + ' [' + ${post.langEtc} + '] ' + ${post.types} + ' [' + ${post.typeEtc} + ']'" style="font-size: 12pt; display: inline-block"></p>
                     </div>
                     <p style="text-align: right">
                         <small th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></small>

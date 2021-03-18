@@ -35,11 +35,10 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardDto> getBoardDtoList(List<String> yearToSearch, List<String> langToSearch) {
+    public List<BoardDto> getBoardDtoList(List<String> yearToSearch, List<String> langToSearch, List<String> typeToSearch) {
 
         List<Board> boardList = new ArrayList<>();
         List<BoardDto> boardDtoList = new ArrayList<>();
-        List<String> langList = Arrays.asList("Android", "C/C++", "Django", "HTML5", "Java", "NodeJS", "Python", "React-Native", "Spring", "VueJS");
 
         List<Board> tmpList = boardRepository.findAll();
 
@@ -58,10 +57,10 @@ public class BoardService {
         tmpList = boardList;
 
         if(langToSearch != null) {
-            if(langToSearch.get(langToSearch.size()-1).equals("etc")) {
+            if(langToSearch.get(langToSearch.size()-1).equals("langEtc")) {
                 int i = 0;
                 while(i < tmpList.size()) {
-                    if(langList.contains(tmpList.get(i).getLanguages().get(tmpList.get(i).getLanguages().size()-1))) {
+                    if(tmpList.get(i).getLangEtc() != null) {
                        boardList.remove(tmpList.get(i));
                     } else {
                         i++;
@@ -86,6 +85,42 @@ public class BoardService {
                 j++;
             }
         }
+
+        tmpList = boardList;
+        System.out.println(tmpList.size());
+
+        if(typeToSearch != null) {
+            if(typeToSearch.get(typeToSearch.size()-1).equals("typeEtc")) {
+                int i = 0;
+                while(i < tmpList.size()) {
+                    if(tmpList.get(i).getTypeEtc() != null) {
+                        boardList.remove(tmpList.get(i));
+                    } else {
+                        i++;
+                    }
+                }
+                typeToSearch = typeToSearch.subList(0, typeToSearch.size()-1);
+                tmpList = boardList;
+                System.out.println(tmpList.size());
+            }
+
+            int j = 0;
+            while(j  < tmpList.size()) {
+                int k = 0;
+                while(k < typeToSearch.size()) {
+                    if(tmpList.get(j).getTypes().contains(typeToSearch.get(k))) {
+                        k++;
+                    } else {
+                        boardList.remove(tmpList.get(j));
+                        j--;
+                        break;
+                    }
+                }
+                j++;
+            }
+        }
+        System.out.println(boardList.size());
+
         Collections.sort(boardList);
 
         for (Board board : boardList) {
@@ -98,6 +133,9 @@ public class BoardService {
                     .createdDate(board.getCreatedDate())
                     .hit(board.getHit())
                     .languages(board.getLanguages())
+                    .types(board.getTypes())
+                    .langEtc(board.getLangEtc())
+                    .typeEtc(board.getTypeEtc())
                     .link(board.getLink())
                     .build();
             boardDtoList.add(boardDto);
@@ -121,6 +159,9 @@ public class BoardService {
                 .createdDate(board.getCreatedDate())
                 .hit(board.getHit())
                 .languages(board.getLanguages())
+                .types(board.getTypes())
+                .langEtc(board.getLangEtc())
+                .typeEtc(board.getTypeEtc())
                 .link(board.getLink())
                 .build();
         return boardDto;

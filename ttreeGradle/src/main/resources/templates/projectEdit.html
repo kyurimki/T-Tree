@@ -37,6 +37,11 @@
                                 <option value="2018">2018</option>
                                 <option value="2019">2019</option>
                                 <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
                             </select>
 
                             <select name="semester" id="inputSemester">
@@ -51,25 +56,34 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Android" id="android">Android</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="C/C++" id="cpp">C/C++</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Django" id="django">Django</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="HTML5" id="html">HTML5</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Java" id="java">Java</label></td></tr>
                                 <tr>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="NodeJS" id="nodejs">NodeJS</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Python" id="python">Python</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="React-Native" id="rn">React-Native</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="Spring" id="spring">Spring</label></td>
-                                    <td><label><input name="checkbox" class="language_select" type="checkbox" value="VueJS" id="vuejs">VueJS</label></td>
-                                    <td>
-                                        <label><input name="checkbox" id="etc" class="language_select" type="checkbox" value="etc"
-                                                      onclick="if (this.checked){
-                                                              document.getElementById('changeMode').removeAttribute('disabled');
+                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="C/C++">C/C++</label></td>
+                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="Java">Java</label></td>
+                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="JavaScript">JavaScript</label></td>
+                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="Python">Python</label></td>
+                                <td>
+                                    <label><input name="checkbox" id="langEtc" class="language_select" type="checkbox" value="langEtc"
+                                                  onclick="if (this.checked){
+                                                              document.getElementById('langChangeMode').removeAttribute('disabled');
                                                           }else {
-                                                              document.getElementById('changeMode').disabled = true;
+                                                              document.getElementById('langChangeMode').disabled = true;
                                                           }">기타</label>
-                                        <input name="etcText" id="changeMode" class="language_select" type="text" disabled placeholder="기타 개발환경" />
+                                    <input name="langEtcText" id="langChangeMode" class="language_select" type="text" disabled placeholder="기타 언어" />
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="Mobile">Mobile</label></td>
+                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="Web">Web</label></td>
+                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="AI/DL/ML">AI/DL/ML</label></td>
+                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="Game">Game</label></td>
+                                    <td>
+                                        <label><input name="checkbox" id="typeEtc" class="language_select" type="checkbox" value="typeEtc"
+                                                      onclick="if (this.checked){
+                                                              document.getElementById('typeChangeMode').removeAttribute('disabled');
+                                                          }else {
+                                                              document.getElementById('typeChangeMode').disabled = true;
+                                                          }">기타</label>
+                                        <input name="typeEtcText" id="typeChangeMode" class="language_select" type="text" disabled placeholder="기타 분류" />
                                     </td>
                                 </tr></table>
                         </td>

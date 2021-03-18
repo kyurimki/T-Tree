@@ -22,30 +22,38 @@
             <form action="/projectList" method="post">
                 <table class="year">
                     <tr>
-                        <td><label><input id="total_year" name="year_select" type="radio" value="all_year" checked> 전체 </label></td>
+                        <td rowspan="2"><label><input id="total_year" name="year_select" type="radio" value="all_year" checked> 전체 </label></td>
                         <td><label><input class="year_select" name="year_select" type="checkbox" value="2016"> 2016 </label></td>
                         <td><label><input class="year_select" name="year_select" type="checkbox" value="2017"> 2017 </label></td>
                         <td><label><input class="year_select" name="year_select" type="checkbox" value="2018"> 2018 </label></td>
                         <td><label><input class="year_select" name="year_select" type="checkbox" value="2019"> 2019 </label></td>
                         <td><label><input class="year_select" name="year_select" type="checkbox" value="2020"> 2020 </label></td>
                     </tr>
+                    <tr>
+                        <td><label><input class="year_select" name="year_select" type="checkbox" value="2021"> 2021 </label></td>
+                        <td><label><input class="year_select" name="year_select" type="checkbox" value="2022"> 2022 </label></td>
+                        <td><label><input class="year_select" name="year_select" type="checkbox" value="2023"> 2023 </label></td>
+                        <td><label><input class="year_select" name="year_select" type="checkbox" value="2024"> 2024 </label></td>
+                        <td><label><input class="year_select" name="year_select" type="checkbox" value="2025"> 2025 </label></td>
+                    </tr>
                 </table>
                 <br/>
 
                 <table class="language">
                     <tr>
-                        <td><label><input id="language_total_year" name="language_select" type="radio" value="all_language" checked>전체</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="Android">Android</label></td>
+                        <td rowspan="2"><label><input id="language_total_year" name="language_select" type="radio" value="all_language">전체</label></td>
                         <td><label><input class="language_select" name="language_select" type="checkbox" value="C/C++">C/C++</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="Django">Django</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="HTML5">HTML5</label></td>
                         <td><label><input class="language_select" name="language_select" type="checkbox" value="Java">Java</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="NodeJS">NodeJS</label></td>
+                        <td><label><input class="language_select" name="language_select" type="checkbox" value="JavaScript">JavaScript</label></td>
                         <td><label><input class="language_select" name="language_select" type="checkbox" value="Python">Python</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="React-Native">React Native</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="Spring">Spring</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="VueJS">VueJS</label></td>
-                        <td><label><input class="language_select" name="language_select" type="checkbox" value="etc">기타</label></td>
+                        <td><label><input class="language_select" name="language_select" type="checkbox" value="langEtc">언어 기타</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input class="type_select" name="type_select" type="checkbox" value="Mobile">Mobile</label></td>
+                        <td><label><input class="type_select" name="type_select" type="checkbox" value="Web">Web</label></td>
+                        <td><label><input class="type_select" name="type_select" type="checkbox" value="AI/DL/ML">AI/DL/ML</label></td>
+                        <td><label><input class="type_select" name="type_select" type="checkbox" value="Game">Game</label></td>
+                        <td><label><input class="type_select" name="type_select" type="checkbox" value="typeEtc">분류 기타</label></td>
                     </tr>
                 </table>
                 <br>
@@ -133,6 +141,9 @@
                     </td>
                     <td>
                         <p th:text="${post.languages}"></p>
+                        <p th:if="${post.langEtc != null}" th:text="' [' + ${post.langEtc} + ']  '"></p>
+                        <p th:text="${post.types}"></p>
+                        <p th:if="${post.typeEtc != null}" th:text="' [' + ${post?.typeEtc} + ']'"></p>
                     </td>
                     <td>
                         <p th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></p>

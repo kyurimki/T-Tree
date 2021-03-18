@@ -57,10 +57,20 @@ public class Board implements Comparable<Board> {
     private List<String> languages;
 
     @Column
+    @Convert(converter = StringToListConverter.class)
+    private List<String> types;
+
+    @Column
+    private String langEtc;
+
+    @Column
+    private String typeEtc;
+
+    @Column
     private String link;
 
     @Builder
-    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit, List<String> languages, String link) {
+    public Board(Long id, String title, String year, String semester, String purpose, String content, String effect, int hit, List<String> languages, List<String> types, String langEtc, String typeEtc, String link) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -70,6 +80,9 @@ public class Board implements Comparable<Board> {
         this.effect = effect;
         this.hit = hit;
         this.languages = languages;
+        this.types = types;
+        this.langEtc = langEtc;
+        this.typeEtc = typeEtc;
         this.link = link;
     }
 

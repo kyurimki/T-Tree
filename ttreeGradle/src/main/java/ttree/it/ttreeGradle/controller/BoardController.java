@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class BoardController {
     public String search(HttpServletRequest request, Model model, @PageableDefault Pageable pageable) {
         List<String> yearToSearch;
         List<String> langToSearch;
+        List<String> typeToSearch;
         List<BoardDto> boardDtoList;
         try {
             yearToSearch = Arrays.asList(request.getParameterValues("year_select"));
@@ -90,24 +92,26 @@ public class BoardController {
         }
         try {
             langToSearch = Arrays.asList(request.getParameterValues("language_select"));
+            typeToSearch = Arrays.asList(request.getParameterValues("type_select"));
             if (langToSearch.get(0).equals("all_language")) {
                 langToSearch = null;
+                typeToSearch = null;
             }
         } catch (NullPointerException e) {
             langToSearch = null;
+            typeToSearch = null;
         }
-        if (yearToSearch == null && langToSearch == null) {
+
+        if (yearToSearch == null && langToSearch == null && typeToSearch == null) {
             Page<Board> pageList = boardService.getBoardList(pageable);
             model.addAttribute("pageList", pageList);
             return "projectList";
-
         } else {
-            boardDtoList = boardService.getBoardDtoList(yearToSearch, langToSearch);
+            boardDtoList = boardService.getBoardDtoList(yearToSearch, langToSearch, typeToSearch);
             model.addAttribute("listPage", boardDtoList);
             return "projectListAfterSearch";
         }
     }
-
 
     @GetMapping("/projectPost")
     public String post() {
@@ -118,14 +122,16 @@ public class BoardController {
     public String write(@RequestParam("sourceFile") MultipartFile sourceFile, @RequestParam("paperFile") MultipartFile paperFile,
                         @RequestParam("proposalFile") MultipartFile proposalFile, @RequestParam("finalPTFile") MultipartFile finalPTFile,
                         @RequestParam("fairFile") MultipartFile fairFile,
-                        BoardDto boardDto, @RequestParam("checkbox") List<String> langList, HttpServletRequest request) {
+                        BoardDto boardDto, @RequestParam("langCheckbox") List<String> langList, @RequestParam("typeCheckbox") List<String> typeList, HttpServletRequest request) {
         try {
-            String etcText = request.getParameter("etcText");
-            if (etcText != null) {
-                langList.set(langList.size() - 1, etcText);
-                boardDto.setLanguages(langList);
-            }
+            String langEtcText = request.getParameter("langEtcText");
+            String typeEtcText = request.getParameter("typeEtcText");
+
             boardDto.setLanguages(langList);
+            boardDto.setTypes(typeList);
+            boardDto.setLangEtc(langEtcText);
+            boardDto.setTypeEtc(typeEtcText);
+
             Long id = boardService.savePost(boardDto);
 
             // 소스코드
