@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/projectPost/edit", "/projectRules", "/projectNotes", "/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/studentPage").hasRole("STUDENT")
+                .antMatchers("/user/studentPage", "/projectProcess/upload").hasRole("STUDENT")
                 .antMatchers("/download/**", "/projectList", "/changePW", "/projectPost/**", "/changeEmail" ).authenticated()
                 .and()
                 .formLogin().loginPage("/user/login")
