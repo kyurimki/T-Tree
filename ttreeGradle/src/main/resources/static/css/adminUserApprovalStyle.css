@@ -110,7 +110,7 @@ select {
     text-align-last: center;
 }
 
-#selectTeamYear {
+#selectTeamYear, #getInfoSearch, #getTeamSearch {
     background-color: #003087;
     color: white;
     border: none;

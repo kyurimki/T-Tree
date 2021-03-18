@@ -442,7 +442,7 @@ public class AdminController {
     @GetMapping("/admin/manageStudent")
     public String getStudentList(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
-            List<UserDto> userList = userService.getUserList();
+            List<UserDto> userList = userService.getStudentUser();
             List<TeamDto> teamList = teamService.getTeamList();
             List<StudentDto> studentList = getUserAndTeam(0, userList, teamList);
             model.addAttribute("studentList", studentList);
@@ -473,7 +473,7 @@ public class AdminController {
             teamList = teamService.getTeamList();
             studentList = getUserAndTeam(0, userList, teamList);
         } else if(searchType.equals("teamName")) {
-            userList = userService.getUserList();
+            userList = userService.getStudentUser();
             teamList = teamService.getTeamListByName(inputText);
             studentList = getUserAndTeam(1, userList, teamList);
         }
@@ -486,7 +486,7 @@ public class AdminController {
         String yearToSearch = request.getParameter("teamYear");
         String semesterToSearch = request.getParameter("teamSemester");
 
-        List<UserDto> userList = userService.getUserList();
+        List<UserDto> userList = userService.getStudentUser();
         List<TeamDto> teamList;
         List<StudentDto> studentList = new ArrayList<>();
 

@@ -91,6 +91,22 @@ public class UserService {
     }
 
     @Transactional
+    public List<UserDto> getStudentUser() {
+        List<User> userList = userRepository.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+
+        for(User user : userList) {
+            if(user.getRole().equals("ROLE_STUDENT")) {
+                Long id = user.getUser_id();
+                UserDto userDto = getUser(id);
+                userDtoList.add(userDto);
+            }
+        }
+
+        return userDtoList;
+    }
+
+    @Transactional
     public List<UserDto> getNotApprovedUser() {
         List<User> userList = userRepository.findUsersByStatusIsFalse();
         int size = userList.size();
