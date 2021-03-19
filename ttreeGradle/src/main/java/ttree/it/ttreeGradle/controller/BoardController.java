@@ -309,12 +309,16 @@ public class BoardController {
         BoardDto boardDto = boardService.getPost(id);
 
         List<String> langList = boardDto.getLanguages();
-        //System.out.println(langList);
         String langListString = "";
         for (String s : langList) {
             langListString += s + " ";
         }
-        //System.out.println(langListString);
+
+        List<String> typeList = boardDto.getTypes();
+        String typeListString = "";
+        for (String s : typeList) {
+            typeListString += s + " ";
+        }
 
         String proposalFileName = "";
         String finalPTFileName = "";
@@ -338,6 +342,7 @@ public class BoardController {
         }
         model.addAttribute("post", boardDto);
         model.addAttribute("postLang", langListString);
+        model.addAttribute("postType", typeListString);
         model.addAttribute("proposalFileName", proposalFileName);
         model.addAttribute("finalPTFileName", finalPTFileName);
         model.addAttribute("fairFileName", fairFileName);

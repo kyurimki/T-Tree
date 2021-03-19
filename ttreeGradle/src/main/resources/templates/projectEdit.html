@@ -57,10 +57,10 @@
                             <table>
                                 <tr>
                                 <tr>
-                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="C/C++">C/C++</label></td>
-                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="Java">Java</label></td>
-                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="JavaScript">JavaScript</label></td>
-                                <td><label><input name="langCheckbox" class="language_select" type="checkbox" value="Python">Python</label></td>
+                                <td><label><input name="langCheckbox" id="C/C++" class="language_select" type="checkbox" value="C/C++">C/C++</label></td>
+                                <td><label><input name="langCheckbox" id="Java" class="language_select" type="checkbox" value="Java">Java</label></td>
+                                <td><label><input name="langCheckbox" id="JavaScript" class="language_select" type="checkbox" value="JavaScript">JavaScript</label></td>
+                                <td><label><input name="langCheckbox" id="Python" class="language_select" type="checkbox" value="Python">Python</label></td>
                                 <td>
                                     <label><input name="checkbox" id="langEtc" class="language_select" type="checkbox" value="langEtc"
                                                   onclick="if (this.checked){
@@ -72,10 +72,10 @@
                                 </td>
                             </tr>
                                 <tr>
-                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="Mobile">Mobile</label></td>
-                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="Web">Web</label></td>
-                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="AI/DL/ML">AI/DL/ML</label></td>
-                                    <td><label><input name="typeCheckbox" class="language_select" type="checkbox" value="Game">Game</label></td>
+                                    <td><label><input name="typeCheckbox" id="Mobile" class="language_select" type="checkbox" value="Mobile">Mobile</label></td>
+                                    <td><label><input name="typeCheckbox" id="Web" class="language_select" type="checkbox" value="Web">Web</label></td>
+                                    <td><label><input name="typeCheckbox" id="AI/DL/ML" class="language_select" type="checkbox" value="AI/DL/ML">AI/DL/ML</label></td>
+                                    <td><label><input name="typeCheckbox" id="Game" class="language_select" type="checkbox" value="Game">Game</label></td>
                                     <td>
                                         <label><input name="checkbox" id="typeEtc" class="language_select" type="checkbox" value="typeEtc"
                                                       onclick="if (this.checked){
@@ -181,45 +181,38 @@
                 });
 
                 $(function() {
-
                     var langListArray = "[[${postLang}]]".split(' ');
-                    var count = 0;
                     for(var i=0; i <langListArray.length; i++) {
-                        if(langListArray[i] == "Android") {
-                            $("input:checkbox[id='android']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "C/C++") {
-                            $("input:checkbox[id='cpp']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "Django") {
-                            $("input:checkbox[id='django']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "HTML5") {
-                            $("input:checkbox[id='html']").prop("checked", true);
-                            count++;
+                        if(langListArray[i] == "C/C++") {
+                            $("input:checkbox[id='C/C++']").prop("checked", true);
                         } else if(langListArray[i] == "Java") {
-                            $("input:checkbox[id='java']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "NodeJS") {
-                            $("input:checkbox[id='nodejs']").prop("checked", true);
-                            count++;
+                            $("input:checkbox[id='Java']").prop("checked", true);
+                        } else if(langListArray[i] == "JavaScript") {
+                            $("input:checkbox[id='JavaScript']").prop("checked", true);
                         } else if(langListArray[i] == "Python") {
-                            $("input:checkbox[id='python']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "React-Native") {
-                            $("input:checkbox[id='rn']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "Spring") {
-                            $("input:checkbox[id='spring']").prop("checked", true);
-                            count++;
-                        } else if(langListArray[i] == "VueJS") {
-                            $("input:checkbox[id='vuejs']").prop("checked", true);
-                            count++;
+                            $("input:checkbox[id='Python']").prop("checked", true);
                         }
                     }
-                    if(count == langListArray.length-2) {
-                        $("input:checkbox[id='etc']").prop("checked", true);
-                        document.getElementById('changeMode').value = langListArray[langListArray.length-2];
+                    if("[[${post.langEtc}]]") {
+                        $("input:checkbox[id='langEtc']").prop("checked", true);
+                        document.getElementById('langChangeMode').value = "[[${post.langEtc}]]";
+                    }
+
+                    var typeListArray = "[[${postType}]]".split(' ');
+                    for(var i=0; i <typeListArray.length; i++) {
+                        if(typeListArray[i] == "Mobile") {
+                            $("input:checkbox[id='Mobile']").prop("checked", true);
+                        } else if(typeListArray[i] == "Web") {
+                            $("input:checkbox[id='Web']").prop("checked", true);
+                        } else if(typeListArray[i] == "AI/DL/ML") {
+                            $("input:checkbox[id='AI/DL/ML']").prop("checked", true);
+                        } else if(typeListArray[i] == "Game") {
+                            $("input:checkbox[id='Game']").prop("checked", true);
+                        }
+                    }
+                    if("[[${post.typeEtc}]]") {
+                        $("input:checkbox[id='typeEtc']").prop("checked", true);
+                        document.getElementById('typeChangeMode').value = "[[${post.typeEtc}]]";
                     }
                 });
 
