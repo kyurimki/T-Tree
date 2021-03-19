@@ -87,7 +87,6 @@ public class BoardService {
         }
 
         tmpList = boardList;
-        System.out.println(tmpList.size());
 
         if(typeToSearch != null) {
             if(typeToSearch.get(typeToSearch.size()-1).equals("typeEtc")) {
@@ -119,7 +118,6 @@ public class BoardService {
                 j++;
             }
         }
-        System.out.println(boardList.size());
 
         Collections.sort(boardList);
 

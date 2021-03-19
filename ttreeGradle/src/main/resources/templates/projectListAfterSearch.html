@@ -140,10 +140,10 @@
                         <p th:text="${post.semester}"></p>
                     </td>
                     <td>
-                        <p th:text="${post.languages}"></p>
-                        <p th:if="${post.langEtc != null}" th:text="' [' + ${post.langEtc} + ']  '"></p>
-                        <p th:text="${post.types}"></p>
-                        <p th:if="${post.typeEtc != null}" th:text="' [' + ${post?.typeEtc} + ']'"></p>
+                        <div style="display:inline" th:text="${post.languages}"></div>
+                        <div style="display:inline" th:if="${post.langEtc != null}" th:text="' [' + ${post.langEtc} + ']  '"></div>
+                        <div style="display:inline" th:text="${post.types}"></div>
+                        <div style="display:inline" th:if="${post.typeEtc != null}" th:text="' [' + ${post?.typeEtc} + ']'"></div>
                     </td>
                     <td>
                         <p th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
