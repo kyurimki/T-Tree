@@ -107,10 +107,6 @@ public class BoardController {
         } catch(NullPointerException e) {
             typeToSearch = null;
         }
-
-        System.out.println("#");
-        System.out.println(langToSearch);
-        System.out.println(typeToSearch);
         if (yearToSearch == null && langToSearch == null && typeToSearch == null) {
             Page<Board> pageList = boardService.getBoardList(pageable);
             model.addAttribute("pageList", pageList);
