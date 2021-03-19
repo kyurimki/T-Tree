@@ -92,16 +92,25 @@ public class BoardController {
         }
         try {
             langToSearch = Arrays.asList(request.getParameterValues("language_select"));
-            typeToSearch = Arrays.asList(request.getParameterValues("type_select"));
+
             if (langToSearch.get(0).equals("all_language")) {
                 langToSearch = null;
-                typeToSearch = null;
             }
         } catch (NullPointerException e) {
             langToSearch = null;
+        }
+        try {
+            typeToSearch = Arrays.asList(request.getParameterValues("type_select"));
+            if(langToSearch == null && typeToSearch == null) {
+                typeToSearch = null;
+            }
+        } catch(NullPointerException e) {
             typeToSearch = null;
         }
 
+        System.out.println("#");
+        System.out.println(langToSearch);
+        System.out.println(typeToSearch);
         if (yearToSearch == null && langToSearch == null && typeToSearch == null) {
             Page<Board> pageList = boardService.getBoardList(pageable);
             model.addAttribute("pageList", pageList);
