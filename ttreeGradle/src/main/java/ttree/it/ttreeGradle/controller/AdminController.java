@@ -38,7 +38,6 @@ public class AdminController {
     public String student_id = "";
     public UserDto userDto;
     boolean signupRecord = false;
-    public boolean id_status = false;
     public boolean idCheckStatus = false;
 
 
@@ -103,7 +102,6 @@ public class AdminController {
     public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if(customUserDetails.getUserStatus()) {
             model.addAttribute("idCheckStatus", false);
-            model.addAttribute("id_status", false);
             return "adminCreateUser";
         }else{
             return "alertPage";
@@ -181,9 +179,6 @@ public class AdminController {
             }
             userService.saveUser(userDto);
             signupRecord = false;
-            id_status = true;
-            model.addAttribute("id_status", id_status);
-            id_status = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
