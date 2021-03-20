@@ -62,13 +62,14 @@
                                 <td><label><input name="langCheckbox" id="JavaScript" class="language_select" type="checkbox" value="JavaScript">JavaScript</label></td>
                                 <td><label><input name="langCheckbox" id="Python" class="language_select" type="checkbox" value="Python">Python</label></td>
                                 <td>
-                                    <label><input name="checkbox" id="langEtc" class="language_select" type="checkbox" value="langEtc"
+                                    <label><input name="langEtcCheckbox" id="langEtc" class="language_select" type="checkbox" value="langEtc"
                                                   onclick="if (this.checked){
-                                                              document.getElementById('langChangeMode').removeAttribute('disabled');
+                                                              document.getElementById('langChangeMode').removeAttribute('readOnly');
                                                           }else {
-                                                              document.getElementById('langChangeMode').disabled = true;
+                                                              document.getElementById('langChangeMode').readOnly = true;
+                                                              document.getElementById('langChangeMode').value = '';
                                                           }">기타</label>
-                                    <input name="langEtcText" id="langChangeMode" class="language_select" type="text" disabled placeholder="기타 언어" />
+                                    <input name="langEtcText" id="langChangeMode" class="language_select" type="text" readonly placeholder="기타 언어" />
                                 </td>
                             </tr>
                                 <tr>
@@ -77,13 +78,14 @@
                                     <td><label><input name="typeCheckbox" id="AI/DL/ML" class="language_select" type="checkbox" value="AI/DL/ML">AI/DL/ML</label></td>
                                     <td><label><input name="typeCheckbox" id="Game" class="language_select" type="checkbox" value="Game">Game</label></td>
                                     <td>
-                                        <label><input name="checkbox" id="typeEtc" class="language_select" type="checkbox" value="typeEtc"
+                                        <label><input name="typeEtcCheckbox" id="typeEtc" class="language_select" type="checkbox" value="typeEtc"
                                                       onclick="if (this.checked){
-                                                              document.getElementById('typeChangeMode').removeAttribute('disabled');
+                                                              document.getElementById('typeChangeMode').removeAttribute('readOnly');
                                                           }else {
-                                                              document.getElementById('typeChangeMode').disabled = true;
+                                                              document.getElementById('typeChangeMode').readonly = true;
+                                                              document.getElementById('typeChangeMode').value = '';
                                                           }">기타</label>
-                                        <input name="typeEtcText" id="typeChangeMode" class="language_select" type="text" disabled placeholder="기타 분류" />
+                                        <input name="typeEtcText" id="typeChangeMode" class="language_select" type="text" readonly placeholder="기타 분류" />
                                     </td>
                                 </tr></table>
                         </td>

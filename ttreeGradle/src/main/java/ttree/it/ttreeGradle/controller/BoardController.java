@@ -360,15 +360,34 @@ public class BoardController {
     public String update(@RequestParam("id") Long id, @RequestParam("sourceFile") MultipartFile sourceFile,
                          @RequestParam("paperFile") MultipartFile paperFile, @RequestParam("proposalFile") MultipartFile proposalFile,
                          @RequestParam("finalPTFile") MultipartFile finalPTFile, @RequestParam("fairFile") MultipartFile fairFile,
-                         BoardDto boardDto, @RequestParam("checkbox") List<String> langList, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
+                         BoardDto boardDto, @RequestParam("langCheckbox") List<String> langList, @RequestParam("typeCheckbox") List<String> typeList, HttpServletRequest request) throws IOException, NoSuchAlgorithmException {
 
         boardDto.setId(id);
-        String etcText = request.getParameter("etcText");
+        String langEtcChecked = request.getParameter("langEtcCheckbox");
+        String typeEtcChecked = request.getParameter("typeEtcCheckbox");
+        String langEtcText = request.getParameter("langEtcText");
+        String typeEtcText = request.getParameter("typeEtcText");
 
-        if (etcText != null) {
-            //System.out.println(langList.size());
-            langList.set(langList.size() - 1, etcText);
-            boardDto.setLanguages(langList);
+        boardDto.setLanguages(langList);
+        boardDto.setTypes(typeList);
+        if(langEtcChecked != null && langEtcChecked.equals("langEtc")) {
+            if(langEtcText.equals("")) {
+                boardDto.setLangEtc(null);
+            } else {
+                boardDto.setLangEtc(langEtcText);
+            }
+        } else {
+            boardDto.setLangEtc(null);
+        }
+
+        if(typeEtcChecked != null && typeEtcChecked.equals("typeEtc")) {
+            if(typeEtcText.equals("")) {
+                boardDto.setTypeEtc(null);
+            } else {
+                boardDto.setTypeEtc(typeEtcText);
+            }
+        } else {
+            boardDto.setTypeEtc(null);
         }
 
         boardDto.setLanguages(langList);
