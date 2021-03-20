@@ -58,7 +58,7 @@
                required minlength="6">
         <br> <span id="check"></span>
     </div>
-    <br> </td>
+    <br>
     <div class="buttonWrapper">
         <button type="submit" id="changePWButton" name="changePW">
             비밀번호 변경하기
@@ -70,7 +70,7 @@
     let check_password;
 
     function check_pw() {
-        var pw = document.getElementById('pw').value;
+        var pw = document.getElementById('newPW').value;
         var SC = ["!", "@", "$", "&", "*"];
         var check_SC = 0;
 
@@ -98,7 +98,7 @@
     }
 
     function pw_format() {
-        var pw = document.getElementById('pw').value;
+        var pw = document.getElementById('newPW').value;
         var SC = ["!", "@", "$", "&", "*"];
         var check_SC = 0;
 
@@ -111,16 +111,12 @@
         if (check_SC == 0) {
             window.alert("!, @, $, &, * 를 포함하여 비밀번호를 입력하여주세요!")
             check_password = false;
-            document.getElementById('pw').value = '';
+            document.getElementById('newPW').value = '';
         }
     }
 
-    if ([[${isChanged}]]) {
-        alert('비밀번호가 변경되었습니다. 다음 로그인부터 반영됩니다.');
-        window.close();
-    } else {
-        alert('현재 비밀번호가 일치하지 않습니다.')
-    }
+
+
 
     function checkCondition() {
         if (check_password) {
@@ -131,8 +127,15 @@
         }
     }
 
-</script>
+    if ([[${isChanged}]]) {
+        alert('비밀번호가 변경되었습니다. 다음 로그인부터 반영됩니다.');
+        window.close();
+    } else {
+        alert('현재 비밀번호가 일치하지 않습니다.')
+    }
 
+
+</script>
 
 </body>
 </html>
