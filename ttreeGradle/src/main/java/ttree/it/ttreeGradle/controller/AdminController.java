@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ttree.it.ttreeGradle.domain.entity.CustomUserDetails;
 import ttree.it.ttreeGradle.dto.*;
 import ttree.it.ttreeGradle.service.ApplicationFormService;
@@ -38,7 +39,9 @@ public class AdminController {
     public String student_id = "";
     public UserDto userDto;
     boolean signupRecord = false;
+
     public boolean idCheckStatus = false;
+    public boolean formStatus = false;
 
 
 
@@ -100,6 +103,7 @@ public class AdminController {
 
     @GetMapping("/admin/createUser")
     public String createUserPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+        model.addAttribute("formStatus", formStatus);
         if(customUserDetails.getUserStatus()) {
             model.addAttribute("idCheckStatus", false);
             return "adminCreateUser";
@@ -125,6 +129,7 @@ public class AdminController {
             model.addAttribute("idCheckStatus", idCheckStatus);
             idCheckStatus = false;
         }
+        model.addAttribute("formStatus", false);
         return "adminCreateUser";
     }
 
@@ -182,7 +187,10 @@ public class AdminController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "adminCreateUser";
+        formStatus = true;
+        model.addAttribute("formStatus", formStatus);
+        formStatus = false;
+        return "redirect:/admin/createUser";
     }
 
     @GetMapping(value = "/admin/updateStatus")

@@ -13,7 +13,8 @@
             <form role="form" action="/admin/createUser/checkId" name="createUserCheckId" id="checkId" method="POST">
                 <td>학번</td>
                 <td><input type="text" id="studentIdNum" name="studentIdNum" th:value="${studentId}"
-                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required></td>
+                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                           required></td>
                 <td>
                     <button type="submit" name="checkStudentId" id="checkStudentId">검색</button>
                 </td>
@@ -71,6 +72,7 @@
 </div>
 <script>
     let status = false;
+    let check_studentIdNum = false;
 
     if ("[[${teamInfo?.teamYear}]]" !== "") {
         var year = "[[${teamInfo?.teamYear}]]";
@@ -90,31 +92,29 @@
             document.getElementById("studentName").setAttribute("readonly", true);
         }
         status = true;
+        check_studentIdNum = true;
     }
 
+    if([[${formStatus}]]){
+        window.alert("회원 생성 완료!!" + [[${idCheckStatus}]] + [[${formStatus}]]);
+    }
 
-    function checkConditions(){
-        if([[${idCheckStatus}]]){
+    function checkConditions() {
+        if ([[${idCheckStatus}]]) {
             return true;
         } else {
+            window.alert("학번을 입력해주세요");
             return false;
         }
     }
 
     function buttonCheck() {
-        if (document.getElementById("studentIdNum").value.length == 0) {
-            window.alert("학번을 입력해주세요!");
+        if (check_studentIdNum) {
+            if (status) { //기존회원 수정
+                window.alert("회원 정보 수정 완료");
+                self.opener.location.reload();
+            }
         }
-        if (document.getElementById("studentIdNum").value.length != 0 && status) { //기존회원 수정
-            window.alert("회원 정보 수정 완료");
-            self.opener.location.reload();
-            //window.close();
-        } if (document.getElementById("studentIdNum").value.length != 0 && !status) { //신규회원 등록
-            window.alert("회원 생성 완료" + status);
-            self.opener.location.reload();
-            //window.close();
-        }
-
     }
 </script>
 </body>
