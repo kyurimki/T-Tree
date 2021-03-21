@@ -76,7 +76,7 @@
                                     <td><label><input name="typeCheckbox" id="Mobile" class="language_select" type="checkbox" value="Mobile">Mobile</label></td>
                                     <td><label><input name="typeCheckbox" id="Web" class="language_select" type="checkbox" value="Web">Web</label></td>
                                     <td><label><input name="typeCheckbox" id="AI/DL/ML" class="language_select" type="checkbox" value="AI/DL/ML">AI/DL/ML</label></td>
-                                    <td><label><input name="typeCheckbox" id="Game" class="language_select" type="checkbox" value="Game">Game</label></td>
+                                    <td><label><input name="typeCheckbox" id="VisionProcess" class="language_select" type="checkbox" value="VisionProcess">Vision Process</label></td>
                                     <td>
                                         <label><input name="typeEtcCheckbox" id="typeEtc" class="language_select" type="checkbox" value="typeEtc"
                                                       onclick="if (this.checked){
@@ -208,8 +208,8 @@
                             $("input:checkbox[id='Web']").prop("checked", true);
                         } else if(typeListArray[i] == "AI/DL/ML") {
                             $("input:checkbox[id='AI/DL/ML']").prop("checked", true);
-                        } else if(typeListArray[i] == "Game") {
-                            $("input:checkbox[id='Game']").prop("checked", true);
+                        } else if(typeListArray[i] == "VisionProcess") {
+                            $("input:checkbox[id='VisionProcess']").prop("checked", true);
                         }
                     }
                     if("[[${post.typeEtc}]]") {
