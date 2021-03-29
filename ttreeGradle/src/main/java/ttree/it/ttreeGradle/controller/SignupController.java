@@ -33,6 +33,7 @@ public class SignupController {
     public boolean status = false;
     public boolean boolIdStatus = false;
     public String student_id = "";
+    public boolean checkPWStatus = false;
 
 
     private CustomUserDetailsService customUserDetailsService;
@@ -177,7 +178,6 @@ public class SignupController {
         String usermajor1 = customUserDetails.getMajorOne();
         String usermajor2 = customUserDetails.getMajorTwo();
         String studentIdNum = customUserDetails.getStudentIdNum();
-        //System.out.println(username + usermajor1 + usermajor2 + studentIdNum);
 
         Long userId = customUserDetails.getTeamId();
         try {
@@ -193,42 +193,56 @@ public class SignupController {
         model.addAttribute("usermajor2", usermajor2);
         model.addAttribute("studentIdNum", studentIdNum);
 
-
-
         return "studentPage";
     }
 
-    @RequestMapping(value="/changePW")
-    public String changePW() { return "changePW";}
+    @GetMapping(value="/changePW")
+    public String changePW(Model model) {
+        checkPWStatus = false;
+        model.addAttribute("checkPWStatus", checkPWStatus);
+        return "changePW";
+    }
+
+    @GetMapping(value="/changePW/checkOldPW")
+    public String checkOldPWGet(Model model) {
+        checkPWStatus = false;
+        model.addAttribute("checkPWStatus", checkPWStatus);
+        return "changePW";
+    }
+
+    @PostMapping(value="/changePW/checkOldPW")
+    public String checkOldPW(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("oldpw") String oldPassword, Model model) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String dbPassword = customUserDetails.getPassword();
+
+        checkPWStatus = passwordEncoder.matches(oldPassword, dbPassword);
+        model.addAttribute("checkPWStatus", checkPWStatus);
+        model.addAttribute("password", oldPassword);
+        return "changePW";
+    }
 
     @PostMapping(value = "/changePW")
-    public String changePW(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("oldpw") String oldPassword, @RequestParam("pass") String password, Model model){
-
+    public String changePW(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam("pass") String password, @RequestParam("password_check") String passwordCheck, Model model){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        boolean isChanged = true;
 
-        String dbPassword = customUserDetails.getPassword();
         String studentIdNum = customUserDetails.getStudentIdNum();
-        //System.out.println(studentIdNum);
-
         UserDto userDto = userService.getUserByStudentInfo(0, studentIdNum).get(0);
 
-        //System.out.println("!" + dbPassword);
-        //System.out.println("oldpassword: " + oldPassword);
-        //System.out.println("password: " + password);
-
-
-        if(passwordEncoder.matches(oldPassword, dbPassword)){
-            model.addAttribute("isChanged", isChanged);
+        if(checkPWStatus && (password.equals(passwordCheck))){
+            model.addAttribute("isChanged", "true");
             String newPassword = passwordEncoder.encode(password);
             userDto.setPassword(newPassword);
             userService.saveUser(userDto);
+        } else {
+            if(!checkPWStatus) {
+                model.addAttribute("isChanged", "noCheckedLog");
+            } else {
+                model.addAttribute("isChanged", "passwordWrong");
+            }
 
-        }else{
-            isChanged = false;
-            model.addAttribute("isChanged", isChanged);
         }
-       return "changePW";
+        checkPWStatus = false;
+        return "changePW";
     }
 
     @RequestMapping(value="/changeEmail")
@@ -246,10 +260,6 @@ public class SignupController {
         email = email + "@sookmyung.ac.kr";
 
         UserDto userDto = userService.getUserByStudentInfo(0, studentIdNum).get(0);
-
-        //System.out.println("dbEmail: " + dbEmail);
-        //System.out.println("oldEmail: " + oldEmail);
-        //System.out.println("email: " + email);
 
         if (dbEmail.equals(oldEmail)){
             model.addAttribute("isEmailChanged", isEmailChanged);
