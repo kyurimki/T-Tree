@@ -1,0 +1,82 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<!-- 해당페이지 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .ck-editor__editable{
+            min-height: 500px;
+        }
+
+    </style>
+</th:block>
+
+<!-- 해당페이지 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:src="@{/ckeditor/build/ckeditor.js}"></script>
+</th:block>
+
+<div layout:fragment="content">
+    <br><br><br>
+    <section>
+        <aside class="leftsideblank">
+        </aside>
+        <aside class="rightsideblank">
+        </aside>
+        <article>
+            <form action="/projectRules" method="post">
+                <div class="editor_wrap">
+                    <textarea type="text" name="content" class="form-control" id="content" cols="40" rows="10">
+                        [[${projectRules.content}]]
+                    </textarea>
+                </div>
+                <br><br><br>
+                <div style="text-align: center;">
+                <input class="btn btn-primary" type="submit" role="button" value="저장">
+                <input class="btn btn-primary" role="button" value="게시글 보기" onclick="location.href='projectRulesSaved'">
+                </div>
+            </form>
+        </article>
+        <script type="text/javascript">
+            ClassicEditor
+                .create( document.querySelector( '#content' ), {
+
+                    toolbar: {
+                        items: [
+                            'heading',
+                            '|',
+                            'bold',
+                            'italic',
+                            'link',
+                            'bulletedList',
+                            'numberedList',
+                            '|',
+                            'indent',
+                            'outdent',
+                            '|',
+                            'blockQuote',
+                            'undo',
+                            'redo',
+                            'alignment'
+                        ]
+                    },
+                    language: 'ko',
+                    licenseKey: '',
+
+                } )
+                .then( editor => {
+                    window.editor = editor;
+                } )
+                .catch( error => {
+                    console.error( 'Oops, something went wrong!' );
+                    console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+                    console.warn( 'Build id: i18actvydgwm-f2rh0gfvttay' );
+                    console.error( error );
+                } );
+        </script>
+    </section>
+</div>
+</html>
+
+

@@ -1,0 +1,92 @@
+*{
+  margin: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+h1{
+  margin-left: 25%;
+  margin-top: 8%;
+  padding-bottom: 100px;
+  font-size: 20pt;
+}
+
+p{
+  font-size: 16pt;
+  margin-bottom: 2%;
+  font-weight: bold;
+}
+
+.leftsideblank {
+  float: left;
+}
+
+.rightsideblank {
+  float: right;
+}
+
+table{
+  //width: 50%;
+  height: 30%;
+  font-size: 15pt;
+  margin: 3%;
+  padding: 10%;
+  border-collapse: collapse;
+}
+
+td{
+  height: 60px;
+}
+
+.line1{
+  border-top: 1px solid #d7dade;
+}
+
+.email {
+  border: 0.5px solid #6d788a;
+  border-top: 3px solid black;
+  padding: 20px;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+input[type=text]{
+  font-size: 20px;
+}
+
+
+button {
+  background-color: #003087;
+  width: 30%;
+  color: white;
+  padding: 15px;
+  margin: 10px 0px;
+  border: none;
+  cursor: pointer;
+}
+
+.buttonWrapper{
+  text-align: center;
+}
+
+button:hover, input[type=button]:hover {
+  opacity: 0.7;
+}
+
+
+@media screen and (min-width: 1200px) {
+  .leftsideblank, .rightsideblank {
+    width: 12.5%;
+    height:100vh;
+  }
+}
+
+@media screen and (max-width: 1200px){
+
+  .leftsideblank, .rightsideblank {
+    width: 12.5%;
+    height: 100vh;
+  }
+
+}
