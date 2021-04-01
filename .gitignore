@@ -36,3 +36,4 @@ build/
 /sourceFiles/
 /paperFiles/
 /src/main/resources/application.properties
+applicaion.properties
