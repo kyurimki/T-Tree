@@ -37,3 +37,4 @@ build/
 /paperFiles/
 /src/main/resources/application.properties
 applicaion.properties
+/.mvn
