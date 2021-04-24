@@ -37,3 +37,5 @@ build/
 /paperFiles/
 /src/main/resources/application.properties
 applicaion.properties
+ttreeGradle/src/main/resources/application.properties
+ttreeGradle/.gradle/
