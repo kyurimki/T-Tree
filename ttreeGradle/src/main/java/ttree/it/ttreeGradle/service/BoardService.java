@@ -60,8 +60,8 @@ public class BoardService {
             if(langToSearch.get(langToSearch.size()-1).equals("langEtc")) {
                 int i = 0;
                 while(i < tmpList.size()) {
-                    if(tmpList.get(i).getLangEtc() != null) {
-                       boardList.remove(tmpList.get(i));
+                    if(tmpList.get(i).getLangEtc() == null) {
+                        boardList.remove(tmpList.get(i));
                     } else {
                         i++;
                     }
@@ -92,7 +92,7 @@ public class BoardService {
             if(typeToSearch.get(typeToSearch.size()-1).equals("typeEtc")) {
                 int i = 0;
                 while(i < tmpList.size()) {
-                    if(tmpList.get(i).getTypeEtc() != null) {
+                    if(tmpList.get(i).getTypeEtc() == null) {
                         boardList.remove(tmpList.get(i));
                     } else {
                         i++;
