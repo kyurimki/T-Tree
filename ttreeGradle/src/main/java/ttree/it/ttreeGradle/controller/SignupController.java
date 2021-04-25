@@ -293,8 +293,9 @@ public class SignupController {
             userService.saveUser(userDto);
 
             String email = userDto.getEmail();
+            String name = userDto.getName();
 
-            mailService.mailPasswordSend(email, password);
+            mailService.mailPasswordSend(email, name, password);
             infoExist = true;
         }
         model.addAttribute("exist", infoExist);

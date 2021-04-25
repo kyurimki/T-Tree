@@ -33,13 +33,13 @@ public class MailService { //신청서 제출용 이메일
         mailSender.send(authCodeMail);
     }
 
-    public void mailPasswordSend(String email, String password) {
+    public void mailPasswordSend(String email, String name, String password) {
         SimpleMailMessage passCodeMail = new SimpleMailMessage();
         passCodeMail.setTo(email);
         passCodeMail.setSubject("[졸업프로젝트 관리 시스템] 임시 비밀번호입니다.");
         passCodeMail.setFrom(FROM_ADDRESS);
         passCodeMail.setText(
-                "숙명여자대학교 IT공학전공 졸업프로젝트 관리 시스템입니다.\n하단의 임시 비밀번호를 로그인 시에 입력하세요.\n" + password
+                "숙명여자대학교 IT공학전공 졸업프로젝트 관리 시스템입니다.\n" + name + " 님, 하단의 임시 비밀번호를 로그인 시에 입력하세요.\n" + password
                         + "\n로그인 후에 마이페이지에서 비밀번호를 변경하세요.");
 
         mailSender.send(passCodeMail);

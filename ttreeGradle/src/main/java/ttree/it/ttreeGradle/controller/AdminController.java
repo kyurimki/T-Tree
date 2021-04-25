@@ -140,7 +140,6 @@ public class AdminController {
         if(email.equals("")) {
             email = "ttree1906@gmail.com";
         }
-        System.out.println(email);
         String phoneNum = request.getParameter("studentPhoneNum");
         try {
             if(!signupRecord) {
