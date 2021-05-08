@@ -25,3 +25,4 @@ Graduation project management system for IT Engineering Department, Sookmyung Wo
 [학교 서버에 배포하기(Deploy to Department's Server)](https://github.com/kyurimki/T-Tree/issues/2)
 
 ### Paper
+[논문-Google Docs](https://docs.google.com/document/d/1mv3BFnLqHVSjI9tnkwRj2uay8IQE12bzN3EfWGCSBms/edit?usp=sharing)
