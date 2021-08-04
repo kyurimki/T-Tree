@@ -87,6 +87,7 @@
 
 ## 5. Documentation
 ### Manual
+[매뉴얼-Google Docs](https://docs.google.com/document/d/1F7-w9fuIg60h9fZIQC-CoPkbrxWyHRBMZQN7Qn-dt8s/edit?usp=sharing)
 
 ### Deployment
 [AWS EC2를 이용하여 임시 배포하기(Deploy to AWS EC2)](https://github.com/kyurimki/T-Tree/issues/1)
